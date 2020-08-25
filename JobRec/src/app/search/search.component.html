@@ -1,10 +1,29 @@
-<button (click)="getSelectedRows()">Get Selected Rows</button>
-<ag-grid-angular
+<div class="container-fluid center">
+  <div class="row center">
+    <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 350px;">
+      <div class="form-group has-success  has-danger">
+        <input style="width: 300px;" type="text" class="form-control" placeholder="Search here!" formControlName="search" [ngClass]="
+          searchForm.get('search').errors &&
+          searchForm.get('search').touched ?
+          'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
+        ">
+        <div class="invalid-feedback">Sorry, please enter a search query</div>
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+      </div>
+    </form>
+  </div>
+  <div class="row center">
+    <ag-grid-angular
     #agGrid
-    style="width: 90%; height: 500px;"
+    style="width: 99%; height: 450px; margin: auto;"
     class="ag-theme-alpine"
-    [rowData]="rowData | async"
+    [rowData]="rowData"
     [columnDefs]="columnDefs"
     rowSelection="multiple"
-    >
-</ag-grid-angular>
+    (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+  <div class="row center">
+    <button type="button" class="btn btn-outline-danger mt-2" style="margin: auto;" (click)="addSubmission()">Add Submissions</button>
+  </div>
+</div>

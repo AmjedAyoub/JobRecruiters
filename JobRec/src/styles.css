@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  background-color: #202020 !important;
+}
+
+.bg-warning {
+  background-color: orange !important;
+}
+
+.ag-theme-alpine .ag-header {
+  background-color: #686179 !important;
+}
+
+.ag-row-even{
+  background-color: #7f3cd8 !important;
+  color: white !important;
+}
+
+.ag-row-odd{
+  background-color: #9876ec !important;
+  color: white !important;
+}
+
+/* .ag-header-cell {
+  width: fit-content !important;
+}
+
+.ag-cell {
+  width: fit-content !important;
+} */
