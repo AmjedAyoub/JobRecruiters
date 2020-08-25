@@ -8,6 +8,12 @@ import {
   NgForm,
 } from '@angular/forms';
 
+import { DataService } from '../_services/data.service';
+
+
+declare var $: any;
+var l = 0;
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -15,10 +21,16 @@ import {
 })
 export class SearchComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
+  @ViewChild('agGrid2') agGrid2: AgGridAngular;
+  editJobMode = false;
   title = 'app';
   private gridApi;
   private gridColumnApi;
+  private gridApi2;
+  private gridColumnApi2;
   searchForm: FormGroup;
+  newJobForm: FormGroup;
+  private len = 0;
 
   columnDefs = [
     {
@@ -94,116 +106,183 @@ export class SearchComponent implements OnInit {
     },
   ];
 
-  d = new Date().toLocaleString();
-  rowData = [
-    // tslint:disable-next-line: max-line-length
+  columnDefs2 = [
     {
-      id: '654',
-      title: 'Software Developer',
-      position: 2,
-      submissions: 6,
-      status: 'Active',
-      dateUpdated: this.d,
-      manager: 'Krishna',
-      createdBy: 'Amjed',
-      createdAt: this.d,
+      headerName: 'ID',
+      field: 'id',
+      sortable: true,
+      filter: true,
+      resizable: true,
     },
-    // tslint:disable-next-line: max-line-length
     {
-      id: '548',
-      title: 'UI Developer',
-      position: 1,
-      submissions: 7,
-      status: 'Active',
-      dateUpdated: this.d,
-      manager: 'Soujayna',
-      createdBy: 'Max',
-      createdAt: this.d,
+      headerName: 'Name',
+      field: 'fullName',
+      sortable: true,
+      filter: true,
+      resizable: true,
     },
-    // tslint:disable-next-line: max-line-length
     {
-      id: '698',
-      title: 'Back-End Developer',
-      position: 6,
-      submissions: 12,
-      status: 'Active',
-      dateUpdated: this.d,
-      manager: 'Soujayna',
-      createdBy: 'Max',
-      createdAt: this.d,
+      headerName: 'Email',
+      field: 'email',
+      sortable: true,
+      filter: true,
+      resizable: true,
     },
-    // tslint:disable-next-line: max-line-length
     {
-      id: '235',
-      title: 'Software Developer',
-      position: 3,
-      submissions: 9,
-      status: 'Active',
-      dateUpdated: this.d,
-      manager: 'Krishna',
-      createdBy: 'Amjed',
-      createdAt: this.d,
+      headerName: 'Phone',
+      field: 'phone',
+      sortable: true,
+      filter: true,
+      resizable: true,
     },
-    // tslint:disable-next-line: max-line-length
     {
-      id: '145',
-      title: 'UI Developer',
-      position: 5,
-      submissions: 10,
-      status: 'Inactive',
-      dateUpdated: this.d,
-      manager: 'Soujayna',
-      createdBy: 'Amjed',
-      createdAt: this.d,
-    },
+      headerName: 'Jobs',
+      field: 'jobs',
+      sortable: true,
+      filter: true,
+      resizable: true,
+    }
   ];
+
+  d = new Date().toLocaleString();
+  rowData: any[];
+  rowData2: any[];
   // rowData: any;
 
-  constructor() {}
+  constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
-      search: new FormControl(null, {validators: [Validators.required]})
+      search: new FormControl(null, { validators: [Validators.required] }),
     });
+    this.rowData = [...this.dataService.getData()];
+    l = this.rowData.length;
+    this.dataService.getDataChangedListener().subscribe((res) => {
+      this.rowData = res;
+      l = this.rowData.length;
+      this.agGrid.api.setRowData(this.rowData);
+    });
+    this.rowData2 = [...this.dataService.getCandidates()];
+    this.dataService.getCandidateChangedListener().subscribe((res) => {
+      this.rowData2 = res;
+      this.agGrid2.api.setRowData(this.rowData2);
+    });
+    this.createNewJobForm();
   }
 
-  search() {
-
+  createNewJobForm() {
+    this.newJobForm = this.fb.group(
+      {
+        id: ['', Validators.required],
+        title: ['', Validators.required],
+        positions: [null, Validators.required],
+        status: ['Active', Validators.required],
+        manager: ['', Validators.required],
+        createdBy: ['', Validators.required],
+      },
+      // { validator: this.idCheckValidator }
+    );
   }
 
-  addSubmission(){
+  // idCheckValidator(form: FormGroup) {
+  //   for (let i = 0; i < l; i++) {
+  //     if (form.get('id').value === this.rowData[i].id) {
+  //       return { exists: true };
+  //     }
+  //   }
+  //   return null;
+  // }
+
+  search() {}
+
+  prev;
+  editJob() {
+    this.editJobMode = true;
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    if(selectedNodes.length > 1){
+      console.log('Sorry, you cant egit more than one job each time!, please select one job only!');
+    }else if (selectedNodes.length === 1) {
+      const selectedData = selectedNodes.map((node) => node.data);
+      this.prev = selectedData[0];
+      console.log(selectedData);
+      this.newJobForm.patchValue({
+        id: selectedData[0].id,
+        title: selectedData[0].title,
+        positions: selectedData[0].position,
+        status: selectedData[0].status,
+        manager: selectedData[0].manager,
+        createdBy: selectedData[0].createdBy
+      });
+      $('#newJob').modal('show');
+    }else{
+      console.log('Please select a job to edit');
+    }
+  }
+
+  newJob(){
+    this.editJobMode = false;
+    this.newJobForm.reset();
+    $('#newJob').modal('show');
+  }
+
+  addSubmission() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
     const selectedDataStringPresentation = selectedData
       .map((node) => node.make + ' ' + node.model)
       .join(', ');
-    if (selectedDataStringPresentation){
-        alert(`Selected nodes: ${selectedDataStringPresentation}`);
-      }
-      else{
-        alert(`please select rows`);
-      }
+    if (selectedDataStringPresentation) {
+      alert(`Selected nodes: ${selectedDataStringPresentation}`);
+    } else {
+      alert(`please select rows`);
+    }
   }
-
-  addRow(): void {
-    const newd = new Date().toLocaleString();
-    // tslint:disable-next-line: max-line-length
-    const newRow = {
-      id: '654',
-      title: 'Software Developer',
-      position: 2,
-      submissions: 6,
-      status: 'Active',
-      dateUpdated: newd,
-      manager: 'Krishna',
-      createdBy: 'Amjed',
-      createdAt: newd,
-    };
-    this.rowData.push(newRow);
-    console.log(newRow);
-    console.log(this.rowData);
+  onNewJob() {
+    if (!this.editJobMode){
+      const newd = new Date().toLocaleString();
+      // tslint:disable-next-line: max-line-length
+      const newRow = {
+        id: this.newJobForm.value.id,
+        title: this.newJobForm.value.title,
+        position: this.newJobForm.value.positions,
+        submissions: 0,
+        status: this.newJobForm.value.status,
+        dateUpdated: newd,
+        manager: this.newJobForm.value.manager,
+        createdBy: this.newJobForm.value.createdBy,
+        createdAt: newd,
+      };
+      // this.rowData.push(newRow);
+      // console.log(newRow);
+      // console.log(this.rowData);
+      this.dataService.addData(newRow);
+      this.dataService.getDataChangedListener().subscribe((res) => {
+        this.rowData = res;
+      });
+    }
+    else{
+      const newd = new Date().toLocaleString();
+      // tslint:disable-next-line: max-line-length
+      const newRow = {
+        id: this.newJobForm.value.id,
+        title: this.newJobForm.value.title,
+        position: this.newJobForm.value.positions,
+        submissions: this.prev.submissions,
+        status: this.newJobForm.value.status,
+        dateUpdated: newd,
+        manager: this.newJobForm.value.manager,
+        createdBy: this.newJobForm.value.createdBy,
+        createdAt: this.prev.createdAt
+      };
+      this.dataService.updateData(this.prev.id, newRow);
+      this.rowData = this.dataService.getData();
+      this.dataService.getDataChangedListener().subscribe((res) => {
+        this.rowData = res;
+      });
+    }
+    this.newJobForm.reset();
+    $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
-    this.agGrid.api.setRowData(this.rowData);
   }
 
   onGridReady(params): void {
@@ -212,6 +291,20 @@ export class SearchComponent implements OnInit {
 
     params.api.sizeColumnsToFit();
     window.addEventListener('resize', () => {
+      setTimeout(() => {
+        params.api.sizeColumnsToFit();
+      });
+    });
+
+    params.api.sizeColumnsToFit();
+  }
+
+  onGridReady2(params): void {
+    this.gridApi2 = params.api;
+    this.gridColumnApi2 = params.columnApi;
+
+    params.api.sizeColumnsToFit();
+    document.addEventListener('resize', () => {
       setTimeout(() => {
         params.api.sizeColumnsToFit();
       });

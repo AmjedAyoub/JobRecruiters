@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { LoginComponent } from './login/login.component';
 import { SearchComponent } from './search/search.component';
+import { DataService } from './_services/data.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { SearchComponent } from './search/search.component';
     HttpClientModule,
     AgGridModule.withComponents([])
   ],
-  providers: [AuthService],
+  providers: [AuthService, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

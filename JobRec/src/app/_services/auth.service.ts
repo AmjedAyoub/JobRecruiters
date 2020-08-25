@@ -26,11 +26,11 @@ export class AuthService {
   }
 
   getIsAuth(): boolean{
-    // this.isAuthenticated = localStorage.getItem('isAuth');
-    if (this.isAuthenticated === true){
-      return true;
+    this.isAuthenticated = localStorage.getItem('isAuth');
+    if (!this.isAuthenticated){
+      return false;
     }
-    return false;
+    return true;
   }
 
   getAuthStatusListener() {
