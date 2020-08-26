@@ -23,7 +23,6 @@ export class DataService {
     phone: string,
     jobs: any[]
   }[]>();
-  private d = new Date().toLocaleString();
   private candidates = [
     {
       id: '78',
@@ -62,10 +61,10 @@ export class DataService {
       position: 2,
       submissions: 4,
       status: 'Active',
-      dateUpdated: this.d,
+      dateUpdated: new Date('7/23/2020, 11:00:00 AM').toLocaleString(),
       manager: 'Krishna',
       createdBy: 'Amjed',
-      createdAt: this.d,
+      createdAt: new Date('7/20/2020, 11:45:00 AM').toLocaleString(),
     },
     // tslint:disable-next-line: max-line-length
     {
@@ -74,10 +73,10 @@ export class DataService {
       position: 1,
       submissions: 2,
       status: 'Active',
-      dateUpdated: this.d,
+      dateUpdated: new Date('6/18/2020, 10:30:00 AM').toLocaleString(),
       manager: 'Soujayna',
       createdBy: 'Max',
-      createdAt: this.d,
+      createdAt: new Date('6/12/2020, 11:48:05 AM').toLocaleString(),
     },
     // tslint:disable-next-line: max-line-length
     {
@@ -86,10 +85,10 @@ export class DataService {
       position: 6,
       submissions: 3,
       status: 'Active',
-      dateUpdated: this.d,
+      dateUpdated: new Date('7/24/2020, 02:15:00 PM').toLocaleString(),
       manager: 'Soujayna',
       createdBy: 'Max',
-      createdAt: this.d,
+      createdAt: new Date('7/20/2020, 09:10:00 AM').toLocaleString(),
     },
     // tslint:disable-next-line: max-line-length
     {
@@ -98,10 +97,10 @@ export class DataService {
       position: 3,
       submissions: 0,
       status: 'Active',
-      dateUpdated: this.d,
+      dateUpdated: new Date('8/21/2020, 03:34:00 PM').toLocaleString(),
       manager: 'Krishna',
       createdBy: 'Amjed',
-      createdAt: this.d,
+      createdAt: new Date('8/02/2020, 11:00:00 AM').toLocaleString(),
     },
     // tslint:disable-next-line: max-line-length
     {
@@ -110,10 +109,10 @@ export class DataService {
       position: 5,
       submissions: 1,
       status: 'Inactive',
-      dateUpdated: this.d,
+      dateUpdated: new Date('6/15/2020, 12:13:00 PM').toLocaleString(),
       manager: 'Soujayna',
       createdBy: 'Amjed',
-      createdAt: this.d,
+      createdAt: new Date('6/05/2020, 10:48:00 AM').toLocaleString(),
     },
   ];
   constructor() {}
@@ -149,9 +148,7 @@ export class DataService {
   }
 
   updateData(id: any, Data: any){
-
-    console.log(id);
-    for(let i = 0; i < this.rowData.length; i++){
+    for (let i = 0; i < this.rowData.length; i++){
       if(this.rowData[i].id === id){
         this.rowData[i] = Data;
         break;
