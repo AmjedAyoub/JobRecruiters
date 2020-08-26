@@ -1,1 +1,16 @@
 
+.modal-content {
+  background-color: #635476 !important;
+}
+
+.form-control{
+  background-color: #ded2e9 !important;
+}
+
+.dropdown-menu {
+  background-color: #3d3c41 !important;
+}
+
+.dropdown-item:hover {
+  background-color: #3d3c41 !important;
+}

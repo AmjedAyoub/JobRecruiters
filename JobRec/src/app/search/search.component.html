@@ -1,16 +1,23 @@
 <div class="container-fluid center">
   <div class="row center">
-    <div class="col-md-9">
-      <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 400px;">
+    <div class="col-md-9" style="display: flex;">
+      <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
         <div class="form-group has-success  has-danger" style="display: flex;">
-          <input type="text" class="form-control" placeholder="Search here!"
-            formControlName="search" [ngClass]="
-            searchForm.get('search').errors &&
-            searchForm.get('search').touched ?
-            'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
-          ">
-          <button type="submit" class="btn btn-outline-primary">Search</button>
-          <div class="invalid-feedback">Sorry, please enter a search query</div>
+          <div style="margin: auto; width: 800px;">
+            <input type="text" class="form-control" placeholder="Search by JobID, JobTitle, Manager, or CreatedBy"
+              formControlName="search" [ngClass]="
+              searchForm.get('search').errors &&
+              searchForm.get('search').touched ?
+              'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
+            ">
+            <div class="invalid-feedback">Sorry, please enter a search query</div>
+            <div class="invalid-feedback">You can use multiple search seperated by comma<br>
+              For example: JobId, JobTitle, Manager<br>
+              OR, Manager, JobTitle<br>
+              OR, Manager, JobTitle, CreatedBy
+            </div>
+          </div>
+          <button type="submit" class="btn btn-outline-primary ml-2" style="max-height: 40px;">Search</button>
         </div>
       </form>
     </div>
@@ -54,7 +61,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <form [formGroup]="newJobForm" (submit)="onNewJob()" class="center"
-          style="margin: auto; width: 400px; padding: 2px;">
+          style="margin: auto; width: 400px; padding: 20px;">
           <div class="form-group has-success has-danger">
             <input type="text" class="form-control" placeholder="Job ID" formControlName="id" [ngClass]="
             (newJobForm.get('id').errors &&
@@ -132,7 +139,7 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <form class="center"
+        <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
             <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
@@ -141,9 +148,10 @@
             </ag-grid-angular>
           </div>
           <br>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
   </div>
+
 </div>
