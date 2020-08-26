@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -61,6 +62,7 @@ export class DataService {
       position: 2,
       submissions: 4,
       status: 'Active',
+      team: 'MS (Azure)',
       dateUpdated: new Date('7/23/2020, 11:00:00 AM').toLocaleString(),
       manager: 'Krishna',
       createdBy: 'Amjed',
@@ -73,6 +75,7 @@ export class DataService {
       position: 1,
       submissions: 2,
       status: 'Active',
+      team: 'Amazone',
       dateUpdated: new Date('6/18/2020, 10:30:00 AM').toLocaleString(),
       manager: 'Soujayna',
       createdBy: 'Max',
@@ -85,6 +88,7 @@ export class DataService {
       position: 6,
       submissions: 3,
       status: 'Active',
+      team: 'Amazone',
       dateUpdated: new Date('7/24/2020, 02:15:00 PM').toLocaleString(),
       manager: 'Soujayna',
       createdBy: 'Max',
@@ -97,6 +101,7 @@ export class DataService {
       position: 3,
       submissions: 0,
       status: 'Active',
+      team: 'MS (Azure)',
       dateUpdated: new Date('8/21/2020, 03:34:00 PM').toLocaleString(),
       manager: 'Krishna',
       createdBy: 'Amjed',
@@ -109,13 +114,14 @@ export class DataService {
       position: 5,
       submissions: 1,
       status: 'Inactive',
+      team: 'Peaple Tech',
       dateUpdated: new Date('6/15/2020, 12:13:00 PM').toLocaleString(),
       manager: 'Soujayna',
       createdBy: 'Amjed',
       createdAt: new Date('6/05/2020, 10:48:00 AM').toLocaleString(),
     },
   ];
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   addData(row: any) {
     const newd = new Date().toLocaleString();
@@ -147,6 +153,16 @@ export class DataService {
     return this.candidates;
   }
 
+  updateCandidate(id: any, Data: any){
+    for (let i = 0; i < this.candidates.length; i++){
+      if(this.candidates[i].id === id){
+        this.candidates[i] = Data;
+        break;
+      }
+    }
+    this.candidateChangedListener.next( [...this.candidates] );
+  }
+
   updateData(id: any, Data: any){
     for (let i = 0; i < this.rowData.length; i++){
       if(this.rowData[i].id === id){
@@ -154,6 +170,20 @@ export class DataService {
         break;
       }
     }
-    this.candidateChangedListener.next( [...this.candidates] );
+    this.dataChangedListener.next( [...this.rowData] );
+  }
+
+
+  addPhoto(image?: File) {
+    const postData = new FormData();
+    if (image !== null){
+      postData.append('image', image);
+      postData.append('userId', localStorage.getItem('userId'));
+    }
+    return this.http
+      .post<{ message: string; doc: any }>(
+        'http://localhost:3000/api/photo',
+        postData
+      );
   }
 }

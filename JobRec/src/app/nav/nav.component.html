@@ -16,12 +16,13 @@
         <a class="nav-link" href="#">About</a>
       </li> -->
     </ul>
-    <form class="form-inline my-2 my-lg-0" *ngIf="isAuth">
-      <ul>
-        <li class="nav-item">
-            <a class="nav-link" (click)="logout()">Logout</a>
-        </li>
-      </ul>
+    <form class="form-inline my-2 my-lg-0 mr-3" *ngIf="isAuth">
+
+        <button type="button" class="btn btn-outline-warning mr-3" (click)="onPageChanged('candidates')" *ngIf="isSearch && isAuth">Candidates</button>
+
+        <button type="button" class="btn btn-outline-success mr-3" (click)="onPageChanged('search')" *ngIf="!isSearch && isAuth">Jobs Search</button>
+
+        <button type="button" class="btn btn-outline-danger" (click)="logout()" *ngIf="isAuth">Logout</button>
     </form>
   </div>
 </nav>

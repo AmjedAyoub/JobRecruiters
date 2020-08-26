@@ -7,10 +7,10 @@ import {
   FormBuilder,
   NgForm,
 } from '@angular/forms';
+import { FileUploader } from 'ng2-file-upload';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
-
 
 declare var $: any;
 var l = 0;
@@ -38,6 +38,10 @@ export class SearchComponent implements OnInit {
   newCandidateForm: FormGroup;
   private len = 0;
 
+  uploader: FileUploader;
+  hasBaseDropZoneOver: boolean;
+  response: string;
+
   columnDefs = [
     {
       headerName: 'Select',
@@ -57,6 +61,13 @@ export class SearchComponent implements OnInit {
     {
       headerName: 'Job Title',
       field: 'title',
+      sortable: true,
+      filter: true,
+      resizable: true,
+    },
+    {
+      headerName: 'Team',
+      field: 'team',
       sortable: true,
       filter: true,
       resizable: true,
@@ -147,7 +158,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-    }
+    },
   ];
 
   columnDefs3 = [
@@ -193,7 +204,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-    }
+    },
   ];
 
   d = new Date().toLocaleString();
@@ -201,7 +212,37 @@ export class SearchComponent implements OnInit {
   rowData2: any[];
   // rowData: any;
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private alertify: AlertifyService) {}
+  constructor(
+    private dataService: DataService,
+    private fb: FormBuilder,
+    private alertify: AlertifyService
+  ) {
+    this.uploader = new FileUploader({
+      url: 'http://localhost:3000/api/photo',
+      disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
+      formatDataFunctionIsAsync: true,
+      formatDataFunction: async (item) => {
+        return new Promise((resolve, reject) => {
+          resolve({
+            name: item._file.name,
+            length: item._file.size,
+            contentType: item._file.type,
+            date: new Date(),
+          });
+        });
+      },
+    });
+
+    this.hasBaseDropZoneOver = false;
+
+    this.response = '';
+
+    this.uploader.response.subscribe((res) => (this.response = res));
+  }
+
+  public fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  }
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
@@ -224,14 +265,14 @@ export class SearchComponent implements OnInit {
     this.createNewCandidateForm();
   }
 
-  createNewCandidateForm(){
+  createNewCandidateForm() {
     this.newCandidateForm = this.fb.group(
       {
         id: ['', Validators.required],
         fullName: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
-        phone: ['', Validators.required]
-      },
+        phone: ['', Validators.required],
+      }
       // { validator: this.idCheckValidator2 }
     );
   }
@@ -250,11 +291,12 @@ export class SearchComponent implements OnInit {
       {
         id: ['', Validators.required],
         title: ['', Validators.required],
+        team: ['', Validators.required],
         positions: [null, Validators.required],
         status: ['Active', Validators.required],
         manager: ['', Validators.required],
         createdBy: ['', Validators.required],
-      },
+      }
       // { validator: this.idCheckValidator }
     );
   }
@@ -274,60 +316,61 @@ export class SearchComponent implements OnInit {
   editJob() {
     this.editJobMode = true;
     const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if(selectedNodes.length > 1){
-      this.alertify.error('Sorry, you cant edit more than one job each time!, please select one job only!');
-    }else if (selectedNodes.length === 1) {
+    if (selectedNodes.length > 1) {
+      this.alertify.error(
+        'Sorry, you cant edit more than one job each time!, please select one job only!'
+      );
+    } else if (selectedNodes.length === 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       this.prev = selectedData[0];
       console.log(selectedData);
       this.newJobForm.patchValue({
         id: selectedData[0].id,
         title: selectedData[0].title,
+        team: selectedData[0].team,
         positions: selectedData[0].position,
         status: selectedData[0].status,
         manager: selectedData[0].manager,
-        createdBy: selectedData[0].createdBy
+        createdBy: selectedData[0].createdBy,
       });
       $('#newJob').modal('show');
-    }else{
+    } else {
       this.alertify.error('Please select a job to edit');
     }
   }
 
-  newJob(){
+  newJob() {
     this.editJobMode = false;
     this.newJobForm.reset();
     $('#newJob').modal('show');
   }
 
-  viewCandidates(){
+  viewCandidates() {
     $('#viewCandidate').modal('show');
     this.gridApi2.sizeColumnsToFit();
   }
 
   addSubmission() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if (selectedNodes.length >= 1){
+    if (selectedNodes.length >= 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       this.selectedJobs = selectedData;
       $('#viewSubs').modal('show');
       this.gridApi3.sizeColumnsToFit();
-    }else{
+    } else {
       this.alertify.error('Please select jobs to add submissions');
     }
   }
 
-  onAddSubs(){
+  onAddSubs() {}
 
-  }
-
-  onNewCandidate(){
+  onNewCandidate() {
     const newRow = {
       id: this.newCandidateForm.value.id,
       fullName: this.newCandidateForm.value.fullName,
       email: this.newCandidateForm.value.email,
       phone: this.newCandidateForm.value.phone,
-      jobs: []
+      jobs: [],
     };
     this.dataService.addNewCandidate(newRow);
     this.dataService.getCandidateChangedListener().subscribe((res) => {
@@ -338,12 +381,13 @@ export class SearchComponent implements OnInit {
   }
 
   onNewJob() {
-    if (!this.editJobMode){
+    if (!this.editJobMode) {
       const newd = new Date().toLocaleString();
       // tslint:disable-next-line: max-line-length
       const newRow = {
         id: this.newJobForm.value.id,
         title: this.newJobForm.value.title,
+        team: this.newJobForm.value.team,
         position: this.newJobForm.value.positions,
         submissions: 0,
         status: this.newJobForm.value.status,
@@ -359,20 +403,20 @@ export class SearchComponent implements OnInit {
       this.dataService.getDataChangedListener().subscribe((res) => {
         this.rowData = res;
       });
-    }
-    else{
+    } else {
       const newd = new Date().toLocaleString();
       // tslint:disable-next-line: max-line-length
       const newRow = {
         id: this.newJobForm.value.id,
         title: this.newJobForm.value.title,
+        team: this.newJobForm.value.team,
         position: this.newJobForm.value.positions,
         submissions: this.prev.submissions,
         status: this.newJobForm.value.status,
         dateUpdated: newd,
         manager: this.newJobForm.value.manager,
         createdBy: this.newJobForm.value.createdBy,
-        createdAt: this.prev.createdAt
+        createdAt: this.prev.createdAt,
       };
       this.dataService.updateData(this.prev.id, newRow);
       this.rowData = this.dataService.getData();
@@ -383,6 +427,10 @@ export class SearchComponent implements OnInit {
     this.newJobForm.reset();
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
+  }
+
+  deleteJob(){
+    
   }
 
   onGridReady(params): void {
@@ -403,19 +451,17 @@ export class SearchComponent implements OnInit {
     this.gridApi2 = params.api;
     this.gridColumnApi2 = params.columnApi;
 
-    this.dataService.getCandidateChangedListener()
-      .subscribe(data => {
-        this.rowData2 = data;
-      });
+    this.dataService.getCandidateChangedListener().subscribe((data) => {
+      this.rowData2 = data;
+    });
   }
 
   onGridReady3(params): void {
     this.gridApi3 = params.api;
     this.gridColumnApi3 = params.columnApi;
 
-    this.dataService.getCandidateChangedListener()
-      .subscribe(data => {
-        this.rowData2 = data;
-      });
+    this.dataService.getCandidateChangedListener().subscribe((data) => {
+      this.rowData2 = data;
+    });
   }
 }

@@ -22,116 +22,23 @@
       </form>
     </div>
     <div class="col-md-2">
-      <form class="form-inline my-2 my-lg-0">
         <a class="nav-link">
-          <button type="button" class="btn btn-outline-info" (click)="newJob()">New Job</button>
+          <button type="button" class="btn btn-outline-info" (click)="newCandidate()">New Candidate</button>
         </a>
-      </form>
     </div>
   </div>
   <div class="row center">
     <ag-grid-angular #agGrid style="width: 99%; height: 450px; margin: auto;" class="ag-theme-alpine"
-      [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="multiple" (gridReady)="onGridReady($event)">
+      [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple" (gridReady)="onGridReady($event)">
     </ag-grid-angular>
   </div>
   <div class="row center">
-    <button type="button" class="btn btn-outline-warning mt-2" (click)="editJob()">Edit Job</button>
-    <button type="button" class="btn btn-outline-danger mt-2 ml-2" (click)="deleteJob()">Delete Job</button>
-    <button type="button" class="btn btn-outline-danger mt-2" style="margin: auto;" (click)="addSubmission()">Add
-      Submissions</button>
+    <button type="button" class="btn btn-outline-warning mt-2" (click)="editCandidate()">Edit Candidate</button>
+    <button type="button" class="btn btn-outline-danger mt-2 ml-2" (click)="deleteCandidate()">Delete Candidate</button>
   </div>
   <hr>
 
-  <div class="modal fade bd-example-modal-lg mt-5" id="newJob" tabindex="-1" role="dialog"
-    aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <form [formGroup]="newJobForm" (submit)="onNewJob()" class="center"
-          style="margin: auto; width: 400px; padding: 20px;">
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Job ID" formControlName="id" [ngClass]="
-            (newJobForm.get('id').errors &&
-            newJobForm.get('id').touched) ||
-            (newJobForm.get('id').touched &&
-            newJobForm.hasError('exists')) ?
-            'is-invalid' : newJobForm.get('id').valid && !newJobForm.hasError('exists') ? 'is-valid' : ''
-          ">
-            <div class="valid-feedback">Success! valid ID</div>
-            <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Job Title"
-              formControlName="title" [ngClass]="
-            newJobForm.get('title').errors &&
-            newJobForm.get('title').touched ?
-            'is-invalid' : newJobForm.get('title').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, title is required</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Team"
-              formControlName="team" [ngClass]="
-            newJobForm.get('team').errors &&
-            newJobForm.get('team').touched ?
-            'is-invalid' : newJobForm.get('team').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, team is required</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="number" class="form-control" placeholder="# of Positions"
-              formControlName="positions" [ngClass]="
-            newJobForm.get('positions').errors &&
-            newJobForm.get('positions').touched ?
-            'is-invalid' : newJobForm.get('positions').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, number of positions is required</div>
-          </div>
-
-          <div class="form-group">
-            <label for="Select1">Job Status</label>
-            <select class="form-control" id="Select1" formControlName="status" [ngClass]="
-          newJobForm.get('status').errors &&
-          newJobForm.get('status').touched ?
-          'is-invalid' : ''
-        ">
-              <option>Active</option>
-              <option>Processing</option>
-              <option>Closed</option>
-            </select>
-            <div class="invalid-feedback">Please select a status</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Manager"
-              formControlName="manager" [ngClass]="
-            newJobForm.get('manager').errors &&
-            newJobForm.get('manager').touched ?
-            'is-invalid' : newJobForm.get('manager').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, number of manager is required</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Created By"
-              formControlName="createdBy" [ngClass]="
-            newJobForm.get('createdBy').errors &&
-            newJobForm.get('createdBy').touched ?
-            'is-invalid' : newJobForm.get('createdBy').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, number of Created By is required</div>
-          </div>
-          <br>
-          <button mat-raised-button class="btn btn-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade bd-example-modal-lg mt-5" id="viewCandidate" tabindex="-1" role="dialog"
+  <!-- <div class="modal fade bd-example-modal-lg mt-5" id="viewCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -139,16 +46,17 @@
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
             <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
-              [rowData]="rowData2" [columnDefs]="columnDefs2" rowSelection="multiple"
+              [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple"
               (gridReady)="onGridReady2($event)">
             </ag-grid-angular>
           </div>
           <br>
+          <button mat-raised-button class="btn btn-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="modal fade bd-example-modal-lg mt-5" id="newCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -198,33 +106,12 @@
             <div class="invalid-feedback">Sorry, phone is required</div>
           </div>
           <br>
-          <button mat-raised-button class="btn btn-success" type="submit">Save</button>
+          <button mat-raised-button class="btn btn-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </form>
       </div>
     </div>
   </div>
-
-  <div class="modal fade mt-5" id="viewSubs" tabindex="-1" role="dialog"
-    aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog candidateView">
-      <div class="modal-content">
-        <form class="center mt-4"
-          style="margin: auto; width: 95%; padding: 2px;">
-          <div class="form-group">
-            <ag-grid-angular #agGrid3 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
-              [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple"
-              (gridReady)="onGridReady3($event)">
-            </ag-grid-angular>
-          </div>
-          <br>
-          <button type="button" class="btn btn-success" (click)="onAddSubs()">Add</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
 
 
 
@@ -355,3 +242,4 @@
 
 
 </div>
+
