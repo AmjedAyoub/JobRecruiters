@@ -24,6 +24,10 @@ body{
   color: white !important;
 }
 
+.ag-root-wrapper {
+  background-color: #4b4343 !important;
+}
+
 /* .ag-header-cell {
   width: fit-content !important;
 }

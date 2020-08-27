@@ -41,6 +41,10 @@ export class SearchComponent implements OnInit {
   uploader: FileUploader;
   hasBaseDropZoneOver: boolean;
   response: string;
+  d = new Date().toLocaleString();
+  rowData: any[];
+  rowData2: any[];
+  rowData3: any[];
 
   columnDefs = [
     {
@@ -85,6 +89,10 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      cellRenderer: (params) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div><button class="btn btn-outline-warning" style="width: 95%; margin: auto;">${params.value}</button></div>`;
+      },
     },
     {
       headerName: 'Status',
@@ -207,42 +215,12 @@ export class SearchComponent implements OnInit {
     },
   ];
 
-  d = new Date().toLocaleString();
-  rowData: any[];
-  rowData2: any[];
-  // rowData: any;
 
   constructor(
     private dataService: DataService,
     private fb: FormBuilder,
     private alertify: AlertifyService
-  ) {
-    this.uploader = new FileUploader({
-      url: 'http://localhost:3000/api/photo',
-      disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
-      formatDataFunctionIsAsync: true,
-      formatDataFunction: async (item) => {
-        return new Promise((resolve, reject) => {
-          resolve({
-            name: item._file.name,
-            length: item._file.size,
-            contentType: item._file.type,
-            date: new Date(),
-          });
-        });
-      },
-    });
-
-    this.hasBaseDropZoneOver = false;
-
-    this.response = '';
-
-    this.uploader.response.subscribe((res) => (this.response = res));
-  }
-
-  public fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
@@ -310,7 +288,65 @@ export class SearchComponent implements OnInit {
   //   return null;
   // }
 
-  search() {}
+  async search() {
+    if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
+      let initialData = await [...this.dataService.getData()];
+      let queries = this.searchForm.value.search.split(',');
+      let results = [];
+      for (let query of queries) {
+        query = query.toLowerCase();
+        if (
+          !isNaN(query) &&
+          query !== '' &&
+          !query.match(/^\s+$/) &&
+          query !== null
+        ) {
+          // Numbers
+          for (const job of initialData) {
+            if (job.id.includes(query)) {
+              if (results.indexOf(job) < 0) {
+                results.push(job);
+              }
+            }
+          }
+        } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
+          if (!isNaN(Date.parse(query))) {
+            // Dates
+            for (const job of initialData) {
+              if (
+                job.createdAt.includes(query) ||
+                job.dateUpdated.includes(query)
+              ) {
+                if (results.indexOf(job) < 0) {
+                  results.push(job);
+                }
+              }
+            }
+          } else {
+            // String
+            // tslint:disable-next-line: max-line-length
+            for (const job of initialData) {
+              if (
+                job.title.toLowerCase().includes(query) ||
+                job.team.toLowerCase().includes(query) ||
+                job.manager.toLowerCase().includes(query) ||
+                job.createdBy.toLowerCase().includes(query) ||
+                job.status.toLowerCase().includes(query)
+              ) {
+                if (results.indexOf(job) < 0) {
+                  results.push(job);
+                }
+              }
+            }
+          }
+        }
+      }
+      this.rowData = results;
+      // console.log(this.rowData);
+    } else {
+      this.rowData = [...this.dataService.getData()];
+    }
+  }
 
   prev;
   editJob() {
@@ -339,6 +375,28 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  deleteJob() {
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    if (selectedNodes.length >= 1) {
+      const selectedData = selectedNodes.map((node) => node.data);
+      this.prev = selectedData[0];
+      console.log(selectedData);
+      for (const job of selectedData) {
+        for (let i = 0; i < this.rowData.length; i++) {
+          if (this.rowData[i].id === job.id) {
+            this.dataService.deleteData(i);
+            break;
+          }
+        }
+      }
+      this.dataService.getDataChangedListener().subscribe((res) => {
+        this.rowData = res;
+      });
+    } else {
+      this.alertify.error('Please select jobs to delete');
+    }
+  }
+
   newJob() {
     this.editJobMode = false;
     this.newJobForm.reset();
@@ -362,7 +420,16 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  onAddSubs() {}
+  onAddSubs() {
+    const selectedNodes = this.agGrid3.api.getSelectedNodes();
+    if (selectedNodes.length >= 1) {
+      const selectedData = selectedNodes.map((node) => node.data);
+      this.dataService.addSubmissions(this.selectedJobs, selectedData);
+      $('#viewSubs').modal('hide');
+    } else {
+      this.alertify.error('Please select candidates to add submissions');
+    }
+  }
 
   onNewCandidate() {
     const newRow = {
@@ -429,8 +496,21 @@ export class SearchComponent implements OnInit {
     // this.agGrid.api.setRowData(this.rowData);
   }
 
-  deleteJob(){
-    
+  async onSubClick(id: string){
+    let candidates = await [...this.dataService.getCandidates()];
+    this.rowData3 = [];
+    for (const candidate of candidates) {
+      for (const job of candidate.jobs) {
+        if (job === id){
+          if (this.rowData3.indexOf(candidate) < 0){
+            this.rowData3.push(candidate);
+          }
+          break;
+        }
+      }
+    }
+    $('#viewCandidate').modal('show');
+    this.gridApi2.sizeColumnsToFit();
   }
 
   onGridReady(params): void {
@@ -444,16 +524,18 @@ export class SearchComponent implements OnInit {
       });
     });
 
+    this.agGrid.cellClicked.subscribe((res) => {
+      if (res.colDef.field === 'submissions'){
+        this.onSubClick(res.data.id);
+      }
+    });
+
     params.api.sizeColumnsToFit();
   }
 
   onGridReady2(params): void {
     this.gridApi2 = params.api;
     this.gridColumnApi2 = params.columnApi;
-
-    this.dataService.getCandidateChangedListener().subscribe((data) => {
-      this.rowData2 = data;
-    });
   }
 
   onGridReady3(params): void {

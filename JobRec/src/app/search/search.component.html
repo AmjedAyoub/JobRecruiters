@@ -4,17 +4,14 @@
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 800px;">
-            <input type="text" class="form-control" placeholder="Search by JobID, JobTitle, Manager, or CreatedBy"
-              formControlName="search" [ngClass]="
+            <input type="text" class="form-control" placeholder="Search by keyword, JobID, JobTitle, Manager, Team, Status or Date"
+              formControlName="search" (ngModelChange)="search()" [ngClass]="
               searchForm.get('search').errors &&
               searchForm.get('search').touched ?
               'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
             ">
             <div class="invalid-feedback">Sorry, please enter a search query</div>
-            <div class="invalid-feedback">You can use multiple search seperated by comma<br>
-              For example: JobId, JobTitle, Manager<br>
-              OR, Manager, JobTitle<br>
-              OR, Manager, JobTitle, CreatedBy
+            <div class="invalid-feedback">You can use multiple search seperated by comma, for example: JobTitle, Manager, Status, ...
             </div>
           </div>
           <button type="submit" class="btn btn-outline-primary ml-2" style="max-height: 40px;">Search</button>
@@ -124,8 +121,8 @@
             <div class="invalid-feedback">Sorry, number of Created By is required</div>
           </div>
           <br>
-          <button mat-raised-button class="btn btn-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
         </form>
       </div>
     </div>
@@ -139,67 +136,12 @@
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
             <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
-              [rowData]="rowData2" [columnDefs]="columnDefs2" rowSelection="multiple"
+              [rowData]="rowData3" [columnDefs]="columnDefs2" rowSelection="multiple"
               (gridReady)="onGridReady2($event)">
             </ag-grid-angular>
           </div>
           <br>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade bd-example-modal-lg mt-5" id="newCandidate" tabindex="-1" role="dialog"
-    aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <form [formGroup]="newCandidateForm" (submit)="onNewCandidate()" class="center"
-          style="margin: auto; width: 400px; padding: 20px;">
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Candidate ID" formControlName="id" [ngClass]="
-            (newCandidateForm.get('id').errors &&
-            newCandidateForm.get('id').touched) ||
-            (newCandidateForm.get('id').touched &&
-            newCandidateForm.hasError('exists')) ?
-            'is-invalid' : newCandidateForm.get('id').valid && !newCandidateForm.hasError('exists') ? 'is-valid' : ''
-          ">
-            <div class="valid-feedback">Success! valid ID</div>
-            <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Full Name"
-              formControlName="fullName" [ngClass]="
-            newCandidateForm.get('fullName').errors &&
-            newCandidateForm.get('fullName').touched ?
-            'is-invalid' : newCandidateForm.get('fullName').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, name is required</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Email"
-              formControlName="email" [ngClass]="
-            newCandidateForm.get('email').errors &&
-            newCandidateForm.get('email').touched ?
-            'is-invalid' : newCandidateForm.get('email').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, email is required</div>
-          </div>
-
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Phone"
-              formControlName="phone" [ngClass]="
-            newCandidateForm.get('phone').errors &&
-            newCandidateForm.get('phone').touched ?
-            'is-invalid' : newCandidateForm.get('phone').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, phone is required</div>
-          </div>
-          <br>
-          <button mat-raised-button class="btn btn-success" type="submit">Save</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
@@ -218,8 +160,8 @@
             </ag-grid-angular>
           </div>
           <br>
-          <button type="button" class="btn btn-success" (click)="onAddSubs()">Add</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-success" (click)="onAddSubs()">Add</button>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
         </form>
       </div>
     </div>

@@ -4,17 +4,14 @@
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 800px;">
-            <input type="text" class="form-control" placeholder="Search by JobID, JobTitle, Manager, or CreatedBy"
-              formControlName="search" [ngClass]="
+            <input type="text" class="form-control" placeholder="Search by CandidateID, Name, Email, Phone, JobID"
+              formControlName="search" (ngModelChange)="search()" [ngClass]="
               searchForm.get('search').errors &&
               searchForm.get('search').touched ?
               'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
             ">
             <div class="invalid-feedback">Sorry, please enter a search query</div>
-            <div class="invalid-feedback">You can use multiple search seperated by comma<br>
-              For example: JobId, JobTitle, Manager<br>
-              OR, Manager, JobTitle<br>
-              OR, Manager, JobTitle, CreatedBy
+            <div class="invalid-feedback">You can use multiple search seperated by comma, for example: CandidateId, Name, Email, ...
             </div>
           </div>
           <button type="submit" class="btn btn-outline-primary ml-2" style="max-height: 40px;">Search</button>
@@ -51,8 +48,8 @@
             </ag-grid-angular>
           </div>
           <br>
-          <button mat-raised-button class="btn btn-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
@@ -106,13 +103,40 @@
             <div class="invalid-feedback">Sorry, phone is required</div>
           </div>
           <br>
-          <button mat-raised-button class="btn btn-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
         </form>
       </div>
     </div>
   </div>
 
+
+  <div class="modal fade bd-example-modal-xl mt-5" id="viewJobs" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form class="center mt-4"
+          style="margin: auto; width: 95%; padding: 2px;">
+          <div class="form-group">
+            <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
+              [rowData]="rowData3" [columnDefs]="columnDefs" rowSelection="multiple"
+              (gridReady)="onGridReady2($event)">
+            </ag-grid-angular>
+          </div>
+          <br>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- <form [formGroup]="uploadImgForm" (submit)="onUploadImg()" class="center">
+    <div>
+      <button class="btn btn-primary" type="button" (click)="filePicker2.click()">Pick Image</button>
+      <input id="postFile" type="file" #filePicker2 (change)="onImagePicked2($event)" accept=".pdf,.doc,.docx">
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="!uploadImgForm.valid">Upload</button>
+  </form> -->
 
 
 <!--

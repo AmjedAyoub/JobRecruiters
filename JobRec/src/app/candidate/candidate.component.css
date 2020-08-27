@@ -1,0 +1,33 @@
+
+.modal-content {
+  background-color: #4e3c55 !important;
+}
+
+.form-control{
+  background-color: #ded2e9 !important;
+}
+
+.dropdown-menu {
+  background-color: #3d3c41 !important;
+}
+
+.dropdown-item:hover {
+  background-color: #3d3c41 !important;
+}
+
+.candidateView{
+  max-width: 900px;
+}
+
+.my-drop-zone {
+  border: dotted 3px lightgray;
+}
+
+.nv-file-over {
+  border: dotted 3px red;
+} /* Default class applied to drop zones on over */
+
+.another-file-over-class {
+  border: dotted 3px green;
+}
+

@@ -2,11 +2,11 @@
   <a class="navbar-brand" routerLink="">RecJob</a>
 
   <div class="collapse navbar-collapse" id="navbarColor02">
-    <ul class="navbar-nav mr-auto" *ngIf="isAuth">
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="#">Home</a>
+    <ul class="navbar-nav mr-auto" *ngIf="isAuth" style="margin: auto; height: 38px;">
+      <li class="nav-item" style="margin: auto; width: 300px; height: 100%;">
+        <div class="my-nav-link center">{{ isSearch ? 'Jobs Search Page' : 'Candidates Search Page' }}</div>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" href="#">Features</a>
       </li>
       <li class="nav-item">

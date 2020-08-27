@@ -3,15 +3,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const postsRoutes = require("./routes/posts");
-const userRoutes = require("./routes/user");
-const photoRoutes = require("./routes/photos");
+const candidateRoutes = require("./routes/candidates");
+const docRoutes = require("./routes/docs");
+const jobRoutes = require("./routes/jobs");
 
 const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://amjed:kptOgSX21cleLXRC@facer.6wtnl.mongodb.net/FacerDB?retryWrites=true&w=majority"
+    "mongodb+srv://amjed:fSv826sWkvpU7pQ0@cluster0.ggzbs.mongodb.net/rec-job?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Connected to database!");
@@ -22,7 +22,7 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images", express.static(path.join("images")));
+app.use("/Docs", express.static(path.join("docs")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -37,8 +37,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/posts", postsRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/photo", photoRoutes);
+app.use("/api/candidates", candidateRoutes);
+app.use("/api/docs", docRoutes);
+app.use("/api/jobs", jobRoutes);
 
 module.exports = app;

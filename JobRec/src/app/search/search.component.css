@@ -1,6 +1,6 @@
 
 .modal-content {
-  background-color: #635476 !important;
+  background-color: #4e3c55 !important;
 }
 
 .form-control{
@@ -27,7 +27,7 @@
   border: dotted 3px red;
 } /* Default class applied to drop zones on over */
 
-.another-file-over-class { 
+.another-file-over-class {
   border: dotted 3px green;
 }
 

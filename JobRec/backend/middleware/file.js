@@ -1,19 +1,20 @@
 const multer = require("multer");
 
 const MIME_TYPE_MAP = {
-  "image/pdf": "pdf",
-  "image/docx": "docx",
-  "image/doc": "doc"
+  "Doc/pdf": "pdf",
+  "Doc/docx": "docx",
+  "Doc/doc": "doc"
 };
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // console.log(file)
     const isValid = MIME_TYPE_MAP[file.mimetype];
     let error = new Error("Invalid mime type");
     if (isValid) {
       error = null;
     }
-    cb(error, "images");
+    cb(error, "docs");
   },
   filename: (req, file, cb) => {
     const name = file.originalname
@@ -25,4 +26,4 @@ const storage = multer.diskStorage({
   }
 });
 
-module.exports = multer({ storage: storage }).single("image");
+module.exports = multer({ storage: storage }).single("doc");
