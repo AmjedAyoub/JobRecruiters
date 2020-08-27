@@ -27,8 +27,10 @@
     </div>
   </div>
   <div class="row center">
-    <ag-grid-angular #agGrid style="width: 99%; height: 450px; margin: auto;" class="ag-theme-alpine"
-      [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="multiple" (gridReady)="onGridReady($event)">
+    <ag-grid-angular #agGrid style="width: 99%; height: 500px; margin: auto;" class="ag-theme-alpine"
+      [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="multiple" (gridReady)="onGridReady($event)"
+      [suppressHorizontalScroll]=false
+      [enableSorting]="true">
     </ag-grid-angular>
   </div>
   <div class="row center">
@@ -44,81 +46,96 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <form [formGroup]="newJobForm" (submit)="onNewJob()" class="center"
-          style="margin: auto; width: 400px; padding: 20px;">
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Job ID" formControlName="id" [ngClass]="
-            (newJobForm.get('id').errors &&
-            newJobForm.get('id').touched) ||
-            (newJobForm.get('id').touched &&
-            newJobForm.hasError('exists')) ?
-            'is-invalid' : newJobForm.get('id').valid && !newJobForm.hasError('exists') ? 'is-valid' : ''
-          ">
-            <div class="valid-feedback">Success! valid ID</div>
-            <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
-          </div>
+          style="margin: auto; width: 100%; padding: 20px;">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Job ID" formControlName="id" [ngClass]="
+                (newJobForm.get('id').errors &&
+                newJobForm.get('id').touched) ||
+                (newJobForm.get('id').touched &&
+                newJobForm.hasError('exists')) ?
+                'is-invalid' : newJobForm.get('id').valid && !newJobForm.hasError('exists') ? 'is-valid' : ''
+              ">
+                <div class="valid-feedback">Success! valid ID</div>
+                <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Job Title"
-              formControlName="title" [ngClass]="
-            newJobForm.get('title').errors &&
-            newJobForm.get('title').touched ?
-            'is-invalid' : newJobForm.get('title').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, title is required</div>
-          </div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Job Title"
+                  formControlName="title" [ngClass]="
+                newJobForm.get('title').errors &&
+                newJobForm.get('title').touched ?
+                'is-invalid' : newJobForm.get('title').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, title is required</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Team"
-              formControlName="team" [ngClass]="
-            newJobForm.get('team').errors &&
-            newJobForm.get('team').touched ?
-            'is-invalid' : newJobForm.get('team').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, team is required</div>
-          </div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Team"
+                  formControlName="team" [ngClass]="
+                newJobForm.get('team').errors &&
+                newJobForm.get('team').touched ?
+                'is-invalid' : newJobForm.get('team').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, team is required</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="number" class="form-control" placeholder="# of Positions"
-              formControlName="positions" [ngClass]="
-            newJobForm.get('positions').errors &&
-            newJobForm.get('positions').touched ?
-            'is-invalid' : newJobForm.get('positions').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, number of positions is required</div>
-          </div>
+              <div class="form-group has-success has-danger">
+                <input type="number" class="form-control" placeholder="# of Positions"
+                  formControlName="positions" [ngClass]="
+                newJobForm.get('positions').errors &&
+                newJobForm.get('positions').touched ?
+                'is-invalid' : newJobForm.get('positions').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, number of positions is required</div>
+              </div>
 
-          <div class="form-group">
-            <label for="Select1">Job Status</label>
-            <select class="form-control" id="Select1" formControlName="status" [ngClass]="
-          newJobForm.get('status').errors &&
-          newJobForm.get('status').touched ?
-          'is-invalid' : ''
-        ">
-              <option>Active</option>
-              <option>Processing</option>
-              <option>Closed</option>
-            </select>
-            <div class="invalid-feedback">Please select a status</div>
-          </div>
+              <div class="form-group">
+                <label for="Select1" style="color: aliceblue;">Job Status</label>
+                <select class="form-control" id="Select1" formControlName="status" [ngClass]="
+              newJobForm.get('status').errors &&
+              newJobForm.get('status').touched ?
+              'is-invalid' : ''
+            ">
+                  <option>Active</option>
+                  <option>Processing</option>
+                  <option>Closed</option>
+                </select>
+                <div class="invalid-feedback">Please select a status</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Manager"
-              formControlName="manager" [ngClass]="
-            newJobForm.get('manager').errors &&
-            newJobForm.get('manager').touched ?
-            'is-invalid' : newJobForm.get('manager').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, number of manager is required</div>
-          </div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Manager"
+                  formControlName="manager" [ngClass]="
+                newJobForm.get('manager').errors &&
+                newJobForm.get('manager').touched ?
+                'is-invalid' : newJobForm.get('manager').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, number of manager is required</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Created By"
-              formControlName="createdBy" [ngClass]="
-            newJobForm.get('createdBy').errors &&
-            newJobForm.get('createdBy').touched ?
-            'is-invalid' : newJobForm.get('createdBy').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, number of Created By is required</div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Created By"
+                  formControlName="createdBy" [ngClass]="
+                newJobForm.get('createdBy').errors &&
+                newJobForm.get('createdBy').touched ?
+                'is-invalid' : newJobForm.get('createdBy').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, number of Created By is required</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group has-success has-danger">
+                <textarea rows="12" class="form-control" placeholder="Description"
+                  formControlName="description" [ngClass]="
+                newJobForm.get('description').errors &&
+                newJobForm.get('description').touched ?
+                'is-invalid' : newJobForm.get('description').valid ? 'is-valid' : ''
+              "></textarea>
+                <div class="invalid-feedback">Sorry, description is required</div>
+              </div>
+            </div>
           </div>
           <br>
           <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>

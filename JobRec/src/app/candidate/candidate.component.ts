@@ -56,11 +56,12 @@ export class CandidateComponent implements OnInit {
 
   columnDefs = [
     {
-      headerName: 'Job ID',
+      headerName: '#',
       field: 'id',
       sortable: true,
       filter: true,
       resizable: true,
+      width: 90
     },
     {
       headerName: 'Job Title',
@@ -68,6 +69,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 150
     },
     {
       headerName: 'Team',
@@ -75,20 +77,23 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 120
     },
     {
-      headerName: '# Positions',
+      headerName: '#Pos.',
       field: 'position',
       sortable: true,
       filter: true,
       resizable: true,
+      width: 90
     },
     {
-      headerName: '# Submissions',
-      field: 'submissions',
+      headerName: '#Subs',
+      field: 'submission',
       sortable: true,
       filter: true,
       resizable: true,
+      width: 100
     },
     {
       headerName: 'Status',
@@ -96,13 +101,15 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 100
     },
     {
-      headerName: 'Date Updated',
-      field: 'dateUpdated',
+      headerName: 'Updated At',
+      field: 'updatedAt',
       sortable: true,
       filter: true,
       resizable: true,
+      width: 120
     },
     {
       headerName: 'Manager',
@@ -110,6 +117,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 120
     },
     {
       headerName: 'Created By',
@@ -117,6 +125,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 120
     },
     {
       headerName: 'Created At',
@@ -124,17 +133,19 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 120
     },
   ];
 
   columnDefs3 = [
     {
-      headerName: 'Select',
+      headerName: ' ',
       field: 'select',
       sortable: true,
       filter: true,
       checkboxSelection: true,
       resizable: true,
+      width: 30
     },
     {
       headerName: 'ID',
@@ -142,6 +153,11 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 100,
+      cellRenderer: (params) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div><button class="btn btn-outline-success" style="width: 95%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidate">${params.value}</button></div>`;
+      },
     },
     {
       headerName: 'Name',
@@ -149,6 +165,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 150
     },
     {
       headerName: 'Email',
@@ -156,6 +173,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 250
     },
     {
       headerName: 'Phone',
@@ -163,6 +181,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 120
     },
     {
       headerName: 'Jobs',
@@ -170,9 +189,10 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
+      width: 250,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><a class="btn-outline-warning">${params.value}</a></div>`;
+        return `<div><a class="btn-outline-warning" style="cursor: pointer;" data-toggle="tooltip" data-placement="auto" title="View Jobs">${params.value}</a></div>`;
       },
     },
   ];
@@ -221,7 +241,7 @@ export class CandidateComponent implements OnInit {
       let queries = this.searchForm.value.search.split(',');
       let results = [];
       for (let query of queries) {
-        query = query.toLowerCase();
+        query = query.toLowerCase().trim();
         if (
           !isNaN(query) &&
           query !== '' &&
@@ -230,7 +250,8 @@ export class CandidateComponent implements OnInit {
         ) {
           // Numbers
           for (const candidate of initialData) {
-            if (candidate.id.includes(query) || candidate.phone.includes(query)) {
+            let dd = candidate.id + '';
+            if (dd.includes(query) || candidate.phone.includes(query)) {
               if (results.indexOf(candidate) < 0) {
                 results.push(candidate);
               }
@@ -291,7 +312,7 @@ export class CandidateComponent implements OnInit {
     console.log(this.editJobMode);
     if (!this.editJobMode) {
       const newRow = {
-        id: '5f46d1d96ffcd83f3cbe6c98',
+        id: +this.newCandidateForm.value.id,
         fullName: this.newCandidateForm.value.fullName,
         email: this.newCandidateForm.value.email,
         phone: this.newCandidateForm.value.phone,
@@ -306,7 +327,7 @@ export class CandidateComponent implements OnInit {
       const newd = new Date().toLocaleString();
       // tslint:disable-next-line: max-line-length
       const newRow = {
-        id: this.newCandidateForm.value.id,
+        id: +this.newCandidateForm.value.id,
         fullName: this.newCandidateForm.value.fullName,
         email: this.newCandidateForm.value.email,
         phone: this.newCandidateForm.value.phone,
@@ -353,7 +374,7 @@ export class CandidateComponent implements OnInit {
     }
   }
 
-  async onJobsClick(id: string){
+  async onJobsClick(id: number){
     console.log(id);
     let candidates = await [...this.dataService.getCandidates()];
     let jobs = await [...this.dataService.getData()];
