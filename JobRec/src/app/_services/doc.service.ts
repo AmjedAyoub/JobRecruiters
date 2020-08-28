@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -43,14 +43,16 @@ export class DocsService {
       });
   }
 
-  addPhoto(userId: string, image: File) {
+  addPhoto(userId: string, doc: File) {
     const postData = new FormData();
     const d = new Date();
-    postData.append('image', image);
+    postData.append('doc', doc);
     postData.append('userId', userId);
-    this.http.post<{ message: string; photo: any }>(
+    return this.http.post<{ message: string; doc: any }>(
       BACKEND_URL,
       postData
-    ).subscribe();
+    );
   }
+
+
 }

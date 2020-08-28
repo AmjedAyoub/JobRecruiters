@@ -10,7 +10,6 @@
               searchForm.get('search').touched ?
               'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
             ">
-            <div class="invalid-feedback">Sorry, please enter a search query</div>
             <div class="invalid-feedback">You can use multiple search seperated by comma, for example: CandidateId, Name, Email, ...
             </div>
           </div>
@@ -26,7 +25,12 @@
   </div>
   <div class="row center">
     <ag-grid-angular #agGrid style="width: 99%; height: 500px; margin: auto;" class="ag-theme-alpine"
-      [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple" (gridReady)="onGridReady($event)">
+      [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple" (gridReady)="onGridReady($event)"
+      [suppressHorizontalScroll]=false
+      [enableSorting]="true"
+      [enableRangeSelection]="true"
+      [pagination]="true"
+      [paginationPageSize]="25">
     </ag-grid-angular>
   </div>
   <div class="row center">
@@ -34,26 +38,6 @@
     <button type="button" class="btn btn-outline-danger mt-2 ml-2" (click)="deleteCandidate()">Delete Candidate</button>
   </div>
   <hr>
-
-  <!-- <div class="modal fade bd-example-modal-lg mt-5" id="viewCandidate" tabindex="-1" role="dialog"
-    aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <form class="center mt-4"
-          style="margin: auto; width: 95%; padding: 2px;">
-          <div class="form-group">
-            <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
-              [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple"
-              (gridReady)="onGridReady2($event)">
-            </ag-grid-angular>
-          </div>
-          <br>
-          <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-        </form>
-      </div>
-    </div>
-  </div> -->
 
   <div class="modal fade bd-example-modal-lg mt-5" id="newCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -130,15 +114,61 @@
     </div>
   </div>
 
-  <!-- <form [formGroup]="uploadImgForm" (submit)="onUploadImg()" class="center">
+  <div class="modal fade bd-example-modal-xl mt-5" id="viewCandidateDetails" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form class="center mt-4"
+          style="margin: auto; width: 95%; padding: 2px;">
+          <div class="card border-warning mb-3" style="width: 100%;">
+            <div class="card-header"><strong>Candidate ID: {{ toViewCandidate.id }} </strong></div>
+            <div class="card-body">
+              <h4 class="card-title">{{ toViewCandidate.fullName }}</h4>
+              <h5>Email: {{ toViewCandidate.email }}</h5><br>
+              <h6>Phone: {{ toViewCandidate.phone }}</h6><br>
+              <h6>Submissions: {{ toViewCandidate.jobs.length }}</h6><br>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Updated At</th>
+                    <th scope="col">Manager</th>
+                    <th scope="col">Created By</th>
+                    <th scope="col">Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-active" *ngFor="let job of toViewCandiateJobs">
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.title }}</td>
+                    <td>{{ job.status }}</td>
+                    <td>{{ job.updatedAt }}</td>
+                    <td>{{ job.manager }}</td>
+                    <td>{{ job.createdBy }}</td>
+                    <td>{{ job.createdAt }}</td>
+                  </tr>
+                  </tbody>
+              </table>
+              <p class="card-text">
+              </p>
+            </div>
+          </div>
+          <hr>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="uploadImgForm" (submit)="onUploadImg()" class="center">
     <div>
       <button class="btn btn-primary" type="button" (click)="filePicker2.click()">Pick Image</button>
       <input id="postFile" type="file" #filePicker2 (change)="onImagePicked2($event)" accept=".pdf,.doc,.docx">
     </div>
-    <button class="btn btn-primary" type="submit" [disabled]="!uploadImgForm.valid">Upload</button>
-  </form> -->
-
-
+    <button class="btn btn-primary" type="submit">Upload</button>
+  </form>
 <!--
   <div class="navbar navbar-default">
     <div class="navbar-header">

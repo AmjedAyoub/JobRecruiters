@@ -37,6 +37,19 @@ export class SearchComponent implements OnInit {
   newJobForm: FormGroup;
   newCandidateForm: FormGroup;
   private len = 0;
+  toViewJob = {
+    id: '',
+    title: '',
+    team: '',
+    manager: '',
+    createdAt: '',
+    updatedAt: '',
+    createdBy: '',
+    status: '',
+    position: '',
+    submission: '',
+    description: '',
+  };
 
   uploader: FileUploader;
   hasBaseDropZoneOver: boolean;
@@ -54,7 +67,10 @@ export class SearchComponent implements OnInit {
       filter: true,
       checkboxSelection: true,
       resizable: true,
-      width: 30
+      width: 30,
+      headerCheckboxSelection: function(params) {
+        return params.columnApi.getRowGroupColumns().length === 0;
+      },
     },
     {
       headerName: '#',
@@ -62,10 +78,10 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 100,
+      width: 90,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-outline-success" style="width: 95%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job">${params.value}</button></div>`;
+        return `<div><button class="btn btn-outline-success" style="width: 100%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job">${params.value}</button></div>`;
       },
     },
     {
@@ -74,7 +90,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150,
+      width: 145,
     },
     {
       headerName: 'Team',
@@ -90,7 +106,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 90,
+      width: 85,
     },
     {
       headerName: '#Subs.',
@@ -98,10 +114,10 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 100,
+      width: 95,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-outline-warning" style="width: 95%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidates">${params.value}</button></div>`;
+        return `<div><button class="btn btn-outline-warning" style="width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidates">${params.value}</button></div>`;
       },
     },
     {
@@ -110,7 +126,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 100,
+      width: 95,
     },
     {
       headerName: 'Description',
@@ -118,7 +134,11 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 250,
+      width: 240,
+      cellRenderer: (params) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div class="descriptionCell" style="width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job Details">${params.value}</div>`;
+      },
     },
     {
       headerName: 'Updated At',
@@ -169,7 +189,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150
+      width: 190
     },
     {
       headerName: 'Email',
@@ -177,7 +197,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 200
+      width: 240
     },
     {
       headerName: 'Phone',
@@ -185,7 +205,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150
+      width: 190
     },
     {
       headerName: 'Jobs',
@@ -193,7 +213,19 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 200
+      width: 223
+    },
+    {
+      headerName: 'Resume',
+      field: 'resume',
+      sortable: true,
+      filter: true,
+      resizable: true,
+      width: 120,
+      cellRenderer: (params) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div><button class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</button></div>`;
+      },
     },
   ];
 
@@ -205,7 +237,10 @@ export class SearchComponent implements OnInit {
       filter: true,
       checkboxSelection: true,
       resizable: true,
-      width: 30
+      width: 30,
+      headerCheckboxSelection: function(params) {
+        return params.columnApi.getRowGroupColumns().length === 0;
+      },
     },
     {
       headerName: 'ID',
@@ -221,7 +256,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150
+      width: 190
     },
     {
       headerName: 'Email',
@@ -229,7 +264,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 200
+      width: 225
     },
     {
       headerName: 'Phone',
@@ -237,7 +272,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150
+      width: 185
     },
     {
       headerName: 'Jobs',
@@ -245,7 +280,19 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 200
+      width: 201
+    },
+    {
+      headerName: 'Resume',
+      field: 'resume',
+      sortable: true,
+      filter: true,
+      resizable: true,
+      width: 120,
+      cellRenderer: (params) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div><button class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</button></div>`;
+      },
     },
   ];
 
@@ -275,6 +322,11 @@ export class SearchComponent implements OnInit {
     });
     this.createNewJobForm();
     this.createNewCandidateForm();
+  }
+
+  sizeGrid(param){
+    this.gridApi.doLayout();
+    this.gridApi.sizeColumnsToFit();
   }
 
   createNewCandidateForm() {
@@ -552,24 +604,50 @@ export class SearchComponent implements OnInit {
     this.gridApi2.sizeColumnsToFit();
   }
 
+  onViewDetails(id: number){
+    for (const job of this.rowData) {
+      if (id === job.id){
+        this.toViewJob.id = job.id;
+        this.toViewJob.title = job.title;
+        this.toViewJob.team = job.team;
+        this.toViewJob.manager = job.manager;
+        this.toViewJob.status = job.status;
+        this.toViewJob.position = job.position;
+        this.toViewJob.submission = job.submission;
+        this.toViewJob.createdAt = job.createdAt;
+        this.toViewJob.createdBy = job.createdBy;
+        this.toViewJob.updatedAt = job.updatedAt;
+        this.toViewJob.description = job.description;
+        break;
+      }
+    }
+    $('#viewJobDetails').modal('show');
+  }
+
   onGridReady(params): void {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-    params.api.sizeColumnsToFit();
     window.addEventListener('resize', () => {
       setTimeout(() => {
         params.api.sizeColumnsToFit();
       });
     });
 
+    setTimeout(() => {
+      params.api.sizeColumnsToFit();
+    }, 500);
+
     this.agGrid.cellClicked.subscribe((res) => {
       if (res.colDef.field === 'submission'){
         this.onSubClick(res.data.id);
       }
+      else if(res.colDef.field === 'description' || res.colDef.field === 'id'){
+        this.onViewDetails(res.data.id);
+      }
     });
-    params.api.ensureIndexVisible();
-    params.api.sizeColumnsToFit();
+    this.gridApi.doLayout();
+    this.gridApi.sizeColumnsToFit();
   }
 
   onGridReady2(params): void {

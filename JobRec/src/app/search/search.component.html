@@ -10,7 +10,6 @@
               searchForm.get('search').touched ?
               'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
             ">
-            <div class="invalid-feedback">Sorry, please enter a search query</div>
             <div class="invalid-feedback">You can use multiple search seperated by comma, for example: JobTitle, Manager, Status, ...
             </div>
           </div>
@@ -30,7 +29,11 @@
     <ag-grid-angular #agGrid style="width: 99%; height: 500px; margin: auto;" class="ag-theme-alpine"
       [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="multiple" (gridReady)="onGridReady($event)"
       [suppressHorizontalScroll]=false
-      [enableSorting]="true">
+      [enableSorting]="true"
+      [enableRangeSelection]="true"
+      [pagination]="true"
+      [paginationPageSize]="25"
+      (onGridSizeChanged)="sizeGrid($event)">
     </ag-grid-angular>
   </div>
   <div class="row center">
@@ -41,9 +44,9 @@
   </div>
   <hr>
 
-  <div class="modal fade bd-example-modal-lg mt-5" id="newJob" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5" id="newJob" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <form [formGroup]="newJobForm" (submit)="onNewJob()" class="center"
           style="margin: auto; width: 100%; padding: 20px;">
@@ -137,7 +140,7 @@
               </div>
             </div>
           </div>
-          <br>
+          <hr>
           <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
         </form>
@@ -145,9 +148,9 @@
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-lg mt-5" id="viewCandidate" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5" id="viewCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
@@ -157,16 +160,16 @@
               (gridReady)="onGridReady2($event)">
             </ag-grid-angular>
           </div>
-          <br>
+          <hr>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
   </div>
 
-  <div class="modal fade mt-5" id="viewSubs" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5" id="viewSubs" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog candidateView">
+    <div class="modal-dialog modal-xl candidateView">
       <div class="modal-content">
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
@@ -176,7 +179,7 @@
               (gridReady)="onGridReady3($event)">
             </ag-grid-angular>
           </div>
-          <br>
+          <hr>
           <button type="button" class="btn btn-outline-success" (click)="onAddSubs()">Add</button>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
         </form>
@@ -184,6 +187,31 @@
     </div>
   </div>
 
+  <div class="modal fade bd-example-modal-xl mt-5" id="viewJobDetails" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form class="center mt-4"
+          style="margin: auto; width: 95%; padding: 2px;">
+          <div class="card border-warning mb-3" style="width: 100%;">
+            <div class="card-header"><strong># {{ toViewJob.id }} </strong>   |  <strong> Status: {{ toViewJob.status }}</strong></div>
+            <div class="card-body">
+              <h4 class="card-title">{{ toViewJob.title }}</h4>
+              <h6>Created By: {{ toViewJob.createdBy }} on {{ toViewJob.createdAt }}</h6>
+              <h6>Updated At: {{ toViewJob.updatedAt }}</h6>
+              <h6>Team: {{ toViewJob.team }}</h6>
+              <h6>Manager: {{ toViewJob.manager }}</h6>
+              <br>
+              <h6>Positions: {{ toViewJob.position }}  |  Submissions: {{ toViewJob.submission }}</h6>
+              <p class="card-text"><strong>Description:</strong><br> {{ toViewJob.description }} </p>
+            </div>
+          </div>
+          <hr>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
 

@@ -19,6 +19,9 @@ export const mimeType = (
           header += arr[i].toString(16);
         }
         switch (header) {
+          case 'application/pdf':
+            isValid = true;
+            break;
           default:
             isValid = true; // Or you can use the blob.type as fallback
             break;

@@ -2,7 +2,6 @@ const multer = require("multer");
 
 const MIME_TYPE_MAP = {
   "Doc/pdf": "pdf",
-  "Doc/docx": "docx",
   "Doc/doc": "doc"
 };
 

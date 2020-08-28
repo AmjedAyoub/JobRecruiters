@@ -52,7 +52,17 @@ export class CandidateComponent implements OnInit {
   rowData2: any[];
   rowData3: any[];
   prev;
+  fileToUpload: File = null;
 
+  toViewCandidate = {
+    id: '',
+    fullName: '',
+    email: '',
+    phone: '',
+    resume: '',
+    jobs: [],
+  };
+  toViewCandiateJobs = [];
 
   columnDefs = [
     {
@@ -61,7 +71,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 90
+      width: 70,
     },
     {
       headerName: 'Job Title',
@@ -69,7 +79,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150
+      width: 150,
     },
     {
       headerName: 'Team',
@@ -77,7 +87,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120
+      width: 110,
     },
     {
       headerName: '#Pos.',
@@ -85,7 +95,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 90
+      width: 85,
     },
     {
       headerName: '#Subs',
@@ -93,7 +103,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 100
+      width: 85,
     },
     {
       headerName: 'Status',
@@ -101,7 +111,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 100
+      width: 90,
     },
     {
       headerName: 'Updated At',
@@ -109,7 +119,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120
+      width: 120,
     },
     {
       headerName: 'Manager',
@@ -117,7 +127,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120
+      width: 120,
     },
     {
       headerName: 'Created By',
@@ -125,7 +135,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120
+      width: 120,
     },
     {
       headerName: 'Created At',
@@ -133,7 +143,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120
+      width: 120,
     },
   ];
 
@@ -145,7 +155,10 @@ export class CandidateComponent implements OnInit {
       filter: true,
       checkboxSelection: true,
       resizable: true,
-      width: 30
+      width: 30,
+      headerCheckboxSelection: function (params) {
+        return params.columnApi.getRowGroupColumns().length === 0;
+      },
     },
     {
       headerName: 'ID',
@@ -156,7 +169,7 @@ export class CandidateComponent implements OnInit {
       width: 100,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-outline-success" style="width: 95%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidate">${params.value}</button></div>`;
+        return `<div><button class="btn btn-outline-success" style="width: 100%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidate">${params.value}</button></div>`;
       },
     },
     {
@@ -165,7 +178,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150
+      width: 150,
     },
     {
       headerName: 'Email',
@@ -173,7 +186,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 250
+      width: 250,
     },
     {
       headerName: 'Phone',
@@ -181,7 +194,7 @@ export class CandidateComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120
+      width: 120,
     },
     {
       headerName: 'Jobs',
@@ -195,7 +208,24 @@ export class CandidateComponent implements OnInit {
         return `<div><a class="btn-outline-warning" style="cursor: pointer;" data-toggle="tooltip" data-placement="auto" title="View Jobs">${params.value}</a></div>`;
       },
     },
+    {
+      headerName: 'Resume',
+      field: 'resume',
+      sortable: true,
+      filter: true,
+      resizable: true,
+      width: 120,
+      cellRenderer: (params) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div><button class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</button></div>`;
+      },
+    },
   ];
+  public formGroup = this.fb.group({
+    file: [null, Validators.required]
+  });
+
+  private fileName;
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
@@ -209,6 +239,7 @@ export class CandidateComponent implements OnInit {
     this.uploadImgForm = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
+        asyncValidators: [mimeType]
       }),
     });
     this.createNewCandidateForm();
@@ -234,6 +265,7 @@ export class CandidateComponent implements OnInit {
   //   }
   //   return null;
   // }
+
 
   async search() {
     if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
@@ -263,7 +295,10 @@ export class CandidateComponent implements OnInit {
           } else {
             // Strings
             for (const candidate of initialData) {
-              if (candidate.fullName.toLowerCase().includes(query) || candidate.email.toLowerCase().includes(query)) {
+              if (
+                candidate.fullName.toLowerCase().includes(query) ||
+                candidate.email.toLowerCase().includes(query)
+              ) {
                 if (results.indexOf(candidate) < 0) {
                   results.push(candidate);
                 }
@@ -374,17 +409,17 @@ export class CandidateComponent implements OnInit {
     }
   }
 
-  async onJobsClick(id: number){
+  async onJobsClick(id: number) {
     console.log(id);
     let candidates = await [...this.dataService.getCandidates()];
     let jobs = await [...this.dataService.getData()];
     this.rowData3 = [];
     for (const candidate of candidates) {
-      if(candidate.id === id){
+      if (candidate.id === id) {
         for (const job of candidate.jobs) {
           for (const resJob of jobs) {
-            if (job === resJob.id){
-              if (this.rowData3.indexOf(resJob) < 0){
+            if (job === resJob.id) {
+              if (this.rowData3.indexOf(resJob) < 0) {
                 this.rowData3.push(resJob);
               }
               break;
@@ -395,6 +430,39 @@ export class CandidateComponent implements OnInit {
     }
     $('#viewJobs').modal('show');
     this.gridApi2.sizeColumnsToFit();
+  }
+
+  async onViewDetails(id: number) {
+    for (const candidate of this.rowData2) {
+      if (id === candidate.id) {
+        this.toViewCandidate.id = candidate.id;
+        this.toViewCandidate.fullName = candidate.fullName;
+        this.toViewCandidate.email = candidate.email;
+        this.toViewCandidate.phone = candidate.phone;
+        this.toViewCandidate.resume = candidate.resume;
+        this.toViewCandidate.jobs = candidate.jobs;
+        let data = await [...this.dataService.getData()];
+        for (const job of candidate.jobs) {
+          for (const toAddJob of data) {
+            if (job === toAddJob.id) {
+              const newJob = {
+                id: toAddJob.id,
+                title: toAddJob.title,
+                team: toAddJob.team,
+                manager: toAddJob.manager,
+                createdAt: toAddJob.createdAt,
+                updatedAt: toAddJob.updatedAt,
+                createdBy: toAddJob.createdBy,
+                status: toAddJob.status,
+              };
+              this.toViewCandiateJobs.unshift(newJob);
+            }
+          }
+        }
+        break;
+      }
+    }
+    $('#viewCandidateDetails').modal('show');
   }
 
   onGridReady(params): void {
@@ -411,8 +479,10 @@ export class CandidateComponent implements OnInit {
     params.api.sizeColumnsToFit();
 
     this.agGrid.cellClicked.subscribe((res) => {
-      if (res.colDef.field === 'jobs'){
+      if (res.colDef.field === 'jobs') {
         this.onJobsClick(res.data.id);
+      } else if (res.colDef.field === 'id') {
+        this.onViewDetails(res.data.id);
       }
     });
   }
@@ -420,5 +490,24 @@ export class CandidateComponent implements OnInit {
   onGridReady2(params): void {
     this.gridApi2 = params.api;
     this.gridColumnApi2 = params.columnApi;
+  }
+
+  onUploadImg() {
+    this.docsService.addPhoto('1',
+      this.uploadImgForm.value.image
+    ).subscribe(
+      () => {
+        console.log('good');
+      }
+    );
+    this.uploadImgForm.reset();
+  }
+
+  onImagePicked2(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.uploadImgForm.patchValue({ image: file });
+    this.uploadImgForm.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
   }
 }

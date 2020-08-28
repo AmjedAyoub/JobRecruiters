@@ -28,6 +28,26 @@ body{
   background-color: #4b4343 !important;
 }
 
+.descriptionCell {
+  cursor: pointer !important;
+}
+
+.descriptionCell:hover {
+  color: #120686 !important;
+}
+
+.card {
+  background-color: #acabb6 !important;
+  border: 2px solid !important;
+}
+
+.ag-paging-panel{
+  color: aliceblue !important;
+}
+
+.ag-body-horizontal-scroll .ag-body-horizontal-scroll-viewport .ag-body-horizontal-scroll-container {
+  display: none !important;
+}
 /* .ag-header-cell {
   width: fit-content !important;
 }

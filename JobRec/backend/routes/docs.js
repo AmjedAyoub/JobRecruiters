@@ -7,7 +7,7 @@ const extractFile = require("../middleware/file");
 
 const router = express.Router();
 
-router.post("", DocController.createDoc);
+router.post("", extractFile, DocController.createDoc);
 
 router.get("", DocController.getDocs);
 

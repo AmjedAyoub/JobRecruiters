@@ -27,7 +27,7 @@ app.use("/Docs", express.static(path.join("docs")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
-    "Access-Control-Allow-Headers",
+    "Access-Control-Allow-Headers", "application/pdf",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.setHeader(

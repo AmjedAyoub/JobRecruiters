@@ -14,10 +14,10 @@
 .dropdown-item:hover {
   background-color: #3d3c41 !important;
 }
-
+/* 
 .candidateView{
   max-width: 900px;
-}
+} */
 
 .my-drop-zone {
   border: dotted 3px lightgray;
@@ -30,4 +30,3 @@
 .another-file-over-class {
   border: dotted 3px green;
 }
-

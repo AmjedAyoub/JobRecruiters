@@ -2,14 +2,13 @@ const Doc = require("../models/doc");
 
 exports.createDoc = (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
-  console.log("here    "+req)
+  console.log(req)
 
   let d = new Date();
   const doc = new Doc({
 
     url: req.file != null ? url + "/Docs/" + req.file.filename : null,
-    dateAdded: d,
-    userId: '5f46d1d96ffcd83f3cbe6c98'
+    userId: '1'
   });
   console.log(doc);
   doc
