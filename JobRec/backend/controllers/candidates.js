@@ -4,13 +4,15 @@ const jwt = require("jsonwebtoken");
 const Candidate = require("../models/candidate");
 
 exports.addNewCandidate = (req, res, next) => {
-  console.log(req.body)
+  const url = req.protocol + "://" + req.get("host");
+  console.log('req.file')
+  console.log(req.file)
   const candidate = new Candidate({
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
-    doc: null,
-    jobs: []
+    jobs: [],
+    resume: req.file != null ? url + "/Docs/" + req.file.filename : null,
   });
   candidate
     .save()
@@ -123,7 +125,7 @@ exports.updateCandidate = (req, res, next) => {
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
-    doc: docPath,
+    resume: docPath,
     jobs: req.body.jobs
   });
   Candidate.updateOne({ _id: req.params.id }, candidate)

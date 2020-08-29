@@ -7,8 +7,10 @@ const MIME_TYPE_MAP = {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // console.log(file)
-    const isValid = MIME_TYPE_MAP[file.mimetype];
+    console.log("file")
+    console.log(file)
+    // const isValid = MIME_TYPE_MAP[file.mimetype];
+    const isValid = true;
     let error = new Error("Invalid mime type");
     if (isValid) {
       error = null;
@@ -21,7 +23,7 @@ const storage = multer.diskStorage({
       .split(" ")
       .join("-");
     const ext = MIME_TYPE_MAP[file.mimetype];
-    cb(null, name + "-" + Date.now() + "." + ext);
+    cb(null, Date.now()+ "-" + name);
   }
 });
 

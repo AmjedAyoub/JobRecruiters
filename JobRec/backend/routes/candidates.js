@@ -1,10 +1,11 @@
 const express = require("express");
 
 const CandidateController = require("../controllers/candidates");
+const extractFile = require("../middleware/file");
 
 const router = express.Router();
 
-router.post("/addnewcan", CandidateController.addNewCandidate);
+router.post("", extractFile, CandidateController.addNewCandidate);
 
 router.get("", CandidateController.getCandidates);
 

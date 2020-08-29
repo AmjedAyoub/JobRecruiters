@@ -12,6 +12,7 @@ import { mimeType } from './mime-type.validator';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
+import { CandidateService } from '../_services/candidate.service';
 import { DocsService } from '../_services/doc.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -34,7 +35,8 @@ export class CandidateComponent implements OnInit {
     private fb: FormBuilder,
     private alertify: AlertifyService,
     private docsService: DocsService,
-    private http: HttpClient
+    private http: HttpClient,
+    private candidateService: CandidateService
   ) {}
   @ViewChild('agGrid') agGrid: AgGridAngular;
   editJobMode = false;
@@ -53,6 +55,8 @@ export class CandidateComponent implements OnInit {
   rowData3: any[];
   prev;
   fileToUpload: File = null;
+  docs: any[];
+  private docsSub: Subscription;
 
   toViewCandidate = {
     id: '',
@@ -60,6 +64,7 @@ export class CandidateComponent implements OnInit {
     email: '',
     phone: '',
     resume: '',
+    resumeId: '',
     jobs: [],
   };
   toViewCandiateJobs = [];
@@ -217,17 +222,13 @@ export class CandidateComponent implements OnInit {
       width: 120,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</button></div>`;
+        return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
       },
     },
   ];
-  public formGroup = this.fb.group({
-    file: [null, Validators.required]
-  });
 
-  private fileName;
-
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.dataService.getAllData();
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
     });
@@ -237,10 +238,7 @@ export class CandidateComponent implements OnInit {
       this.agGrid.api.setRowData(this.rowData2);
     });
     this.uploadImgForm = new FormGroup({
-      image: new FormControl(null, {
-        validators: [Validators.required],
-        asyncValidators: [mimeType]
-      }),
+      image: new FormControl(null)
     });
     this.createNewCandidateForm();
   }
@@ -252,6 +250,7 @@ export class CandidateComponent implements OnInit {
         fullName: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         phone: ['', Validators.required],
+        resume: [null],
       }
       // { validator: this.idCheckValidator2 }
     );
@@ -323,13 +322,14 @@ export class CandidateComponent implements OnInit {
     } else if (selectedNodes.length === 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       this.prev = selectedData[0];
-      console.log(selectedData);
+      // console.log(selectedData);
       this.newCandidateForm.patchValue({
         id: selectedData[0].id,
         fullName: selectedData[0].fullName,
         email: selectedData[0].email,
         phone: selectedData[0].phone,
         jobs: [],
+        resume: selectedData[0].resume
       });
       $('#newCandidate').modal('show');
     } else {
@@ -344,7 +344,7 @@ export class CandidateComponent implements OnInit {
   }
 
   onNewCandidate() {
-    console.log(this.editJobMode);
+    // console.log(this.editJobMode);
     if (!this.editJobMode) {
       const newRow = {
         id: +this.newCandidateForm.value.id,
@@ -352,28 +352,62 @@ export class CandidateComponent implements OnInit {
         email: this.newCandidateForm.value.email,
         phone: this.newCandidateForm.value.phone,
         jobs: [],
+        resume: this.uploadImgForm.value.image
       };
-      this.dataService.addNewCandidate(newRow);
-      this.dataService.getCandidateChangedListener().subscribe((res) => {
-        this.rowData2 = res;
+      // tslint:disable-next-line: max-line-length
+      this.docsService.addDoc(this.newCandidateForm.value.fullNAme, this.newCandidateForm.value.email, this.newCandidateForm.value.phone, [], this.uploadImgForm.value.image
+      ).subscribe(
+        (res) => {
+          console.log('res')
+          console.log(res);
+        //   newRow.resume = res.doc.url;
+        //   this.dataService.addNewCandidate(newRow);
+        //   this.dataService.getCandidateChangedListener().subscribe((res) => {
+        //     this.rowData2 = res;
+        // }
+      // );
       });
       // this.createUser(newRow);
     } else {
-      const newd = new Date().toLocaleString();
       // tslint:disable-next-line: max-line-length
+      for(let candidate of this.rowData2){
+        if(candidate.id === this.prev.id){
+          this.toViewCandidate.resumeId = candidate.resumeId;
+          break;
+        }
+      }
       const newRow = {
         id: +this.newCandidateForm.value.id,
         fullName: this.newCandidateForm.value.fullName,
         email: this.newCandidateForm.value.email,
         phone: this.newCandidateForm.value.phone,
         jobs: this.prev.jobs,
+        resume: this.uploadImgForm.value.image
       };
-      this.dataService.updateCandidate(this.prev.id, newRow);
-      this.dataService.getCandidateChangedListener().subscribe((res) => {
-        this.rowData2 = res;
+      // tslint:disable-next-line: max-line-length
+      this.docsService.updateDoc(this.toViewCandidate.resumeId, this.newCandidateForm.value.fullNAme, this.newCandidateForm.value.email, this.newCandidateForm.value.phone, this.prev.jobs, this.uploadImgForm.value.image
+      ).subscribe(
+        (res) => {
+          console.log(res);
+          // this.docsService.getDocs();
+          // let candidates = this.dataService.getCandidates();
+          // this.docsService.getDocsUpdateListener().subscribe(
+          //   (res) => {
+          //     this.dataService.getCandidateChangedListener().subscribe((response) => {
+          //       this.rowData2 = response;
+          //     });
+          //     this.dataService.getData();
+          //     this.dataService.getDataChangedListener().subscribe(
+          //       (data) => {
+          //       });
+          //   });
       });
+      // this.dataService.updateCandidate(this.prev.id, newRow);
+      // this.dataService.getCandidateChangedListener().subscribe((res) => {
+      //   this.rowData2 = res;
+      // });
     }
-    this.newCandidateForm.reset();
+    // this.newCandidateForm.reset();
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
   }
@@ -493,14 +527,14 @@ export class CandidateComponent implements OnInit {
   }
 
   onUploadImg() {
-    this.docsService.addPhoto('1',
-      this.uploadImgForm.value.image
-    ).subscribe(
-      () => {
-        console.log('good');
-      }
-    );
-    this.uploadImgForm.reset();
+    // this.docsService.addDoc(this.newCandidateForm.value.id,
+    //   this.uploadImgForm.value.image
+    // ).subscribe(
+    //   () => {
+    //     console.log('good');
+    //   }
+    // );
+    // this.new.reset();
   }
 
   onImagePicked2(event: Event) {

@@ -19,6 +19,11 @@
   max-width: 900px;
 } */
 
+
+#postFile {
+  visibility: hidden;
+}
+
 .my-drop-zone {
   border: dotted 3px lightgray;
 }

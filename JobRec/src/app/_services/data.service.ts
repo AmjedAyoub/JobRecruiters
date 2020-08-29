@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { DocsService } from './doc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,36 +32,7 @@ export class DataService implements OnInit {
       resume: string;
     }[]
   >();
-  private candidates1 = [
-    {
-      id: '78',
-      fullName: 'John Stepher',
-      email: 'john@gmail.com',
-      phone: '999-9999-999',
-      jobs: ['654', '698'],
-    },
-    {
-      id: '65',
-      fullName: 'Max Johnathen',
-      email: 'max@gmail.com',
-      phone: '888-8888-888',
-      jobs: ['654', '548'],
-    },
-    {
-      id: '53',
-      fullName: 'Chris Marksen',
-      email: 'chris@gmail.com',
-      phone: '333-3333-333',
-      jobs: ['654', '698'],
-    },
-    {
-      id: '12',
-      fullName: 'Amjed Ayoub',
-      email: 'amjad@gmail.com',
-      phone: '777-7777-777',
-      jobs: ['654', '698', '548', '145'],
-    },
-  ];
+  private candidates1 = [];
 
   private candidates = [
     {
@@ -72,7 +44,8 @@ export class DataService implements OnInit {
         24,
         199
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 2,
@@ -83,7 +56,8 @@ export class DataService implements OnInit {
         170,
         31
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 3,
@@ -94,7 +68,8 @@ export class DataService implements OnInit {
         67,
         38
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 4,
@@ -105,7 +80,8 @@ export class DataService implements OnInit {
         84,
         171
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 5,
@@ -116,7 +92,8 @@ export class DataService implements OnInit {
         100,
         37
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 6,
@@ -127,7 +104,8 @@ export class DataService implements OnInit {
         164,
         55
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 7,
@@ -138,7 +116,8 @@ export class DataService implements OnInit {
         136,
         157
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 8,
@@ -149,7 +128,8 @@ export class DataService implements OnInit {
         188,
         45
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 9,
@@ -160,7 +140,8 @@ export class DataService implements OnInit {
         31,
         47
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 10,
@@ -171,7 +152,8 @@ export class DataService implements OnInit {
         83,
         54
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 11,
@@ -182,7 +164,8 @@ export class DataService implements OnInit {
         41,
         103
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 12,
@@ -193,7 +176,8 @@ export class DataService implements OnInit {
         91,
         165
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 13,
@@ -204,7 +188,8 @@ export class DataService implements OnInit {
         27,
         105
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 14,
@@ -215,7 +200,8 @@ export class DataService implements OnInit {
         46,
         78
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 15,
@@ -226,7 +212,8 @@ export class DataService implements OnInit {
         136,
         45
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 16,
@@ -237,7 +224,8 @@ export class DataService implements OnInit {
         23,
         83
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 17,
@@ -248,7 +236,8 @@ export class DataService implements OnInit {
         50,
         113
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 18,
@@ -259,7 +248,8 @@ export class DataService implements OnInit {
         180,
         66
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 19,
@@ -270,7 +260,8 @@ export class DataService implements OnInit {
         34,
         51
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     }, {
       id: 20,
       fullName: 'Fischer Petty',
@@ -281,7 +272,8 @@ export class DataService implements OnInit {
         172,
         74
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 120,
@@ -293,7 +285,8 @@ export class DataService implements OnInit {
         64,
         10
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 220,
@@ -305,7 +298,8 @@ export class DataService implements OnInit {
         87,
         169
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 320,
@@ -317,7 +311,8 @@ export class DataService implements OnInit {
         95,
         39
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 420,
@@ -329,7 +324,8 @@ export class DataService implements OnInit {
         77,
         170
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 520,
@@ -341,7 +337,8 @@ export class DataService implements OnInit {
         103,
         38
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 620,
@@ -353,7 +350,8 @@ export class DataService implements OnInit {
         9,
         108
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 720,
@@ -365,7 +363,8 @@ export class DataService implements OnInit {
         43,
         68
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 820,
@@ -377,7 +376,8 @@ export class DataService implements OnInit {
         114,
         30
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 920,
@@ -389,7 +389,8 @@ export class DataService implements OnInit {
         159,
         4
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1020,
@@ -401,7 +402,8 @@ export class DataService implements OnInit {
         22,
         28
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1120,
@@ -413,7 +415,8 @@ export class DataService implements OnInit {
         44,
         109
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1220,
@@ -425,7 +428,8 @@ export class DataService implements OnInit {
         82,
         153
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1320,
@@ -437,7 +441,8 @@ export class DataService implements OnInit {
         26,
         97
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1420,
@@ -449,7 +454,8 @@ export class DataService implements OnInit {
         95,
         156
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1520,
@@ -461,7 +467,8 @@ export class DataService implements OnInit {
         162,
         177
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1620,
@@ -473,7 +480,8 @@ export class DataService implements OnInit {
         86,
         86
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1720,
@@ -485,7 +493,8 @@ export class DataService implements OnInit {
         73,
         181
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1820,
@@ -497,7 +506,8 @@ export class DataService implements OnInit {
         51,
         192
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1920,
@@ -509,7 +519,8 @@ export class DataService implements OnInit {
         65,
         137
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
     {
       id: 1921,
@@ -520,7 +531,8 @@ export class DataService implements OnInit {
         54,
         59
       ],
-      resume: ''
+      resume: '',
+      resumeId: ''
     },
   ];
 
@@ -3185,11 +3197,48 @@ export class DataService implements OnInit {
 
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private docsService: DocsService) {}
 
   // tslint:disable-next-line: contextual-lifecycle
   ngOnInit() {
-    this.updateSubs();
+    this.getAllData();
+      // this.docsService.getDocsUpdateListener().subscribe(
+      //   (res) => {
+      //     for (const candidate of this.candidates){
+      //       for (const doc of res.docs){
+      //         if(+candidate.id === +doc.userId){
+      //           const newRow = {
+      //             id: +candidate.id,
+      //             fullName: candidate.fullName,
+      //             email: candidate.email,
+      //             phone: candidate.phone,
+      //             jobs: candidate.jobs,
+      //             resume: doc.url,
+      //             resumeId: doc._id
+      //           };
+      //           this.updateCandidate(candidate.id, newRow);
+      //           break;
+      //         }
+      //       }
+      //     }
+      //     console.log(res);
+      //     console.log(this.candidates);
+      //   }
+      //   );
+  }
+
+  getAllData(){
+
+    this.docsService.getDocs();
+    this.docsService.getDocsUpdateListener().subscribe(
+      (res) => {
+        this.candidates1 = res.docs;
+        this.candidateChangedListener.next([...this.candidates1]);
+        this.updateSubs();
+        console.log(this.candidates1);
+        console.log(this.candidates1);
+        }
+      );
   }
 
   cleanSubs(){
@@ -3200,7 +3249,7 @@ export class DataService implements OnInit {
 
   updateSubs(){
     this.cleanSubs();
-    for (const candidate of this.candidates) {
+    for (const candidate of this.candidates1) {
       for (const job of candidate.jobs) {
         for (const row of this.rowData) {
           if (job === row.id){
@@ -3232,19 +3281,19 @@ export class DataService implements OnInit {
         }
       }
     }
-    this.candidateChangedListener.next([...this.candidates]);
+    this.candidateChangedListener.next([...this.candidates1]);
   }
 
   addNewCandidate(row: any) {
     // tslint:disable-next-line: max-line-length
     this.candidates.unshift(row);
-    this.candidateChangedListener.next([...this.candidates]);
+    this.candidateChangedListener.next([...this.candidates1]);
   }
 
   deleteCandidate(idx: number){
     this.candidates.splice(idx, 1);
     this.updateSubs();
-    this.candidateChangedListener.next([...this.candidates]);
+    this.candidateChangedListener.next([...this.candidates1]);
     this.dataChangedListener.next([...this.rowData]);
   }
 
@@ -3263,17 +3312,17 @@ export class DataService implements OnInit {
   }
 
   getCandidates() {
-    return this.candidates;
+    return this.candidates1;
   }
 
   updateCandidate(id: any, Data: any) {
-    for (let i = 0; i < this.candidates.length; i++) {
-      if (this.candidates[i].id === id) {
+    for (let i = 0; i < this.candidates1.length; i++) {
+      if (this.candidates1[i].id === id) {
         this.candidates[i] = Data;
         break;
       }
     }
-    this.candidateChangedListener.next([...this.candidates]);
+    this.candidateChangedListener.next([...this.candidates1]);
   }
 
   updateData(id: any, Data: any) {
@@ -3290,7 +3339,7 @@ export class DataService implements OnInit {
     console.log(jobs);
     console.log(candidates);
     for (const candidate of candidates) {
-      for (const intialCan of this.candidates) {
+      for (const intialCan of this.candidates1) {
         if (candidate.id === intialCan.id){
           for (const job of jobs) {
             if(intialCan.jobs.indexOf(job.id) < 0){
@@ -3302,7 +3351,7 @@ export class DataService implements OnInit {
     }
     this.updateSubs();
     this.dataChangedListener.next([...this.rowData]);
-    this.candidateChangedListener.next([...this.candidates]);
+    this.candidateChangedListener.next([...this.candidates1]);
   }
 
   addPhoto(image?: File) {

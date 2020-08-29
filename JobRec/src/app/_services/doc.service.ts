@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Candidate } from '../_models/candidate.model';
 
 import { environment } from '../../environments/environment';
 // import { Job } from '../_models/';
@@ -14,45 +15,70 @@ const BACKEND_URL = environment.apiUrl + '/docs/';
 
 @Injectable({ providedIn: 'root' })
 export class DocsService {
-  private posts: any[] = [];
-  private postsUpdated = new Subject<{ posts: any[] }>();
+  private docs: any[] = [];
+  private docsUpdated = new Subject<{ docs: any[] }>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getphotos() {
-    this.http
-      .get<{ message: string; photos: any }>(BACKEND_URL)
+  getDocs() {
+    return this.http
+      .get<{ message: string; docs: any }>(BACKEND_URL)
       .pipe(
         map((postData) => {
           return {
-            posts: postData.photos.map((photo) => {
+            docs: postData.docs.map((doc) => {
               return {
-                url: photo.url,
-                dateAdded: photo.dateAdded,
-                userId: photo.userId,
+                url: doc.url,
+                userId: doc.userId,
+                _id: doc._id
               };
             }),
           };
         })
       )
       .subscribe((transformedPostData) => {
-        this.posts = transformedPostData.posts;
-        this.postsUpdated.next({
-          posts: [...this.posts],
+        this.docs = transformedPostData.docs;
+        this.docsUpdated.next({
+          docs: [...this.docs],
         });
       });
   }
 
-  addPhoto(userId: string, doc: File) {
+  addDoc(fullName: string, email: string, phone: string, jobs: any, doc: File | null) {
     const postData = new FormData();
-    const d = new Date();
     postData.append('doc', doc);
-    postData.append('userId', userId);
-    return this.http.post<{ message: string; doc: any }>(
-      BACKEND_URL,
-      postData
-    );
+    postData.append('fullName', fullName);
+    postData.append('email', email);
+    postData.append('phone', phone);
+    postData.append('jobs', jobs);
+    return this.http.post<{ message: string; doc: any }>(BACKEND_URL, postData);
   }
 
 
+  getDoc(id: string) {
+    return this.http.get<{
+      _id: string;
+      url: string;
+      fullName: string;
+      email: string;
+      phone: string;
+      jobs: []
+    }>(BACKEND_URL + id);
+  }
+
+  updateDoc(id: string, fullName: string, email: string, phone: string, jobs: any, resume: File | string) {
+    let postData = new FormData();
+    postData.append('fullName', fullName);
+    postData.append('email', email);
+    postData.append('phone', phone);
+    postData.append('jobs', jobs);
+    postData.append('doc', resume);
+    postData.append('id', id);
+
+    return this.http.put(BACKEND_URL + id, postData);
+  }
+
+  getDocsUpdateListener() {
+    return this.docsUpdated.asObservable();
+  }
 }

@@ -43,53 +43,63 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <form [formGroup]="newCandidateForm" (submit)="onNewCandidate()" class="center"
-          style="margin: auto; width: 400px; padding: 20px;">
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Candidate ID" formControlName="id" [ngClass]="
-            (newCandidateForm.get('id').errors &&
-            newCandidateForm.get('id').touched) ||
-            (newCandidateForm.get('id').touched &&
-            newCandidateForm.hasError('exists')) ?
-            'is-invalid' : newCandidateForm.get('id').valid && !newCandidateForm.hasError('exists') ? 'is-valid' : ''
-          ">
-            <div class="valid-feedback">Success! valid ID</div>
-            <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
-          </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form [formGroup]="newCandidateForm" (submit)="onNewCandidate()" class="center"
+            style="margin: auto; width: 400px; padding: 20px;">
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Candidate ID" formControlName="id" [ngClass]="
+                (newCandidateForm.get('id').errors &&
+                newCandidateForm.get('id').touched) ||
+                (newCandidateForm.get('id').touched &&
+                newCandidateForm.hasError('exists')) ?
+                'is-invalid' : newCandidateForm.get('id').valid && !newCandidateForm.hasError('exists') ? 'is-valid' : ''
+              ">
+                <div class="valid-feedback">Success! valid ID</div>
+                <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Full Name"
-              formControlName="fullName" [ngClass]="
-            newCandidateForm.get('fullName').errors &&
-            newCandidateForm.get('fullName').touched ?
-            'is-invalid' : newCandidateForm.get('fullName').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, name is required</div>
-          </div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Full Name"
+                  formControlName="fullName" [ngClass]="
+                newCandidateForm.get('fullName').errors &&
+                newCandidateForm.get('fullName').touched ?
+                'is-invalid' : newCandidateForm.get('fullName').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, name is required</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Email"
-              formControlName="email" [ngClass]="
-            newCandidateForm.get('email').errors &&
-            newCandidateForm.get('email').touched ?
-            'is-invalid' : newCandidateForm.get('email').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, email is required</div>
-          </div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Email"
+                  formControlName="email" [ngClass]="
+                newCandidateForm.get('email').errors &&
+                newCandidateForm.get('email').touched ?
+                'is-invalid' : newCandidateForm.get('email').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, email is required</div>
+              </div>
 
-          <div class="form-group has-success has-danger">
-            <input type="text" class="form-control" placeholder="Phone"
-              formControlName="phone" [ngClass]="
-            newCandidateForm.get('phone').errors &&
-            newCandidateForm.get('phone').touched ?
-            'is-invalid' : newCandidateForm.get('phone').valid ? 'is-valid' : ''
-          ">
-            <div class="invalid-feedback">Sorry, phone is required</div>
+              <div class="form-group has-success has-danger">
+                <input type="text" class="form-control" placeholder="Phone"
+                  formControlName="phone" [ngClass]="
+                newCandidateForm.get('phone').errors &&
+                newCandidateForm.get('phone').touched ?
+                'is-invalid' : newCandidateForm.get('phone').valid ? 'is-valid' : ''
+              ">
+                <div class="invalid-feedback">Sorry, phone is required</div>
+              </div>
+              <form [formGroup]="uploadImgForm" (submit)="onUploadImg()" class="center">
+                <div>
+                  <button class="btn btn-primary" type="button" (click)="filePicker2.click()">Pick resume</button>
+                  <input id="postFile" type="file" #filePicker2 (change)="onImagePicked2($event)" accept=".pdf,.doc,.docx">
+                </div>
+              </form>
+              <br>
+              <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
+              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+            </form>
+            </div>
           </div>
-          <br>
-          <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-        </form>
       </div>
     </div>
   </div>
@@ -125,8 +135,15 @@
             <div class="card-body">
               <h4 class="card-title">{{ toViewCandidate.fullName }}</h4>
               <h5>Email: {{ toViewCandidate.email }}</h5><br>
-              <h6>Phone: {{ toViewCandidate.phone }}</h6><br>
-              <h6>Submissions: {{ toViewCandidate.jobs.length }}</h6><br>
+              <div class="row">
+                <div class="col-md-8">
+                  <h6>Phone: {{ toViewCandidate.phone }}</h6><br>
+                  <h6>Submissions: {{ toViewCandidate.jobs.length }}</h6>
+                </div>
+                <div class="col-md-2 center">
+                  <div class="center"><a href="{{ toViewCandidate.resume }}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>
+                </div>
+              </div>
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -162,13 +179,6 @@
     </div>
   </div>
 
-  <form [formGroup]="uploadImgForm" (submit)="onUploadImg()" class="center">
-    <div>
-      <button class="btn btn-primary" type="button" (click)="filePicker2.click()">Pick Image</button>
-      <input id="postFile" type="file" #filePicker2 (change)="onImagePicked2($event)" accept=".pdf,.doc,.docx">
-    </div>
-    <button class="btn btn-primary" type="submit">Upload</button>
-  </form>
 <!--
   <div class="navbar navbar-default">
     <div class="navbar-header">

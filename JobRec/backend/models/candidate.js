@@ -6,8 +6,8 @@ const postSchema = mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: true },
-  doc: { type: mongoose.Schema.Types.ObjectId, ref: "Doc", required: false },
-  jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }]
+  resume: { type: String },
+  jobs: [{ type: String }]
 });
 
 postSchema.plugin(uniqueValidator);

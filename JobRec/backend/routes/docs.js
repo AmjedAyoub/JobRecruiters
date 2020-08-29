@@ -15,4 +15,6 @@ router.get("/:id", DocController.getDoc);
 
 router.delete("/:id", DocController.deleteDoc);
 
+router.put("/:id", extractFile, DocController.updateDoc);
+
 module.exports = router;
