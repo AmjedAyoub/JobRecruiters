@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './_services/data.service';
-import { DocsService } from './_services/doc.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +8,7 @@ import { DocsService } from './_services/doc.service';
 })
 export class AppComponent implements OnInit {
   title = 'JobRec';
-  constructor(private dataService: DataService, private docsService: DocsService){}
+  constructor(private dataService: DataService){}
 
   ngOnInit() {
     this.dataService.getData();

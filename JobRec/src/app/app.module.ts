@@ -8,7 +8,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AgGridModule } from 'ag-grid-angular';
 
 import { AuthService } from './_services/auth.service';
-import { ButtonRendererComponent } from './renderer/button-renderer.component';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -23,8 +22,7 @@ import { CandidateComponent } from './candidate/candidate.component';
     NavComponent,
     LoginComponent,
     SearchComponent,
-    CandidateComponent,
-    ButtonRendererComponent
+    CandidateComponent
    ],
   imports: [
     BrowserModule,
@@ -33,7 +31,7 @@ import { CandidateComponent } from './candidate/candidate.component';
     AppRoutingModule,
     FileUploadModule,
     HttpClientModule,
-    AgGridModule.withComponents([ButtonRendererComponent])
+    AgGridModule.withComponents([])
   ],
   providers: [AuthService, DataService],
   bootstrap: [AppComponent]

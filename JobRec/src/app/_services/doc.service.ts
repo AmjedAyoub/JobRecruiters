@@ -71,8 +71,6 @@ export class DocsService {
   }
 
   updateDoc(id: string, fullName: string, email: string, phone: string, jobs: any, resume: File | string) {
-    console.log('jobs')
-    console.log(jobs)
     const postData = new FormData();
     postData.append('fullName', fullName);
     postData.append('email', email);

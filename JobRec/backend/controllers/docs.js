@@ -90,6 +90,7 @@ exports.updateDoc = (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     docPath = url + "/Docs/" + req.file.filename;
   }
+  console.log(req.body);
   const doc = new Doc({
     _id: req.body.id,
     url: docPath,
@@ -100,8 +101,6 @@ exports.updateDoc = (req, res, next) => {
   });
   Doc.updateOne({ _id: req.params.id }, doc)
     .then(result => {
-      console.log('result')
-      console.log(result)
       if (result.n > 0) {
         res.status(200).json({ message: "Update successful!", doc: doc });
       } else {

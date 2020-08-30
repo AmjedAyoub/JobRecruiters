@@ -14,7 +14,7 @@
 .dropdown-item:hover {
   background-color: #3d3c41 !important;
 }
-/* 
+/*
 .candidateView{
   max-width: 900px;
 } */
@@ -29,4 +29,10 @@
 
 .another-file-over-class {
   border: dotted 3px green;
+}
+
+.disabledResume{
+  opacity: 0.4 !important;
+  cursor: default !important;
+  pointer-events: none !important;
 }

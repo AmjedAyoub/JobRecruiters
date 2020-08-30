@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -7,20 +6,21 @@ import {
   FormBuilder,
   NgForm,
 } from '@angular/forms';
-import { FileUploader } from 'ng2-file-upload';
+import { AgGridAngular } from 'ag-grid-angular';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
+import { Subscription } from 'rxjs';
+import { DocsService } from '../_services/doc.service';
 
 declare var $: any;
-var l = 0;
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
   @ViewChild('agGrid3') agGrid3: AgGridAngular;
@@ -35,8 +35,13 @@ export class SearchComponent implements OnInit {
   selectedJobs = [];
   searchForm: FormGroup;
   newJobForm: FormGroup;
-  newCandidateForm: FormGroup;
-  private len = 0;
+  d = new Date().toLocaleString();
+  rowData: any[];
+  rowData2: any[];
+  rowData3: any[];
+  private docsSub: Subscription;
+  prev;
+
   toViewJob = {
     id: '',
     title: '',
@@ -51,14 +56,6 @@ export class SearchComponent implements OnInit {
     description: '',
   };
 
-  uploader: FileUploader;
-  hasBaseDropZoneOver: boolean;
-  response: string;
-  d = new Date().toLocaleString();
-  rowData: any[];
-  rowData2: any[];
-  rowData3: any[];
-
   columnDefs = [
     {
       headerName: ' ',
@@ -68,7 +65,7 @@ export class SearchComponent implements OnInit {
       checkboxSelection: true,
       resizable: true,
       width: 30,
-      headerCheckboxSelection: function(params) {
+      headerCheckboxSelection: function (params) {
         return params.columnApi.getRowGroupColumns().length === 0;
       },
     },
@@ -181,7 +178,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 90
+      width: 90,
     },
     {
       headerName: 'Name',
@@ -189,7 +186,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 190
+      width: 190,
     },
     {
       headerName: 'Email',
@@ -197,7 +194,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 240
+      width: 240,
     },
     {
       headerName: 'Phone',
@@ -205,7 +202,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 190
+      width: 190,
     },
     {
       headerName: 'Jobs',
@@ -213,7 +210,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 223
+      width: 223,
     },
     {
       headerName: 'Resume',
@@ -224,7 +221,7 @@ export class SearchComponent implements OnInit {
       width: 120,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        if (params.value !== 'null'){
+        if (params.value !== 'null') {
           return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
         return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
@@ -241,7 +238,7 @@ export class SearchComponent implements OnInit {
       checkboxSelection: true,
       resizable: true,
       width: 30,
-      headerCheckboxSelection: function(params) {
+      headerCheckboxSelection: function (params) {
         return params.columnApi.getRowGroupColumns().length === 0;
       },
     },
@@ -251,7 +248,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 90
+      width: 90,
     },
     {
       headerName: 'Name',
@@ -259,7 +256,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 190
+      width: 190,
     },
     {
       headerName: 'Email',
@@ -267,7 +264,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 225
+      width: 225,
     },
     {
       headerName: 'Phone',
@@ -275,7 +272,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 185
+      width: 185,
     },
     {
       headerName: 'Jobs',
@@ -283,7 +280,7 @@ export class SearchComponent implements OnInit {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 201
+      width: 201,
     },
     {
       headerName: 'Resume',
@@ -294,19 +291,19 @@ export class SearchComponent implements OnInit {
       width: 120,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        if (params.value !== 'null'){
+        if (params.value !== 'null') {
           return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
         return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
-      }
+      },
     },
   ];
-
 
   constructor(
     private dataService: DataService,
     private fb: FormBuilder,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private docsService: DocsService
   ) {}
 
   ngOnInit(): void {
@@ -314,52 +311,31 @@ export class SearchComponent implements OnInit {
       search: new FormControl(null, { validators: [Validators.required] }),
     });
     this.rowData = [...this.dataService.getData()];
-    l = this.rowData.length;
     this.dataService.getDataChangedListener().subscribe((res) => {
       this.rowData = res;
-      l = this.rowData.length;
       this.agGrid.api.setRowData(this.rowData);
     });
-    this.rowData2 = [...this.dataService.getCandidates()];
-    this.dataService.getCandidateChangedListener().subscribe((res) => {
-      this.rowData2 = res;
+    this.docsService.getDocs();
+    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
+      this.rowData2 = res.docs;
       this.agGrid2.api.setRowData(this.rowData2);
       this.agGrid3.api.setRowData(this.rowData2);
     });
     this.createNewJobForm();
-    this.createNewCandidateForm();
+    if(this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)){
+      this.search();
+    }
   }
 
-  sizeGrid(param){
+  sizeGrid(param) {
     this.gridApi.doLayout();
     this.gridApi.sizeColumnsToFit();
   }
 
-  createNewCandidateForm() {
-    this.newCandidateForm = this.fb.group(
-      {
-        id: ['', Validators.required],
-        fullName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', Validators.required],
-      }
-      // { validator: this.idCheckValidator2 }
-    );
-  }
-
-  // idCheckValidator2(form: FormGroup) {
-  //   for (let i = 0; i < l; i++) {
-  //     if (form.get('id').value === this.rowData2[i].id) {
-  //       return { exists: true };
-  //     }
-  //   }
-  //   return null;
-  // }
-
   createNewJobForm() {
     this.newJobForm = this.fb.group(
       {
-        id: ['', Validators.required],
+        id: [null, Validators.required],
         title: ['', Validators.required],
         team: ['', Validators.required],
         positions: [null, Validators.required],
@@ -436,13 +412,11 @@ export class SearchComponent implements OnInit {
         }
       }
       this.rowData = results;
-      // console.log(this.rowData);
     } else {
       this.rowData = [...this.dataService.getData()];
     }
   }
 
-  prev;
   editJob() {
     this.editJobMode = true;
     const selectedNodes = this.agGrid.api.getSelectedNodes();
@@ -453,7 +427,6 @@ export class SearchComponent implements OnInit {
     } else if (selectedNodes.length === 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       this.prev = selectedData[0];
-      console.log(selectedData);
       this.newJobForm.patchValue({
         id: selectedData[0].id,
         title: selectedData[0].title,
@@ -475,11 +448,10 @@ export class SearchComponent implements OnInit {
     if (selectedNodes.length >= 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       this.prev = selectedData[0];
-      console.log(selectedData);
       for (const job of selectedData) {
-        for (let i = 0; i < this.rowData.length; i++) {
-          if (this.rowData[i].id === job.id) {
-            this.dataService.deleteData(i);
+        for (const row of this.rowData) {
+          if (row.id === job.id) {
+            this.dataService.deleteData(job.id);
             break;
           }
         }
@@ -526,22 +498,6 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  onNewCandidate() {
-    const newRow = {
-      id: this.newCandidateForm.value.id,
-      fullName: this.newCandidateForm.value.fullName,
-      email: this.newCandidateForm.value.email,
-      phone: this.newCandidateForm.value.phone,
-      jobs: [],
-    };
-    this.dataService.addNewCandidate(newRow);
-    this.dataService.getCandidateChangedListener().subscribe((res) => {
-      this.rowData2 = res;
-    });
-    this.newCandidateForm.reset();
-    $('.modal').modal('hide');
-  }
-
   onNewJob() {
     if (!this.editJobMode) {
       const newd = new Date().toLocaleString();
@@ -559,15 +515,12 @@ export class SearchComponent implements OnInit {
         createdAt: newd,
         description: this.newJobForm.value.description,
       };
-      // this.rowData.push(newRow);
-      // console.log(newRow);
-      // console.log(this.rowData);
       this.dataService.addData(newRow);
       this.dataService.getDataChangedListener().subscribe((res) => {
         this.rowData = res;
       });
     } else {
-      const newd = new Date().toLocaleDateString("en-US");
+      const newd = new Date().toLocaleDateString('en-US');
       // tslint:disable-next-line: max-line-length
       const newRow = {
         id: +this.newJobForm.value.id,
@@ -593,26 +546,30 @@ export class SearchComponent implements OnInit {
     // this.agGrid.api.setRowData(this.rowData);
   }
 
-  async onSubClick(id: number){
-    let candidates = await [...this.dataService.getCandidates()];
-    this.rowData3 = [];
-    for (const candidate of candidates) {
-      for (const job of candidate.jobs) {
-        if (job === id){
-          if (this.rowData3.indexOf(candidate) < 0){
-            this.rowData3.push(candidate);
+  async onSubClick(id: number) {
+    let candidates;
+    this.docsService.getDocs();
+    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
+      candidates = res.docs;
+      this.rowData3 = [];
+      for (const candidate of candidates) {
+        for (const job of candidate.jobs) {
+          if (job === id) {
+            if (this.rowData3.indexOf(candidate) < 0) {
+              this.rowData3.push(candidate);
+            }
+            break;
           }
-          break;
         }
       }
-    }
-    $('#viewCandidate').modal('show');
-    this.gridApi2.sizeColumnsToFit();
+      $('#viewCandidate').modal('show');
+      this.gridApi2.sizeColumnsToFit();
+    });
   }
 
-  onViewDetails(id: number){
+  onViewDetails(id: number) {
     for (const job of this.rowData) {
-      if (id === job.id){
+      if (id === job.id) {
         this.toViewJob.id = job.id;
         this.toViewJob.title = job.title;
         this.toViewJob.team = job.team;
@@ -645,10 +602,12 @@ export class SearchComponent implements OnInit {
     }, 500);
 
     this.agGrid.cellClicked.subscribe((res) => {
-      if (res.colDef.field === 'submission'){
+      if (res.colDef.field === 'submission') {
         this.onSubClick(res.data.id);
-      }
-      else if(res.colDef.field === 'description' || res.colDef.field === 'id'){
+      } else if (
+        res.colDef.field === 'description' ||
+        res.colDef.field === 'id'
+      ) {
         this.onViewDetails(res.data.id);
       }
     });
@@ -661,12 +620,16 @@ export class SearchComponent implements OnInit {
     this.gridColumnApi2 = params.columnApi;
   }
 
-  onGridReady3(params): void {
+  async onGridReady3(params){
     this.gridApi3 = params.api;
     this.gridColumnApi3 = params.columnApi;
-
-    this.dataService.getCandidateChangedListener().subscribe((data) => {
-      this.rowData2 = data;
+    this.docsService.getDocs();
+    this.docsSub = await this.docsService.getDocsUpdateListener().subscribe((res) => {
+      this.rowData2 = res.docs;
     });
+  }
+
+  ngOnDestroy() {
+    this.docsSub.unsubscribe();
   }
 }

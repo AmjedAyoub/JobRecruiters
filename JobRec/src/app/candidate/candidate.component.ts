@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -17,7 +17,7 @@ const BACKEND_URL = environment.apiUrl + '/candidates';
   templateUrl: './candidate.component.html',
   styleUrls: ['./candidate.component.css'],
 })
-export class CandidateComponent implements OnInit {
+export class CandidateComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   editJobMode = false;
   title = 'app';
@@ -537,5 +537,9 @@ export class CandidateComponent implements OnInit {
     this.uploadImgForm.get('image').updateValueAndValidity();
     const reader = new FileReader();
     reader.readAsDataURL(file);
+  }
+
+  ngOnDestroy(){
+    this.docsSub.unsubscribe();
   }
 }
