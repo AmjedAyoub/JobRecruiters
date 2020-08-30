@@ -19,6 +19,11 @@
   max-width: 900px;
 } */
 
+.disabledResume{
+  opacity: 0.4 !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
 
 #postFile {
   visibility: hidden;
@@ -26,6 +31,10 @@
 
 .my-drop-zone {
   border: dotted 3px lightgray;
+}
+
+.hideId{
+  visibility: hidden !important;
 }
 
 .nv-file-over {

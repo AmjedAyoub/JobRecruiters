@@ -1,17 +1,18 @@
 const Doc = require("../models/doc");
 
 exports.createDoc = (req, res, next) => {
-  const url = req.protocol + "://" + req.get("host");
-  console.log('req.body')
-  console.log(req.body)
+  let docPath = req.body.doc;
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    docPath = url + "/Docs/" + req.file.filename;
+  }
   const doc = new Doc({
-    url: url + "/Docs/" + req.file.filename,
+    url: docPath,
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
     jobs: req.body.jobs
   });
-  console.log(doc);
   doc
     .save()
     .then(addeddoc => {
@@ -36,7 +37,7 @@ exports.createDoc = (req, res, next) => {
 };
 
 exports.getDocs = (req, res, next) => {
-  Doc.find()
+  Doc.find().sort({_id: -1})
     .then(docs => {
       res.status(200).json({
         message: "Documents fetched successfully!",
@@ -83,15 +84,8 @@ exports.deleteDoc = (req, res, next) => {
     });
 };
 
-
 exports.updateDoc = (req, res, next) => {
-
-  let d = new Date();
   let docPath = req.body.doc;
-  console.log('##################')
-  console.log(req.params.id)
-  console.log(req.file.filename)
-  console.log('##################')
   if (req.file) {
     const url = req.protocol + "://" + req.get("host");
     docPath = url + "/Docs/" + req.file.filename;
@@ -102,11 +96,8 @@ exports.updateDoc = (req, res, next) => {
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
-    jobs: req.body.jobs
+    jobs: req.body.jobs.split(',')
   });
-  console.log('doc')
-  console.log(doc)
-  console.log('doc2')
   Doc.updateOne({ _id: req.params.id }, doc)
     .then(result => {
       console.log('result')

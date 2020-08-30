@@ -3235,8 +3235,6 @@ export class DataService implements OnInit {
         this.candidates1 = res.docs;
         this.candidateChangedListener.next([...this.candidates1]);
         this.updateSubs();
-        console.log(this.candidates1);
-        console.log(this.candidates1);
         }
       );
   }
@@ -3312,7 +3310,7 @@ export class DataService implements OnInit {
   }
 
   getCandidates() {
-    return this.candidates1;
+    return this.candidates;
   }
 
   updateCandidate(id: any, Data: any) {

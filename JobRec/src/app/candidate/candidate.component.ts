@@ -1,24 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, Validators, FormGroup, FormBuilder, NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AgGridAngular } from 'ag-grid-angular';
-import {
-  FormControl,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
-import { FileUploader } from 'ng2-file-upload';
-import { mimeType } from './mime-type.validator';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
-import { CandidateService } from '../_services/candidate.service';
 import { DocsService } from '../_services/doc.service';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 declare var $: any;
-let l = 0;
 
 const BACKEND_URL = environment.apiUrl + '/candidates';
 
@@ -28,16 +18,6 @@ const BACKEND_URL = environment.apiUrl + '/candidates';
   styleUrls: ['./candidate.component.css'],
 })
 export class CandidateComponent implements OnInit {
-  // rowData: any;
-
-  constructor(
-    private dataService: DataService,
-    private fb: FormBuilder,
-    private alertify: AlertifyService,
-    private docsService: DocsService,
-    private http: HttpClient,
-    private candidateService: CandidateService
-  ) {}
   @ViewChild('agGrid') agGrid: AgGridAngular;
   editJobMode = false;
   title = 'app';
@@ -49,7 +29,6 @@ export class CandidateComponent implements OnInit {
   searchForm: FormGroup;
   newCandidateForm: FormGroup;
   uploadImgForm: FormGroup;
-  private len = 0;
   d = new Date().toLocaleString();
   rowData2: any[];
   rowData3: any[];
@@ -59,14 +38,14 @@ export class CandidateComponent implements OnInit {
   private docsSub: Subscription;
 
   toViewCandidate = {
-    id: '',
+    _id: '',
     fullName: '',
     email: '',
     phone: '',
-    resume: '',
-    resumeId: '',
+    url: '',
     jobs: [],
   };
+
   toViewCandiateJobs = [];
 
   columnDefs = [
@@ -167,14 +146,14 @@ export class CandidateComponent implements OnInit {
     },
     {
       headerName: 'ID',
-      field: 'id',
+      field: '_id',
       sortable: true,
       filter: true,
       resizable: true,
       width: 100,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-outline-success" style="width: 100%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidate">${params.value}</button></div>`;
+        return `<div><button class="btn btn-outline-success" style="width: 100%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidate">View</button></div>`;
       },
     },
     {
@@ -215,100 +194,115 @@ export class CandidateComponent implements OnInit {
     },
     {
       headerName: 'Resume',
-      field: 'resume',
+      field: 'url',
       sortable: true,
       filter: true,
       resizable: true,
       width: 120,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+        if (params.value !== 'null') {
+          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+        }
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
       },
     },
   ];
 
-  async ngOnInit() {
-    await this.dataService.getAllData();
+  constructor(
+    private dataService: DataService,
+    private fb: FormBuilder,
+    private alertify: AlertifyService,
+    private docsService: DocsService
+  ) {}
+
+  ngOnInit() {
+    this.docsService.getDocs();
+    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
+      this.rowData2 = res.docs;
+    });
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
     });
-    this.rowData2 = [...this.dataService.getCandidates()];
-    this.dataService.getCandidateChangedListener().subscribe((res) => {
-      this.rowData2 = res;
-      this.agGrid.api.setRowData(this.rowData2);
-    });
     this.uploadImgForm = new FormGroup({
-      image: new FormControl(null)
+      image: new FormControl(null),
     });
     this.createNewCandidateForm();
   }
 
   createNewCandidateForm() {
-    this.newCandidateForm = this.fb.group(
-      {
-        id: ['', Validators.required],
-        fullName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', Validators.required],
-        resume: [null],
-      }
-      // { validator: this.idCheckValidator2 }
-    );
+    this.newCandidateForm = this.fb.group({
+      fullName: ['', Validators.required],
+      _id: [''],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      resume: [null],
+    });
   }
-
-  // idCheckValidator2(form: FormGroup) {
-  //   for (let i = 0; i < l; i++) {
-  //     if (form.get('id').value === this.rowData2[i].id) {
-  //       return { exists: true };
-  //     }
-  //   }
-  //   return null;
-  // }
-
 
   async search() {
     if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
-      let initialData = await [...this.dataService.getCandidates()];
+      this.docsService.getDocs();
+      let initialData;
       let queries = this.searchForm.value.search.split(',');
       let results = [];
-      for (let query of queries) {
-        query = query.toLowerCase().trim();
-        if (
-          !isNaN(query) &&
-          query !== '' &&
-          !query.match(/^\s+$/) &&
-          query !== null
-        ) {
-          // Numbers
-          for (const candidate of initialData) {
-            let dd = candidate.id + '';
-            if (dd.includes(query) || candidate.phone.includes(query)) {
-              if (results.indexOf(candidate) < 0) {
-                results.push(candidate);
-              }
-            }
-          }
-        } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
-          if (!isNaN(Date.parse(query))) {
-            // Dates
-          } else {
-            // Strings
+      await this.docsService.getDocsUpdateListener().subscribe((res) => {
+        initialData = res.docs;
+        for (let query of queries) {
+          query = query.toLowerCase().trim();
+          if (
+            !isNaN(query) &&
+            query !== '' &&
+            !query.match(/^\s+$/) &&
+            query !== null
+          ) {
+            // Numbers
             for (const candidate of initialData) {
-              if (
-                candidate.fullName.toLowerCase().includes(query) ||
-                candidate.email.toLowerCase().includes(query)
-              ) {
+              if (candidate.phone.includes(query)) {
                 if (results.indexOf(candidate) < 0) {
                   results.push(candidate);
+                }
+              }
+              for (let job of candidate.jobs) {
+                job = job + '';
+                if (job.includes(query)) {
+                  if (results.indexOf(candidate) < 0) {
+                    results.push(candidate);
+                    break;
+                  }
+                }
+              }
+            }
+          } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
+            if (!isNaN(Date.parse(query))) {
+              // Dates
+            } else {
+              // Strings
+              for (const candidate of initialData) {
+                const dd = candidate.id + '';
+                if (
+                  candidate.fullName.toLowerCase().includes(query) ||
+                  candidate.email.toLowerCase().includes(query) ||
+                  dd.includes(query) ||
+                  candidate.phone.includes(query)
+                ) {
+                  if (results.indexOf(candidate) < 0) {
+                    results.push(candidate);
+                  }
                 }
               }
             }
           }
         }
-      }
-      this.rowData2 = results;
+        this.rowData2 = results;
+      });
     } else {
-      this.rowData2 = [...this.dataService.getCandidates()];
+      this.docsService.getDocs();
+      this.docsSub = this.docsService
+        .getDocsUpdateListener()
+        .subscribe((res) => {
+          this.rowData2 = res.docs;
+        });
     }
   }
 
@@ -322,14 +316,13 @@ export class CandidateComponent implements OnInit {
     } else if (selectedNodes.length === 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       this.prev = selectedData[0];
-      // console.log(selectedData);
       this.newCandidateForm.patchValue({
-        id: selectedData[0].id,
+        _id: selectedData[0]._id,
         fullName: selectedData[0].fullName,
         email: selectedData[0].email,
         phone: selectedData[0].phone,
         jobs: [],
-        resume: selectedData[0].resume
+        resume: selectedData[0].url,
       });
       $('#newCandidate').modal('show');
     } else {
@@ -344,112 +337,123 @@ export class CandidateComponent implements OnInit {
   }
 
   onNewCandidate() {
-    // console.log(this.editJobMode);
     if (!this.editJobMode) {
-      const newRow = {
-        id: +this.newCandidateForm.value.id,
-        fullName: this.newCandidateForm.value.fullName,
-        email: this.newCandidateForm.value.email,
-        phone: this.newCandidateForm.value.phone,
-        jobs: [],
-        resume: this.uploadImgForm.value.image
-      };
       // tslint:disable-next-line: max-line-length
-      this.docsService.addDoc(this.newCandidateForm.value.fullNAme, this.newCandidateForm.value.email, this.newCandidateForm.value.phone, [], this.uploadImgForm.value.image
-      ).subscribe(
-        (res) => {
-          console.log('res')
-          console.log(res);
-        //   newRow.resume = res.doc.url;
-        //   this.dataService.addNewCandidate(newRow);
-        //   this.dataService.getCandidateChangedListener().subscribe((res) => {
-        //     this.rowData2 = res;
-        // }
-      // );
-      });
-      // this.createUser(newRow);
+      if (this.uploadImgForm.value.image !== null) {
+        this.docsService
+          .addDoc(
+            this.newCandidateForm.value.fullName,
+            this.newCandidateForm.value.email,
+            this.newCandidateForm.value.phone,
+            [],
+            this.uploadImgForm.value.image
+          )
+          .subscribe((res) => {
+            this.alertify.success('Candidate has been added successfully');
+            this.docsService.getDocs();
+            this.docsSub = this.docsService
+              .getDocsUpdateListener()
+              .subscribe((response) => {
+                this.rowData2 = response.docs;
+              });
+          });
+      } else {
+        this.docsService
+          .addDoc(
+            this.newCandidateForm.value.fullName,
+            this.newCandidateForm.value.email,
+            this.newCandidateForm.value.phone,
+            [],
+            'null'
+          )
+          .subscribe((res) => {
+            this.alertify.success('Candidate has been added successfully');
+            this.docsService.getDocs();
+            this.docsSub = this.docsService
+              .getDocsUpdateListener()
+              .subscribe((response) => {
+                this.rowData2 = response.docs;
+              });
+          });
+      }
     } else {
       // tslint:disable-next-line: max-line-length
-      for(let candidate of this.rowData2){
-        if(candidate.id === this.prev.id){
-          this.toViewCandidate.resumeId = candidate.resumeId;
-          break;
-        }
+      if (this.uploadImgForm.value.image !== null) {
+        this.docsService
+          .updateDoc(
+            this.newCandidateForm.value._id,
+            this.newCandidateForm.value.fullName,
+            this.newCandidateForm.value.email,
+            this.newCandidateForm.value.phone,
+            this.prev.jobs,
+            this.uploadImgForm.value.image
+          )
+          .subscribe((res) => {
+            this.alertify.success('Candidate has been updated successfully');
+            this.docsService.getDocs();
+            this.docsSub = this.docsService
+              .getDocsUpdateListener()
+              .subscribe((response) => {
+                this.rowData2 = response.docs;
+              });
+          });
+      } else {
+        this.docsService
+          .updateDoc(
+            this.newCandidateForm.value._id,
+            this.newCandidateForm.value.fullName,
+            this.newCandidateForm.value.email,
+            this.newCandidateForm.value.phone,
+            this.prev.jobs,
+            this.prev.url
+          )
+          .subscribe((res) => {
+            this.alertify.success('Candidate has been updated successfully');
+            this.docsService.getDocs();
+            this.docsSub = this.docsService
+              .getDocsUpdateListener()
+              .subscribe((response) => {
+                this.rowData2 = response.docs;
+              });
+          });
       }
-      const newRow = {
-        id: +this.newCandidateForm.value.id,
-        fullName: this.newCandidateForm.value.fullName,
-        email: this.newCandidateForm.value.email,
-        phone: this.newCandidateForm.value.phone,
-        jobs: this.prev.jobs,
-        resume: this.uploadImgForm.value.image
-      };
-      // tslint:disable-next-line: max-line-length
-      this.docsService.updateDoc(this.toViewCandidate.resumeId, this.newCandidateForm.value.fullNAme, this.newCandidateForm.value.email, this.newCandidateForm.value.phone, this.prev.jobs, this.uploadImgForm.value.image
-      ).subscribe(
-        (res) => {
-          console.log(res);
-          // this.docsService.getDocs();
-          // let candidates = this.dataService.getCandidates();
-          // this.docsService.getDocsUpdateListener().subscribe(
-          //   (res) => {
-          //     this.dataService.getCandidateChangedListener().subscribe((response) => {
-          //       this.rowData2 = response;
-          //     });
-          //     this.dataService.getData();
-          //     this.dataService.getDataChangedListener().subscribe(
-          //       (data) => {
-          //       });
-          //   });
-      });
-      // this.dataService.updateCandidate(this.prev.id, newRow);
-      // this.dataService.getCandidateChangedListener().subscribe((res) => {
-      //   this.rowData2 = res;
-      // });
     }
-    // this.newCandidateForm.reset();
+    this.newCandidateForm.reset();
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
   }
-
-  // createUser(user: any) {
-  //   this.http.post(BACKEND_URL + '/addnewcan', user).subscribe(
-  //     () => {
-  //     },
-  //     error => {
-  //     }
-  //   );
-  // }
 
   deleteCandidate() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     if (selectedNodes.length >= 1) {
       const selectedData = selectedNodes.map((node) => node.data);
-      this.prev = selectedData[0];
-      console.log(selectedData);
       for (const candidate of selectedData) {
-        for (let i = 0; i < this.rowData2.length; i++) {
-          if (this.rowData2[i].id === candidate.id) {
-            this.dataService.deleteCandidate(i);
-            break;
-          }
-        }
+        this.docsService.deleteDoc(candidate._id).subscribe((res) => {
+          this.alertify.success('Candidate has been deleted successfully');
+          this.docsService.getDocs();
+          this.docsSub = this.docsService
+            .getDocsUpdateListener()
+            .subscribe((response) => {
+              this.rowData2 = response.docs;
+            });
+        });
       }
-      this.dataService.getDataChangedListener().subscribe((res) => {
-        this.rowData2 = res;
-      });
     } else {
       this.alertify.error('Please select candidates to delete');
     }
   }
 
   async onJobsClick(id: number) {
-    console.log(id);
-    let candidates = await [...this.dataService.getCandidates()];
+    this.docsService.getDocs();
+    this.docsSub = this.docsService
+      .getDocsUpdateListener()
+      .subscribe((response) => {
+        this.rowData2 = response.docs;
+      });
     let jobs = await [...this.dataService.getData()];
     this.rowData3 = [];
-    for (const candidate of candidates) {
-      if (candidate.id === id) {
+    for (const candidate of this.rowData2) {
+      if (candidate._id === id) {
         for (const job of candidate.jobs) {
           for (const resJob of jobs) {
             if (job === resJob.id) {
@@ -468,14 +472,15 @@ export class CandidateComponent implements OnInit {
 
   async onViewDetails(id: number) {
     for (const candidate of this.rowData2) {
-      if (id === candidate.id) {
-        this.toViewCandidate.id = candidate.id;
+      if (id + '' === candidate._id) {
+        this.toViewCandidate._id = candidate._id;
         this.toViewCandidate.fullName = candidate.fullName;
         this.toViewCandidate.email = candidate.email;
         this.toViewCandidate.phone = candidate.phone;
-        this.toViewCandidate.resume = candidate.resume;
+        this.toViewCandidate.url = candidate.url;
         this.toViewCandidate.jobs = candidate.jobs;
         let data = await [...this.dataService.getData()];
+        this.toViewCandiateJobs = [];
         for (const job of candidate.jobs) {
           for (const toAddJob of data) {
             if (job === toAddJob.id) {
@@ -514,9 +519,9 @@ export class CandidateComponent implements OnInit {
 
     this.agGrid.cellClicked.subscribe((res) => {
       if (res.colDef.field === 'jobs') {
-        this.onJobsClick(res.data.id);
-      } else if (res.colDef.field === 'id') {
-        this.onViewDetails(res.data.id);
+        this.onJobsClick(res.data._id);
+      } else if (res.colDef.field === '_id') {
+        this.onViewDetails(res.data._id);
       }
     });
   }
@@ -526,18 +531,7 @@ export class CandidateComponent implements OnInit {
     this.gridColumnApi2 = params.columnApi;
   }
 
-  onUploadImg() {
-    // this.docsService.addDoc(this.newCandidateForm.value.id,
-    //   this.uploadImgForm.value.image
-    // ).subscribe(
-    //   () => {
-    //     console.log('good');
-    //   }
-    // );
-    // this.new.reset();
-  }
-
-  onImagePicked2(event: Event) {
+  onResumePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.uploadImgForm.patchValue({ image: file });
     this.uploadImgForm.get('image').updateValueAndValidity();

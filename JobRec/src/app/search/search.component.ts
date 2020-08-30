@@ -177,7 +177,7 @@ export class SearchComponent implements OnInit {
   columnDefs2 = [
     {
       headerName: 'ID',
-      field: 'id',
+      field: '_id',
       sortable: true,
       filter: true,
       resizable: true,
@@ -217,14 +217,17 @@ export class SearchComponent implements OnInit {
     },
     {
       headerName: 'Resume',
-      field: 'resume',
+      field: 'url',
       sortable: true,
       filter: true,
       resizable: true,
       width: 120,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+        if (params.value !== 'null'){
+          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+        }
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
       },
     },
   ];
@@ -244,7 +247,7 @@ export class SearchComponent implements OnInit {
     },
     {
       headerName: 'ID',
-      field: 'id',
+      field: '_id',
       sortable: true,
       filter: true,
       resizable: true,
@@ -284,15 +287,18 @@ export class SearchComponent implements OnInit {
     },
     {
       headerName: 'Resume',
-      field: 'resume',
+      field: 'url',
       sortable: true,
       filter: true,
       resizable: true,
       width: 120,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
-      },
+        if (params.value !== 'null'){
+          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+        }
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
+      }
     },
   ];
 

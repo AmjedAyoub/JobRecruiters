@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit {
     });
 
     this.isAuth = this.authService.getIsAuth();
+    if (this.isAuth){
+      this.router.navigate(['search']);
+    }
+
     this.authService.getAuthStatusListener().subscribe(
       (res) => {
           this.isAuth = res;

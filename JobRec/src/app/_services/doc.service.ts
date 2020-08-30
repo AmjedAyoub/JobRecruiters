@@ -28,9 +28,12 @@ export class DocsService {
           return {
             docs: postData.docs.map((doc) => {
               return {
+                _id: doc._id,
                 url: doc.url,
-                userId: doc.userId,
-                _id: doc._id
+                fullName: doc.fullName,
+                email: doc.email,
+                phone: doc.phone,
+                jobs: doc.jobs
               };
             }),
           };
@@ -44,7 +47,9 @@ export class DocsService {
       });
   }
 
-  addDoc(fullName: string, email: string, phone: string, jobs: any, doc: File | null) {
+  addDoc(fullName: string, email: string, phone: string, jobs: any, doc: File | string) {
+    console.log('jobs');
+    console.log(jobs);
     const postData = new FormData();
     postData.append('doc', doc);
     postData.append('fullName', fullName);
@@ -53,7 +58,6 @@ export class DocsService {
     postData.append('jobs', jobs);
     return this.http.post<{ message: string; doc: any }>(BACKEND_URL, postData);
   }
-
 
   getDoc(id: string) {
     return this.http.get<{
@@ -67,7 +71,9 @@ export class DocsService {
   }
 
   updateDoc(id: string, fullName: string, email: string, phone: string, jobs: any, resume: File | string) {
-    let postData = new FormData();
+    console.log('jobs')
+    console.log(jobs)
+    const postData = new FormData();
     postData.append('fullName', fullName);
     postData.append('email', email);
     postData.append('phone', phone);
@@ -80,5 +86,9 @@ export class DocsService {
 
   getDocsUpdateListener() {
     return this.docsUpdated.asObservable();
+  }
+
+  deleteDoc(id: string) {
+    return this.http.delete(BACKEND_URL + id);
   }
 }

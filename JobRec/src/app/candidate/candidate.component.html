@@ -48,15 +48,8 @@
             <form [formGroup]="newCandidateForm" (submit)="onNewCandidate()" class="center"
             style="margin: auto; width: 400px; padding: 20px;">
               <div class="form-group has-success has-danger">
-                <input type="text" class="form-control" placeholder="Candidate ID" formControlName="id" [ngClass]="
-                (newCandidateForm.get('id').errors &&
-                newCandidateForm.get('id').touched) ||
-                (newCandidateForm.get('id').touched &&
-                newCandidateForm.hasError('exists')) ?
-                'is-invalid' : newCandidateForm.get('id').valid && !newCandidateForm.hasError('exists') ? 'is-valid' : ''
-              ">
-                <div class="valid-feedback">Success! valid ID</div>
-                <div class="invalid-feedback">Sorry, this ID is already been taken!</div>
+                <input  type="text" class="form-control" disabled placeholder="Candidate ID" formControlName="_id" [ngClass]="
+                !editJobMode ? 'hideId' : ''">
               </div>
 
               <div class="form-group has-success has-danger">
@@ -88,10 +81,13 @@
               ">
                 <div class="invalid-feedback">Sorry, phone is required</div>
               </div>
-              <form [formGroup]="uploadImgForm" (submit)="onUploadImg()" class="center">
+              <form [formGroup]="uploadImgForm" (submit)="onNewCandidate()" class="center">
+                <div *ngIf="editJobMode">
+                  <a class="btn btn-outline-success" href="{{prev.url}}" target="_blank" type="button" [ngClass]="prev.url==='null'? 'disabledResume' : ''">View Current Resume</a>
+                </div>
                 <div>
-                  <button class="btn btn-primary" type="button" (click)="filePicker2.click()">Pick resume</button>
-                  <input id="postFile" type="file" #filePicker2 (change)="onImagePicked2($event)" accept=".pdf,.doc,.docx">
+                  <button class="btn btn-outline-primary" type="button" (click)="filePicker2.click()">Pick New Resume</button>
+                  <input id="postFile" type="file" #filePicker2 (change)="onResumePicked($event)" accept=".pdf,.doc,.docx">
                 </div>
               </form>
               <br>
@@ -103,7 +99,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="modal fade bd-example-modal-xl mt-5" id="viewJobs" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -131,17 +126,17 @@
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="card border-warning mb-3" style="width: 100%;">
-            <div class="card-header"><strong>Candidate ID: {{ toViewCandidate.id }} </strong></div>
+            <div class="card-header"><strong>Candidate ID: {{ toViewCandidate._id }} </strong></div>
             <div class="card-body">
               <h4 class="card-title">{{ toViewCandidate.fullName }}</h4>
               <h5>Email: {{ toViewCandidate.email }}</h5><br>
               <div class="row">
                 <div class="col-md-8">
                   <h6>Phone: {{ toViewCandidate.phone }}</h6><br>
-                  <h6>Submissions: {{ toViewCandidate.jobs.length }}</h6>
+                  <h6>Submissions: {{ toViewCandiateJobs.length }}</h6>
                 </div>
                 <div class="col-md-2 center">
-                  <div class="center"><a href="{{ toViewCandidate.resume }}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>
+                  <div class="center"><a href="{{ toViewCandidate.url }}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume" [ngClass]="toViewCandidate.url==='null'? 'disabledResume' : ''">Resume</a></div>
                 </div>
               </div>
               <table class="table table-hover">
@@ -178,125 +173,6 @@
       </div>
     </div>
   </div>
-
-<!--
-  <div class="navbar navbar-default">
-    <div class="navbar-header">
-        <a class="navbar-brand" href>Angular2 File Upload</a>
-    </div>
-</div>
-
-<div class="row">
-
-    <div class="col-md-3">
-
-        <h3>Select files</h3>
-
-        <div ng2FileDrop
-             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-             (fileOver)="fileOverBase($event)"
-             [uploader]="uploader"
-             class="well my-drop-zone">
-            Base drop zone
-        </div>
-
-        Multiple
-        <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
-
-        Single
-        <input type="file" ng2FileSelect [uploader]="uploader" />
-    </div>
-
-    <div class="col-md-9" style="margin-bottom: 40px">
-
-        <h3>Upload queue</h3>
-        <p>Queue length: {{ uploader?.queue?.length }}</p>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th width="50%">Name</th>
-                <th>Size</th>
-                <th>Progress</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of uploader.queue">
-                <td><strong>{{ item?.file?.name }}</strong></td>
-                <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-                <td *ngIf="uploader.options.isHTML5">
-                    <div class="progress" style="margin-bottom: 0;">
-                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-                    </div>
-                </td>
-                <td class="text-center">
-                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                </td>
-                <td nowrap>
-                    <button type="button" class="btn btn-success btn-xs"
-                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                        <span class="glyphicon glyphicon-upload"></span> Upload
-                    </button>
-                    <button type="button" class="btn btn-warning btn-xs"
-                            (click)="item.cancel()" [disabled]="!item.isUploading">
-                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                    </button>
-                    <button type="button" class="btn btn-danger btn-xs"
-                            (click)="item.remove()">
-                        <span class="glyphicon glyphicon-trash"></span> Remove
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div>
-            <div>
-                Queue progress:
-                <div class="progress" style="">
-                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-                </div>
-            </div>
-            <button type="button" class="btn btn-success btn-s"
-                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-                <span class="glyphicon glyphicon-upload"></span> Upload all
-            </button>
-            <button type="button" class="btn btn-warning btn-s"
-                    (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-            </button>
-            <button type="button" class="btn btn-danger btn-s"
-                    (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-                <span class="glyphicon glyphicon-trash"></span> Remove all
-            </button>
-        </div>
-
-    </div>
-
-</div>
-
-<br><br>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">Response</div>
-            <div class="panel-body">
-              {{ response }}
-            </div>
-        </div>
-    </div>
-</div>
-
- -->
-
-
-
-
 
 
 
