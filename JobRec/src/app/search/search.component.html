@@ -141,8 +141,8 @@
             </div>
           </div>
           <hr>
-          <button mat-raised-button class="btn btn-outline-success" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+          <button mat-raised-button class="btn btn-outline-success" [disabled]="!this.newJobForm.valid" type="submit">{{ editJobMode ? 'Edit' : 'Save' }}</button>
+          <button type="button" class="btn btn-outline-secondary ml-3" data-dismiss="modal">Cancel</button>
         </form>
       </div>
     </div>
@@ -181,7 +181,7 @@
           </div>
           <hr>
           <button type="button" class="btn btn-outline-success" (click)="onAddSubs()">Add</button>
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-secondary ml-3" data-dismiss="modal">Cancel</button>
         </form>
       </div>
     </div>

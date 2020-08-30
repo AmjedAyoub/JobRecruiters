@@ -3342,7 +3342,6 @@ export class DataService implements OnInit, OnDestroy {
       this.candidateChangedListener.next([...this.candidates1]);
       this.updateSubs();
     });
-    this.updateSubs();
   }
 
   getAllData() {
@@ -3353,7 +3352,7 @@ export class DataService implements OnInit, OnDestroy {
       this.updateSubs();
       this.dataChangedListener.next([...this.rowData]);
     });
-    // this.updateSubs();
+    this.updateSubs();
   }
 
   cleanSubs() {
@@ -3393,26 +3392,6 @@ export class DataService implements OnInit, OnDestroy {
         break;
       }
     }
-    this.dataChangedListener.next([...this.rowData]);
-    this.docsService.getDocs();
-    for (const candidate of this.candidates1) {
-      for (let i = 0; i < candidate.jobs.length; i++) {
-        if (jobId === candidate.jobs[i]) {
-          candidate.jobs.splice(i, 1);
-          await this.docsService
-            .updateDoc(
-              candidate._id,
-              candidate.fullName,
-              candidate.email,
-              candidate.phone,
-              candidate.jobs,
-              candidate.url
-            )
-            .subscribe();
-          break;
-        }
-      }
-    }
     this.getAllData();
     this.alertify.success('Job has bee deleted successfully');
   }
@@ -3446,25 +3425,8 @@ export class DataService implements OnInit, OnDestroy {
     this.alertify.success('Job has been updated successfully');
   }
 
-  async addSubmissions(jobs: any[], candidates: any[]) {
-    for (const candidate of candidates) {
-      for (const job of jobs) {
-        if (candidate.jobs.indexOf(job.id) < 0) {
-            candidate.jobs.unshift(job.id);
-            await this.docsService
-              .updateDoc(
-                candidate._id,
-                candidate.fullName,
-                candidate.email,
-                candidate.phone,
-                candidate.jobs,
-                candidate.url
-              )
-              .subscribe();
-        }
-      }
-    }
-    await this.getAllData();
+  addSubmissions() {
+    this.getAllData();
     this.alertify.success('Submission has benn added successfully');
   }
 

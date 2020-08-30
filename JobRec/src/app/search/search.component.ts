@@ -12,6 +12,7 @@ import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Subscription } from 'rxjs';
 import { DocsService } from '../_services/doc.service';
+import { async } from 'rxjs/internal/scheduler/async';
 
 declare var $: any;
 
@@ -322,9 +323,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.agGrid3.api.setRowData(this.rowData2);
     });
     this.createNewJobForm();
-    if(this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)){
-      this.search();
-    }
   }
 
   sizeGrid(param) {
@@ -344,13 +342,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         createdBy: ['', Validators.required],
         description: ['', Validators.required],
       }
-      // { validator: this.idCheckValidator }
+      // { asyncValidators: this.idCheckValidator }
     );
   }
 
   // idCheckValidator(form: FormGroup) {
-  //   for (let i = 0; i < l; i++) {
-  //     if (form.get('id').value === this.rowData[i].id) {
+  //   for (let i = 0; i < this.rowData.length; i++) {
+  //     if (+form.get('id').value === this.rowData[i].id) {
   //       return { exists: true };
   //     }
   //   }
@@ -443,22 +441,46 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteJob() {
+  async deleteJob() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     if (selectedNodes.length >= 1) {
       const selectedData = selectedNodes.map((node) => node.data);
-      this.prev = selectedData[0];
+      // this.prev = selectedData[0];
+      this.docsService.getDocs();
       for (const job of selectedData) {
-        for (const row of this.rowData) {
-          if (row.id === job.id) {
-            this.dataService.deleteData(job.id);
-            break;
+        for (const candidate of this.rowData2) {
+          for (let i = 0; i < candidate.jobs.length; i++) {
+            if (job.id === candidate.jobs[i]) {
+              candidate.jobs.splice(i, 1);
+              await this.docsService
+                .updateDoc(
+                  candidate._id,
+                  candidate.fullName,
+                  candidate.email,
+                  candidate.phone,
+                  candidate.jobs,
+                  candidate.url
+                )
+                .subscribe(() => {
+                  this.search();
+                });
+              break;
+            }
           }
         }
+        this.dataService.deleteData(job.id);
       }
-      this.dataService.getDataChangedListener().subscribe((res) => {
+      await this.dataService.getDataChangedListener().subscribe((res) => {
         this.rowData = res;
       });
+      setTimeout(() => {
+        if (
+          this.searchForm.valid &&
+          !this.searchForm.value.search.match(/^\s+$/)
+        ) {
+          this.search();
+        }
+      }, 500);
     } else {
       this.alertify.error('Please select jobs to delete');
     }
@@ -487,11 +509,41 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAddSubs() {
+  async onAddSubs() {
     const selectedNodes = this.agGrid3.api.getSelectedNodes();
     if (selectedNodes.length >= 1) {
       const selectedData = selectedNodes.map((node) => node.data);
-      this.dataService.addSubmissions(this.selectedJobs, selectedData);
+      for (const candidate of selectedData) {
+        for (const job of this.selectedJobs) {
+          if (candidate.jobs.indexOf(job.id) < 0) {
+            candidate.jobs.unshift(job.id);
+            await this.docsService
+              .updateDoc(
+                candidate._id,
+                candidate.fullName,
+                candidate.email,
+                candidate.phone,
+                candidate.jobs,
+                candidate.url
+              )
+              .subscribe(() => {
+                this.search();
+              });
+          }
+        }
+      }
+      this.dataService.addSubmissions();
+      await this.dataService.getDataChangedListener().subscribe((res) => {
+        this.rowData = res;
+      });
+      setTimeout(() => {
+        if (
+          this.searchForm.valid &&
+          !this.searchForm.value.search.match(/^\s+$/)
+        ) {
+          this.search();
+        }
+      }, 400);
       $('#viewSubs').modal('hide');
     } else {
       this.alertify.error('Please select candidates to add submissions');
@@ -519,6 +571,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.dataService.getDataChangedListener().subscribe((res) => {
         this.rowData = res;
       });
+      if (
+        this.searchForm.valid &&
+        !this.searchForm.value.search.match(/^\s+$/)
+      ) {
+        this.search();
+      }
     } else {
       const newd = new Date().toLocaleDateString('en-US');
       // tslint:disable-next-line: max-line-length
@@ -540,6 +598,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.dataService.getDataChangedListener().subscribe((res) => {
         this.rowData = res;
       });
+      if (
+        this.searchForm.valid &&
+        !this.searchForm.value.search.match(/^\s+$/)
+      ) {
+        this.search();
+      }
     }
     this.newJobForm.reset();
     $('.modal').modal('hide');
@@ -564,6 +628,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
       $('#viewCandidate').modal('show');
       this.gridApi2.sizeColumnsToFit();
+      this.search();
     });
   }
 
@@ -620,13 +685,15 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.gridColumnApi2 = params.columnApi;
   }
 
-  async onGridReady3(params){
+  async onGridReady3(params) {
     this.gridApi3 = params.api;
     this.gridColumnApi3 = params.columnApi;
     this.docsService.getDocs();
-    this.docsSub = await this.docsService.getDocsUpdateListener().subscribe((res) => {
-      this.rowData2 = res.docs;
-    });
+    this.docsSub = await this.docsService
+      .getDocsUpdateListener()
+      .subscribe((res) => {
+        this.rowData2 = res.docs;
+      });
   }
 
   ngOnDestroy() {

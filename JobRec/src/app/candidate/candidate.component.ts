@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormBuilder, NgForm } from '@angular/forms';
+import {
+  FormControl,
+  Validators,
+  FormGroup,
+  FormBuilder,
+  NgForm,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AgGridAngular } from 'ag-grid-angular';
 
@@ -356,6 +362,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
               .subscribe((response) => {
                 this.rowData2 = response.docs;
               });
+              this.search();
           });
       } else {
         this.docsService
@@ -374,7 +381,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
               .subscribe((response) => {
                 this.rowData2 = response.docs;
               });
-          });
+              this.search();
+            });
       }
     } else {
       // tslint:disable-next-line: max-line-length
@@ -396,7 +404,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
               .subscribe((response) => {
                 this.rowData2 = response.docs;
               });
-          });
+              this.search();
+            });
       } else {
         this.docsService
           .updateDoc(
@@ -415,9 +424,10 @@ export class CandidateComponent implements OnInit, OnDestroy {
               .subscribe((response) => {
                 this.rowData2 = response.docs;
               });
-          });
-      }
-    }
+              this.search();
+            });
+          }
+        }
     this.newCandidateForm.reset();
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
@@ -436,6 +446,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             .subscribe((response) => {
               this.rowData2 = response.docs;
             });
+            this.search();
         });
       }
     } else {
@@ -468,6 +479,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
     }
     $('#viewJobs').modal('show');
     this.gridApi2.sizeColumnsToFit();
+    this.search();
   }
 
   async onViewDetails(id: number) {
@@ -539,7 +551,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(file);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.docsSub.unsubscribe();
   }
 }
