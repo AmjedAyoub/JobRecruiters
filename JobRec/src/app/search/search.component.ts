@@ -228,7 +228,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (params.value !== 'null') {
           return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
-        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="color: darkgrey; margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
       },
     },
   ];
@@ -298,7 +298,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (params.value !== 'null') {
           return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
-        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="color: darkgrey; gray margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
       },
     },
   ];
@@ -386,7 +386,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             let dd = job.id + '';
             if (dd.includes(query)) {
               if (results.indexOf(job) < 0) {
-                results.push(job);
+                results.unshift(job);
               }
             }
           }
@@ -399,7 +399,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                 job.updatedAt.includes(query)
               ) {
                 if (results.indexOf(job) < 0) {
-                  results.push(job);
+                  results.unshift(job);
                 }
               }
             }
@@ -415,7 +415,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                 job.status.toLowerCase().includes(query)
               ) {
                 if (results.indexOf(job) < 0) {
-                  results.push(job);
+                  results.unshift(job);
                 }
               }
             }

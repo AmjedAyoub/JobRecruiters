@@ -211,7 +211,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
         if (params.value !== 'null') {
           return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
-        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="margin: auto; text-align: center">Resume</a></div>`;
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="color: darkgrey; margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
       },
     },
   ];
@@ -267,14 +267,14 @@ export class CandidateComponent implements OnInit, OnDestroy {
             for (const candidate of initialData) {
               if (candidate.phone.includes(query)) {
                 if (results.indexOf(candidate) < 0) {
-                  results.push(candidate);
+                  results.unshift(candidate);
                 }
               }
               for (let job of candidate.jobs) {
                 job = job + '';
                 if (job.includes(query)) {
                   if (results.indexOf(candidate) < 0) {
-                    results.push(candidate);
+                    results.unshift(candidate);
                     break;
                   }
                 }
@@ -294,7 +294,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
                   candidate.phone.includes(query)
                 ) {
                   if (results.indexOf(candidate) < 0) {
-                    results.push(candidate);
+                    results.unshift(candidate);
                   }
                 }
               }
