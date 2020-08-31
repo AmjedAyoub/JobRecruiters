@@ -457,43 +457,43 @@ export class SearchComponent implements OnInit, OnDestroy {
   async deleteJob() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     if (selectedNodes.length >= 1) {
-      const selectedData = selectedNodes.map((node) => node.data);
-      // this.prev = selectedData[0];
-      // this.docsService.getDocs();
-      for (const candidate of this.rowData2) {
-        for (const job of selectedData) {
-          for (let i = 0; i < candidate.jobs.length; i++) {
-            if (job.id === candidate.jobs[i]) {
-              candidate.jobs.splice(i, 1);
-              break;
+      this.alertify.confirm('Are you sure you want to delete job(s)?', async () => {
+        const selectedData = selectedNodes.map((node) => node.data);
+        for (const candidate of this.rowData2) {
+          for (const job of selectedData) {
+            for (let i = 0; i < candidate.jobs.length; i++) {
+              if (job.id === candidate.jobs[i]) {
+                candidate.jobs.splice(i, 1);
+                break;
+              }
             }
           }
+          await this.docsService
+            .updateDoc(
+              candidate._id,
+              candidate.fullName,
+              candidate.email,
+              candidate.phone,
+              candidate.jobs,
+              candidate.url
+            )
+            .subscribe(() => {
+              this.search();
+            });
         }
-        await this.docsService
-          .updateDoc(
-            candidate._id,
-            candidate.fullName,
-            candidate.email,
-            candidate.phone,
-            candidate.jobs,
-            candidate.url
-          )
-          .subscribe(() => {
+        await this.dataService.deleteData(selectedNodes);
+        await this.dataService.getDataChangedListener().subscribe((res) => {
+          this.rowData = res;
+        });
+        setTimeout(() => {
+          if (
+            this.searchForm.valid &&
+            !this.searchForm.value.search.match(/^\s+$/)
+          ) {
             this.search();
-          });
-      }
-      await this.dataService.deleteData(selectedNodes);
-      await this.dataService.getDataChangedListener().subscribe((res) => {
-        this.rowData = res;
+          }
+        }, 500);
       });
-      setTimeout(() => {
-        if (
-          this.searchForm.valid &&
-          !this.searchForm.value.search.match(/^\s+$/)
-        ) {
-          this.search();
-        }
-      }, 500);
     } else {
       this.alertify.error('Please select jobs to delete');
     }

@@ -437,19 +437,21 @@ export class CandidateComponent implements OnInit, OnDestroy {
   deleteCandidate() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     if (selectedNodes.length >= 1) {
-      const selectedData = selectedNodes.map((node) => node.data);
-      for (const candidate of selectedData) {
-        this.docsService.deleteDoc(candidate._id).subscribe((res) => {
-          this.alertify.success('Candidate has been deleted successfully');
-          this.docsService.getDocs();
-          this.docsSub = this.docsService
-            .getDocsUpdateListener()
-            .subscribe((response) => {
-              this.rowData2 = response.docs;
-            });
-            this.search();
-        });
-      }
+      this.alertify.confirm('Are you sure you want to delete candidate(s)?', async () => {
+        const selectedData = selectedNodes.map((node) => node.data);
+        for (const candidate of selectedData) {
+          this.docsService.deleteDoc(candidate._id).subscribe((res) => {
+            this.alertify.success('Candidate has been deleted successfully');
+            this.docsService.getDocs();
+            this.docsSub = this.docsService
+              .getDocsUpdateListener()
+              .subscribe((response) => {
+                this.rowData2 = response.docs;
+              });
+              this.search();
+          });
+        }
+      });
     } else {
       this.alertify.error('Please select candidates to delete');
     }
