@@ -169,7 +169,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150,
+      width: 200,
     },
     {
       headerName: 'Email',
@@ -177,7 +177,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 250,
+      width: 300,
     },
     {
       headerName: 'Phone',
@@ -185,7 +185,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 120,
+      width: 150,
     },
     {
       headerName: 'Jobs',
@@ -193,10 +193,10 @@ export class CandidateComponent implements OnInit, OnDestroy {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 250,
+      width: 100,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><a class="btn-outline-warning" style="cursor: pointer;" data-toggle="tooltip" data-placement="auto" title="View Jobs">${params.value}</a></div>`;
+        return `<div><button class="btn btn-outline-warning" style="width: 100%; margin: auto; color: white; cursor: pointer;" data-toggle="tooltip" data-placement="auto" title="View Jobs">${params.value.length-1}</button></div>`;
       },
     },
     {
