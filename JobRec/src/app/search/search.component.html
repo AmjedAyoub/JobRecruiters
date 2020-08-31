@@ -26,16 +26,18 @@
     </div>
   </div>
   <div class="row center">
-    <ag-grid-angular #agGrid style="width: 99%; height: 500px; margin: auto;" class="ag-theme-alpine"
+    <ag-grid-angular #agGrid style="width: 99%; height: 480px; margin: auto;" class="ag-theme-alpine"
       [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="multiple" (gridReady)="onGridReady($event)"
       [suppressHorizontalScroll]=false
       [enableSorting]="true"
       [enableRangeSelection]="true"
       [pagination]="true"
       [paginationPageSize]="25"
-      (onGridSizeChanged)="sizeGrid($event)">
+      (onGridSizeChanged)="sizeGrid($event)"
+      [statusBar]="showCount()">
     </ag-grid-angular>
   </div>
+  <div style="color: #ffff; z-index: 100; font-size: small;">Jobs selected({{ rowCount }})</div>
   <div class="row center">
     <button type="button" class="btn btn-outline-warning mt-2" (click)="editJob()">Edit Job</button>
     <button type="button" class="btn btn-outline-danger mt-2 ml-2" (click)="deleteJob()">Delete Job</button>
@@ -44,7 +46,7 @@
   </div>
   <hr>
 
-  <div class="modal fade bd-example-modal-xl mt-5" id="newJob" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="newJob" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -148,16 +150,21 @@
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-xl mt-5" id="viewCandidate" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
-            <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
+            <ag-grid-angular #agGrid2 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
               [rowData]="rowData3" [columnDefs]="columnDefs2" rowSelection="multiple"
-              (gridReady)="onGridReady2($event)">
+              (gridReady)="onGridReady2($event)"
+              [suppressHorizontalScroll]=false
+              [enableSorting]="true"
+              [enableRangeSelection]="true"
+              [pagination]="true"
+              [paginationPageSize]="25">
             </ag-grid-angular>
           </div>
           <hr>
@@ -167,17 +174,23 @@
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-xl mt-5" id="viewSubs" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewSubs" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl candidateView">
       <div class="modal-content">
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
-            <ag-grid-angular #agGrid3 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
+            <ag-grid-angular #agGrid3 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
               [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple"
-              (gridReady)="onGridReady3($event)">
+              (gridReady)="onGridReady3($event)"
+              [suppressHorizontalScroll]=false
+              [enableSorting]="true"
+              [enableRangeSelection]="true"
+              [pagination]="true"
+              [paginationPageSize]="25">
             </ag-grid-angular>
+            <div style="color: #ffff; z-index: 100; font-size: small;">Candidates selected({{ subCount }})</div>
           </div>
           <hr>
           <button type="button" class="btn btn-outline-success" (click)="onAddSubs()">Add</button>
@@ -187,7 +200,7 @@
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-xl mt-5" id="viewJobDetails" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewJobDetails" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">

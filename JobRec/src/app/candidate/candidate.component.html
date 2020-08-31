@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="row center">
-    <ag-grid-angular #agGrid style="width: 99%; height: 500px; margin: auto;" class="ag-theme-alpine"
+    <ag-grid-angular #agGrid style="width: 99%; height: 480px; margin: auto;" class="ag-theme-alpine"
       [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple" (gridReady)="onGridReady($event)"
       [suppressHorizontalScroll]=false
       [enableSorting]="true"
@@ -33,13 +33,14 @@
       [paginationPageSize]="25">
     </ag-grid-angular>
   </div>
+  <div style="color: #ffff; z-index: 100; font-size: small;">Candidates selected({{ candidateCount }})</div>
   <div class="row center">
     <button type="button" class="btn btn-outline-warning mt-2" (click)="editCandidate()">Edit Candidate</button>
     <button type="button" class="btn btn-outline-danger mt-2 ml-2" (click)="deleteCandidate()">Delete Candidate</button>
   </div>
   <hr>
 
-  <div class="modal fade bd-example-modal-lg mt-5" id="newCandidate" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-lg mt-5 mb-5" id="newCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -100,16 +101,21 @@
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-xl mt-5" id="viewJobs" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewJobs" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
-            <ag-grid-angular #agGrid2 style="width: 99%; height: 300px; margin: auto;" class="ag-theme-alpine"
+            <ag-grid-angular #agGrid2 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
               [rowData]="rowData3" [columnDefs]="columnDefs" rowSelection="multiple"
-              (gridReady)="onGridReady2($event)">
+              (gridReady)="onGridReady2($event)"
+              [suppressHorizontalScroll]=false
+              [enableSorting]="true"
+              [enableRangeSelection]="true"
+              [pagination]="true"
+              [paginationPageSize]="25">
             </ag-grid-angular>
           </div>
           <br>
@@ -119,7 +125,7 @@
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-xl mt-5" id="viewCandidateDetails" tabindex="-1" role="dialog"
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewCandidateDetails" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">

@@ -3384,16 +3384,21 @@ export class DataService implements OnInit, OnDestroy {
     this.alertify.success('Job has been added successfully');
   }
 
-  async deleteData(idx: number) {
-    const jobId = idx;
-    for (let j = 0; j < this.rowData.length; j++) {
-      if (this.rowData[j].id === idx) {
-        this.rowData.splice(j, 1);
-        break;
+  async deleteData(jobs: any) {
+    for (const j of jobs) {
+    for (let i = 0; i < this.rowData.length; i++) {
+        if (this.rowData[i].id === j.data.id) {
+          this.rowData.splice(i, 1);
+          break;
+        }
       }
     }
     this.getAllData();
-    this.alertify.success('Job has bee deleted successfully');
+    if (jobs.length > 1){
+      this.alertify.success('Jobs have been deleted successfully');
+    }else{
+      this.alertify.success('Job has been deleted successfully');
+    }
   }
 
   getDataChangedListener() {
@@ -3427,7 +3432,7 @@ export class DataService implements OnInit, OnDestroy {
 
   addSubmissions() {
     this.getAllData();
-    this.alertify.success('Submission has benn added successfully');
+    this.alertify.success('Submission(s) added successfully');
   }
 
   ngOnDestroy() {

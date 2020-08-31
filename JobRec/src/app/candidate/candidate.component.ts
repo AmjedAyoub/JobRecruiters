@@ -42,6 +42,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
   fileToUpload: File = null;
   docs: any[];
   private docsSub: Subscription;
+  candidateCount = 0;
 
   toViewCandidate = {
     _id: '',
@@ -535,6 +536,9 @@ export class CandidateComponent implements OnInit, OnDestroy {
       } else if (res.colDef.field === '_id') {
         this.onViewDetails(res.data._id);
       }
+    });
+    this.agGrid.selectionChanged.subscribe(() => {
+      this.candidateCount = this.agGrid.api.getSelectedRows().length;
     });
   }
 

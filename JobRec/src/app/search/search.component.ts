@@ -42,6 +42,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   rowData3: any[];
   private docsSub: Subscription;
   prev;
+  private statusBar;
+  rowCount = 0;
+  subCount = 0;
 
   toViewJob = {
     id: '',
@@ -307,6 +310,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     private docsService: DocsService
   ) {}
 
+  showCount() {
+    this.statusBar = {
+      statusPanels: [
+        {
+          statusPanel: this.rowCount,
+          align: 'left',
+        },
+      ],
+    };
+  }
+
   ngOnInit(): void {
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
@@ -319,7 +333,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.docsService.getDocs();
     this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
       this.rowData2 = res.docs;
-      this.agGrid2.api.setRowData(this.rowData2);
       this.agGrid3.api.setRowData(this.rowData2);
     });
     this.createNewJobForm();
@@ -446,30 +459,30 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (selectedNodes.length >= 1) {
       const selectedData = selectedNodes.map((node) => node.data);
       // this.prev = selectedData[0];
-      this.docsService.getDocs();
-      for (const job of selectedData) {
-        for (const candidate of this.rowData2) {
+      // this.docsService.getDocs();
+      for (const candidate of this.rowData2) {
+        for (const job of selectedData) {
           for (let i = 0; i < candidate.jobs.length; i++) {
             if (job.id === candidate.jobs[i]) {
               candidate.jobs.splice(i, 1);
-              await this.docsService
-                .updateDoc(
-                  candidate._id,
-                  candidate.fullName,
-                  candidate.email,
-                  candidate.phone,
-                  candidate.jobs,
-                  candidate.url
-                )
-                .subscribe(() => {
-                  this.search();
-                });
               break;
             }
           }
         }
-        this.dataService.deleteData(job.id);
+        await this.docsService
+          .updateDoc(
+            candidate._id,
+            candidate.fullName,
+            candidate.email,
+            candidate.phone,
+            candidate.jobs,
+            candidate.url
+          )
+          .subscribe(() => {
+            this.search();
+          });
       }
+      await this.dataService.deleteData(selectedNodes);
       await this.dataService.getDataChangedListener().subscribe((res) => {
         this.rowData = res;
       });
@@ -517,20 +530,20 @@ export class SearchComponent implements OnInit, OnDestroy {
         for (const job of this.selectedJobs) {
           if (candidate.jobs.indexOf(job.id) < 0) {
             candidate.jobs.unshift(job.id);
-            await this.docsService
-              .updateDoc(
-                candidate._id,
-                candidate.fullName,
-                candidate.email,
-                candidate.phone,
-                candidate.jobs,
-                candidate.url
-              )
-              .subscribe(() => {
-                this.search();
-              });
           }
         }
+        await this.docsService
+          .updateDoc(
+            candidate._id,
+            candidate.fullName,
+            candidate.email,
+            candidate.phone,
+            candidate.jobs,
+            candidate.url
+          )
+          .subscribe(() => {
+            this.search();
+          });
       }
       this.dataService.addSubmissions();
       await this.dataService.getDataChangedListener().subscribe((res) => {
@@ -610,26 +623,22 @@ export class SearchComponent implements OnInit, OnDestroy {
     // this.agGrid.api.setRowData(this.rowData);
   }
 
-  async onSubClick(id: number) {
-    let candidates;
-    this.docsService.getDocs();
-    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
-      candidates = res.docs;
-      this.rowData3 = [];
-      for (const candidate of candidates) {
-        for (const job of candidate.jobs) {
-          if (job === id) {
-            if (this.rowData3.indexOf(candidate) < 0) {
-              this.rowData3.push(candidate);
-            }
-            break;
+  onSubClick(id: number) {
+    this.rowData3 = [];
+    for (const candidate of this.rowData2) {
+      for (const job of candidate.jobs) {
+        if (job === id) {
+          if (this.rowData3.indexOf(candidate) < 0) {
+            this.rowData3.push(candidate);
           }
+          break;
         }
       }
-      $('#viewCandidate').modal('show');
-      this.gridApi2.sizeColumnsToFit();
-      this.search();
-    });
+    }
+    $('#viewCandidate').modal('show');
+    this.agGrid2.api.setRowData(this.rowData3);
+    this.gridApi2.sizeColumnsToFit();
+    this.search();
   }
 
   onViewDetails(id: number) {
@@ -665,7 +674,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       params.api.sizeColumnsToFit();
     }, 500);
-
+    this.agGrid.selectionChanged.subscribe(() => {
+      this.rowCount = this.agGrid.api.getSelectedRows().length;
+    });
     this.agGrid.cellClicked.subscribe((res) => {
       if (res.colDef.field === 'submission') {
         this.onSubClick(res.data.id);
@@ -694,6 +705,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.rowData2 = res.docs;
       });
+    this.agGrid3.selectionChanged.subscribe(() => {
+      this.subCount = this.agGrid3.api.getSelectedRows().length;
+    });
   }
 
   ngOnDestroy() {

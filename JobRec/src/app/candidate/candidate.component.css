@@ -25,6 +25,10 @@
   pointer-events: none !important;
 }
 
+.modal {
+  padding-bottom: 40px !important;
+}
+
 #postFile {
   visibility: hidden;
 }

@@ -19,6 +19,10 @@
   max-width: 900px;
 } */
 
+.modal {
+  padding-bottom: 40px !important;
+}
+
 .my-drop-zone {
   border: dotted 3px lightgray;
 }
