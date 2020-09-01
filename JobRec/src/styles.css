@@ -2,6 +2,16 @@
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 
+.container-fluid {
+ font: x-small !important;
+}
+
+html, body {margin: 0; height: 100%; overflow: hidden}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
 body{
   background-color: #202020 !important;
 }
@@ -10,17 +20,25 @@ body{
   background-color: orange !important;
 }
 
+.ag-row {
+  font-size: 12px !important;
+}
+
+.ag-cell {
+  line-height: 24px !important;
+}
+
 .ag-theme-alpine .ag-header {
   background-color: #686179 !important;
 }
 
 .ag-row-even{
-  background-color: #7f3cd8 !important;
+  background-color: #4c8bdf !important;
   color: white !important;
 }
 
 .ag-row-odd{
-  background-color: #9876ec !important;
+  background-color: #6fb0ec !important;
   color: white !important;
 }
 

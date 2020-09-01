@@ -7,12 +7,12 @@ import {
   NgForm,
 } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
+import { faPlus, faMinus, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Subscription } from 'rxjs';
 import { DocsService } from '../_services/doc.service';
-import { async } from 'rxjs/internal/scheduler/async';
 
 declare var $: any;
 
@@ -45,6 +45,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   private statusBar;
   rowCount = 0;
   subCount = 0;
+  domLayout = window.innerHeight;
+  height;
+  faPlus = faPlus;
+  faMinus = faMinus;
+  faUserPlus = faUserPlus;
 
   toViewJob = {
     id: '',
@@ -74,6 +79,18 @@ export class SearchComponent implements OnInit, OnDestroy {
       },
     },
     {
+      headerName: '',
+      field: 'edit',
+      sortable: true,
+      filter: true,
+      resizable: true,
+      width: 90,
+      cellRenderer: () => {
+        // tslint:disable-next-line: max-line-length
+        return `<div><button class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="Edit Job">Edit</button></div>`;
+      },
+    },
+    {
       headerName: '#',
       field: 'id',
       sortable: true,
@@ -82,7 +99,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       width: 90,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-outline-success" style="width: 100%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job">${params.value}</button></div>`;
+        return `<div><button class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; border-color: lime; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job">${params.value}</button></div>`;
       },
     },
     {
@@ -118,7 +135,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       width: 95,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div><button class="btn btn-outline-warning" style="width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidates">${params.value}</button></div>`;
+        return `<div><button class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Candidates">${params.value}</button></div>`;
       },
     },
     {
@@ -138,7 +155,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       width: 240,
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
-        return `<div class="descriptionCell" style="width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job Details">${params.value}</div>`;
+        return `<div class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: white" data-toggle="tooltip" data-placement="auto" title="View Job Details">${params.value}</div>`;
       },
     },
     {
@@ -226,9 +243,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
         if (params.value !== 'null') {
-          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="font: small;  height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
-        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="color: darkgrey; margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="font: small; font-size: 12px; height: 29px; color: darkgrey; margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
       },
     },
   ];
@@ -296,9 +313,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
         if (params.value !== 'null') {
-          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
+          return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="font: small; height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
         }
-        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="color: darkgrey; gray margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
+        return `<div class="disabledResume"><a class="btn btn-info disabledResume" style="font: small; font-size: 12px; height: 29px; color: darkgrey; gray margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>`;
       },
     },
   ];
@@ -329,6 +346,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.dataService.getDataChangedListener().subscribe((res) => {
       this.rowData = res;
       this.agGrid.api.setRowData(this.rowData);
+      this.agGrid.api.sizeColumnsToFit();
     });
     this.docsService.getDocs();
     this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
@@ -353,6 +371,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         status: ['Active', Validators.required],
         manager: ['', Validators.required],
         createdBy: ['', Validators.required],
+        skills: ['', Validators.required],
         description: ['', Validators.required],
       }
       // { asyncValidators: this.idCheckValidator }
@@ -428,30 +447,20 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  editJob() {
-    this.editJobMode = true;
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if (selectedNodes.length > 1) {
-      this.alertify.error(
-        'Sorry, you cant edit more than one job each time!, please select one job only!'
-      );
-    } else if (selectedNodes.length === 1) {
-      const selectedData = selectedNodes.map((node) => node.data);
-      this.prev = selectedData[0];
+  editJob(job: any) {
+      this.editJobMode = true;
+      this.prev = job;
       this.newJobForm.patchValue({
-        id: selectedData[0].id,
-        title: selectedData[0].title,
-        team: selectedData[0].team,
-        positions: selectedData[0].position,
-        status: selectedData[0].status,
-        manager: selectedData[0].manager,
-        createdBy: selectedData[0].createdBy,
-        description: selectedData[0].description,
+        id: job.id,
+        title: job.title,
+        team: job.team,
+        positions: job.position,
+        status: job.status,
+        manager: job.manager,
+        createdBy: job.createdBy,
+        description: job.description,
       });
       $('#newJob').modal('show');
-    } else {
-      this.alertify.error('Please select a job to edit');
-    }
   }
 
   async deleteJob() {
@@ -661,6 +670,42 @@ export class SearchComponent implements OnInit, OnDestroy {
     $('#viewJobDetails').modal('show');
   }
 
+  getTableHeight(){
+    if (window.innerWidth < 490){
+      return {
+        height: (window.innerHeight - 224) + 'px'
+     };
+    }else if (window.innerWidth >= 490 && window.innerWidth < 993){
+      return {
+        height: (window.innerHeight - 186) + 'px'
+     };
+    }else if (window.innerWidth >= 993 && window.innerWidth < 1297){
+      return {
+        height: (window.innerHeight - 170) + 'px'
+     };
+    }else if (window.innerWidth >= 1297){
+      return {
+        height: (window.innerHeight - 135) + 'px'
+     };
+    }
+  }
+
+  getHeight(){
+    if (window.innerWidth < 993){
+      return {
+        'margin-top': (window.innerHeight - 221) + 'px'
+     };
+    }else if (window.innerWidth >= 993 && window.innerWidth < 1297){
+      return {
+        'margin-top': (window.innerHeight - 205) + 'px'
+     };
+    }else if (window.innerWidth >= 1297){
+      return {
+        'margin-top': (window.innerHeight - 170) + 'px'
+     };
+    }
+  }
+
   onGridReady(params): void {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -668,12 +713,24 @@ export class SearchComponent implements OnInit, OnDestroy {
     window.addEventListener('resize', () => {
       setTimeout(() => {
         params.api.sizeColumnsToFit();
+        this.getTableHeight();
       });
     });
 
+    this.agGrid.heightScaleChanged.subscribe(
+      () => this.getTableHeight()
+      );
+    this.agGrid.bodyHeightChanged.subscribe(
+      () => this.getTableHeight()
+    );
     setTimeout(() => {
       params.api.sizeColumnsToFit();
     }, 500);
+    this.agGrid.statusBar = {
+      statusPanels: [
+          { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
+      ],
+    };
     this.agGrid.selectionChanged.subscribe(() => {
       this.rowCount = this.agGrid.api.getSelectedRows().length;
     });
@@ -685,6 +742,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         res.colDef.field === 'id'
       ) {
         this.onViewDetails(res.data.id);
+      }else if ( res.colDef.field === 'edit'){
+        this.editJob(res.data);
       }
     });
     this.gridApi.doLayout();

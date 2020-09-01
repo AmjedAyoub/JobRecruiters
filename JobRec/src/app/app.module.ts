@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'ng2-file-upload';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AgGridModule } from 'ag-grid-angular';
@@ -31,6 +32,7 @@ import { CandidateComponent } from './candidate/candidate.component';
     AppRoutingModule,
     FileUploadModule,
     HttpClientModule,
+    FontAwesomeModule,
     AgGridModule.withComponents([])
   ],
   providers: [AuthService, DataService],

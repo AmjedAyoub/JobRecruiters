@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="height: 45px;">
   <a class="navbar-brand" routerLink="">RecJob</a>
 
   <div class="collapse navbar-collapse" id="navbarColor02">
-    <ul class="navbar-nav mr-auto" *ngIf="isAuth" style="margin: auto; height: 38px;">
+    <ul class="navbar-nav mr-auto" *ngIf="isAuth" style="margin: auto; height: 35px;">
       <li class="nav-item" style="margin: auto; width: 300px; height: 100%;">
         <div class="my-nav-link center">{{ isSearch ? 'Jobs Search Page' : 'Candidates Search Page' }}</div>
       </li>
@@ -18,11 +18,11 @@
     </ul>
     <form class="form-inline my-2 my-lg-0 mr-3" *ngIf="isAuth">
 
-        <button type="button" class="btn btn-outline-warning mr-3" (click)="onPageChanged('candidates')" *ngIf="isSearch && isAuth">Candidates</button>
+        <button type="button" class="btn btn-outline-warning mr-3 btn-sm" (click)="onPageChanged('candidates')" *ngIf="isSearch && isAuth">Candidates</button>
 
-        <button type="button" class="btn btn-outline-success mr-3" (click)="onPageChanged('search')" *ngIf="!isSearch && isAuth">Jobs Search</button>
+        <button type="button" class="btn btn-outline-success mr-3 btn-sm" (click)="onPageChanged('search')" *ngIf="!isSearch && isAuth">Jobs Search</button>
 
-        <button type="button" class="btn btn-outline-danger" (click)="logout()" *ngIf="isAuth">Logout</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" (click)="logout()" *ngIf="isAuth">Logout</button>
     </form>
   </div>
 </nav>
