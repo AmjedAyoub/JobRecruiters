@@ -33,13 +33,13 @@ body{
 }
 
 .ag-row-even{
-  background-color: #4c8bdf !important;
-  color: white !important;
+  background-color: #92c6db !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 .ag-row-odd{
-  background-color: #6fb0ec !important;
-  color: white !important;
+  background-color: #e4f1f7 !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 .ag-root-wrapper {
@@ -51,7 +51,7 @@ body{
 }
 
 .descriptionCell:hover {
-  color: #120686 !important;
+  color: #038a03 !important;
 }
 
 .card {

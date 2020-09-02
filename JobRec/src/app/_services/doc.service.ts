@@ -33,6 +33,7 @@ export class DocsService {
                 fullName: doc.fullName,
                 email: doc.email,
                 phone: doc.phone,
+                skills: doc.skills,
                 jobs: doc.jobs
               };
             }),
@@ -47,7 +48,7 @@ export class DocsService {
       });
   }
 
-  addDoc(fullName: string, email: string, phone: string, jobs: any, doc: File | string) {
+  addDoc(fullName: string, email: string, phone: string, skills: any,  jobs: any, doc: File | string) {
     console.log('jobs');
     console.log(jobs);
     const postData = new FormData();
@@ -55,6 +56,7 @@ export class DocsService {
     postData.append('fullName', fullName);
     postData.append('email', email);
     postData.append('phone', phone);
+    postData.append('skills', skills);
     postData.append('jobs', jobs);
     return this.http.post<{ message: string; doc: any }>(BACKEND_URL, postData);
   }
@@ -66,16 +68,18 @@ export class DocsService {
       fullName: string;
       email: string;
       phone: string;
+      skills: [];
       jobs: []
     }>(BACKEND_URL + id);
   }
 
-  updateDoc(id: string, fullName: string, email: string, phone: string, jobs: any, resume: File | string) {
+  updateDoc(id: string, fullName: string, email: string, phone: string, skills: any, jobs: any, resume: File | string) {
     const postData = new FormData();
     postData.append('fullName', fullName);
     postData.append('email', email);
     postData.append('phone', phone);
     postData.append('jobs', jobs);
+    postData.append('skills', skills);
     postData.append('doc', resume);
     postData.append('id', id);
 

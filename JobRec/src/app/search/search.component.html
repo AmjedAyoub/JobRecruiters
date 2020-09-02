@@ -1,6 +1,6 @@
 <div class="container-fluid center">
   <div class="row center">
-    <div class="col-md-2" style="white-space:nowrap; display: contents;">
+    <!-- <div class="col-md-2" style="white-space:nowrap; display: contents;">
       <form class="form-inline my-2 my-lg-0" style="white-space:nowrap; display: flex;">
         <a class="nav-link">
           <button type="button" class="btn btn-outline-info btn-sm" (click)="newJob()" data-toggle="tooltip" data-placement="auto" title="Add New Job"><fa-icon [icon]="faPlus"></fa-icon></button>
@@ -13,8 +13,8 @@
             (click)="addSubmission()" data-toggle="tooltip" data-placement="auto" title="Add Submissions"><fa-icon [icon]="faUserPlus"></fa-icon></button>
         </a>
       </form>
-    </div>
-    <div class="col-md-10" style="display: flex;">
+    </div> -->
+    <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 90%;">
@@ -34,20 +34,39 @@
       </form>
     </div>
   </div>
+  <span class="badge">
+    <button type="button" class="btn btn-outline-info btn-sm" (click)="newJob()" data-toggle="tooltip"
+      data-placement="auto" title="Add New Job">
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </button>
+  </span>
+  <span class="badge">
+    <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteJob()" data-toggle="tooltip"
+      data-placement="auto" title="Delete Job(s)">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </span>
+  <span class="badge ml-2">
+    <button type="button" class="btn btn-outline-success btn-sm" style="margin: auto;" (click)="addSubmission()"
+      data-toggle="tooltip" data-placement="auto" title="Add Submissions">
+      <fa-icon [icon]="faUserPlus"></fa-icon>
+    </button>
+  </span>
   <div class="row center" style="height: 100%; position: relative;">
-    <ag-grid-angular #agGrid
-      style="width: 100%; margin: auto; position: absolute; font: small !important;" [ngStyle]="getTableHeight()"
-      class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="multiple"
-      (gridReady)="onGridReady($event)" [suppressHorizontalScroll]=false rowHeight='30' cellHeight='29'
-      [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25"
+    <ag-grid-angular #agGrid style="width: 100%; margin: auto; position: absolute; font: small !important;"
+      [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs"
+      rowSelection="multiple" (gridReady)="onGridReady($event)" [suppressHorizontalScroll]=false rowHeight='30'
+      cellHeight='29' [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25"
       (onGridSizeChanged)="sizeGrid($event)" [statusBar]="true" [pivotPanelShow]="true" [groupIncludeFooter]="true"
-      [domLayout]="domLayout"
-      [groupIncludeTotalFooter]="true">
+      [domLayout]="domLayout" [groupIncludeTotalFooter]="true">
     </ag-grid-angular>
-    <div style="color: #ffff; z-index: 100; font-size: small; position: relative; height: 100%;" [ngStyle]="getHeight()">Jobs
+    <div style="color: #ffff; z-index: 100; font-size: small; position: relative; height: 100%;"
+      [ngStyle]="getHeight()">Jobs
       selected <strong>{{ rowCount }}</strong>
       <button type="button" class="btn btn-outline-success ml-4 btn-sm ml-3" style="margin: auto;"
-        (click)="addSubmission()" data-toggle="tooltip" data-placement="auto" title="Add Submissions"><fa-icon [icon]="faUserPlus"></fa-icon></button>
+        (click)="addSubmission()" data-toggle="tooltip" data-placement="auto" title="Add Submissions">
+        <fa-icon [icon]="faUserPlus"></fa-icon>
+      </button>
     </div>
   </div>
 
@@ -116,128 +135,189 @@
                   <option>Closed</option>
                 </select>
                 <!-- <div class="invalid-feedback">Please select a status</div> -->
-            </div>
+              </div>
 
-            <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
-              <label for="manager" style="color: aliceblue; width: 100px;">Manager: </label>
-              <input type="text" class="form-control ml-2" placeholder="Manager" formControlName="manager" [ngClass]="
+              <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
+                <label for="manager" style="color: aliceblue; width: 100px;">Manager: </label>
+                <input type="text" class="form-control ml-2" placeholder="Manager" formControlName="manager" [ngClass]="
                   newJobForm.get('manager').errors &&
                   newJobForm.get('manager').touched ?
                   'is-invalid' : newJobForm.get('manager').valid ? 'is-valid' : ''
                   ">
-              <!-- <div class="invalid-feedback">Name of manager is required</div> -->
-            </div>
+                <!-- <div class="invalid-feedback">Name of manager is required</div> -->
+              </div>
 
-            <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
-              <label for="createdBy" style="color: aliceblue; width: 100px;">Created-By: </label>
-              <input type="text" class="form-control ml-2" placeholder="Created By" formControlName="createdBy" [ngClass]="
+              <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
+                <label for="createdBy" style="color: aliceblue; width: 100px;">Created-By: </label>
+                <input type="text" class="form-control ml-2" placeholder="Created By" formControlName="createdBy"
+                  [ngClass]="
                 newJobForm.get('createdBy').errors &&
                 newJobForm.get('createdBy').touched ?
                 'is-invalid' : newJobForm.get('createdBy').valid ? 'is-valid' : ''
               ">
-              <!-- <div class="invalid-feedback">Name of Creator is required</div> -->
+                <!-- <div class="invalid-feedback">Name of Creator is required</div> -->
+              </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-success has-danger">
-              <label for="skills" style="color: aliceblue;">Required Skills: </label>
-              <textarea rows="5" class="form-control ml-2" placeholder="Skills seperated by comma, skill #1, skill #2,..." formControlName="skills"
-                [ngClass]="
+            <div class="col-md-6">
+              <div class="form-group has-success has-danger">
+                <label for="skills" style="color: aliceblue;">Required Skills: </label>
+                <textarea rows="5" class="form-control ml-2"
+                  placeholder="Skills seperated by comma, skill #1, skill #2,..." formControlName="skills" [ngClass]="
                 newJobForm.get('skills').errors &&
                 newJobForm.get('skills').touched ?
                 'is-invalid' : newJobForm.get('skills').valid ? 'is-valid' : ''
               "></textarea>
-              <!-- <div class="invalid-feedback">Sorry, skills is required</div> -->
-            </div>
-            <div class="form-group has-success has-danger">
-              <label for="manager" style="color: aliceblue;">Description: </label>
-              <textarea rows="8" class="form-control ml-2" placeholder="Description" formControlName="description"
-                [ngClass]="
+                <!-- <div class="invalid-feedback">Sorry, skills is required</div> -->
+              </div>
+              <div class="form-group has-success has-danger">
+                <label for="manager" style="color: aliceblue;">Description: </label>
+                <textarea rows="8" class="form-control ml-2" placeholder="Description" formControlName="description"
+                  [ngClass]="
                 newJobForm.get('description').errors &&
                 newJobForm.get('description').touched ?
                 'is-invalid' : newJobForm.get('description').valid ? 'is-valid' : ''
               "></textarea>
-              <!-- <div class="invalid-feedback">Sorry, description is required</div> -->
+                <!-- <div class="invalid-feedback">Sorry, description is required</div> -->
+              </div>
             </div>
           </div>
+          <hr>
+          <button mat-raised-button class="btn btn-outline-success" [disabled]="!this.newJobForm.valid"
+            type="submit">Save</button>
+          <button type="button" class="btn btn-outline-secondary ml-3" data-dismiss="modal">Cancel</button>
+        </form>
       </div>
-      <hr>
-      <button mat-raised-button class="btn btn-outline-success" [disabled]="!this.newJobForm.valid" type="submit">Save</button>
-      <button type="button" class="btn btn-outline-secondary ml-3" data-dismiss="modal">Cancel</button>
-      </form>
     </div>
   </div>
-</div>
 
-<div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewCandidate" tabindex="-1" role="dialog"
-  aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
-        <div class="form-group">
-          <ag-grid-angular #agGrid2 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
-            [rowData]="rowData3" [columnDefs]="columnDefs2" rowSelection="multiple" (gridReady)="onGridReady2($event)"
-            [suppressHorizontalScroll]=false [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true"
-            [paginationPageSize]="25">
-          </ag-grid-angular>
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5 text-center" id="viewCandidate" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <h2 class="mt-2" style="color: thistle;">Submissions Details</h2>
+        <h4 style="color: thistle;">For Job #: {{ prev?.id || 0 }} - {{ prev?.title || '' }} </h4>
+        <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
+          <div class="form-group">
+            <ag-grid-angular #agGrid2 style="width: 99%; height: 350px; margin: auto;" class="ag-theme-alpine"
+              rowHeight='30' cellHeight='29' [rowData]="rowData3" [columnDefs]="columnDefs2" rowSelection="multiple"
+              (gridReady)="onGridReady2($event)" [suppressHorizontalScroll]=false [enableSorting]="true"
+              [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="20">
+            </ag-grid-angular>
+          </div>
+          <hr>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade bd-example-modal-xl mt-5 mb-5 text-center" id="viewSubs" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl candidateView">
+      <div class="modal-content">
+        <h3 class="mt-2" style="color: thistle;">Add Submissions</h3>
+        <div class="row">
+          <div class="col-md-12">
+            <form [formGroup]="searchSubsForm" (submit)="searchSubs()" class="text-center mt-4"
+              style="margin: auto; width: 95%; padding: 2px;">
+              <div class="form-group has-success has-danger text-center"
+                style="display: flex; margin: auto; place-content: center;">
+                <input type="text" class="form-control form-control-sm" style="width: 50%;"
+                  placeholder="Search by keyword, Name, Phone, Email, Skills" formControlName="search"
+                  (ngModelChange)="search()" [ngClass]="
+                  searchSubsForm.get('search').errors &&
+                  searchSubsForm.get('search').touched ?
+                  'is-invalid' : searchSubsForm.get('search').valid ? 'is-valid' : ''
+                ">
+                <div style="white-space:nowrap; display: flex;">
+                  <button type="submit" class="btn btn-outline-primary btn-sm ml-2"
+                    style="max-height: 40px;">Search</button>
+                    <h6 class="ml-2 mr-2" style="color: thistle; padding-top: 5px;">OR TRY</h6>
+                    <button type="button" class="btn btn-outline-warning" data-toggle="tooltip"
+                    data-placement="auto" title="Auto match the candidates based on their skills">
+                    <fa-icon [icon]="faUserCog"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <h6 class="mt-2" style="color: white; text-align: start;">Please select candidates:</h6>
+                <ag-grid-angular #agGrid3 style="width: 99%; height: 350px; margin: auto; margin-top: 10px;"
+                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData2" [columnDefs]="columnDefs3"
+                  rowSelection="multiple" (gridReady)="onGridReady3($event)" [suppressHorizontalScroll]=false
+                  [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+                </ag-grid-angular>
+              </div>
+            </form>
+          </div>
         </div>
-        <hr>
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewSubs" tabindex="-1" role="dialog"
-  aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl candidateView">
-    <div class="modal-content">
-      <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
-        <div class="form-group">
-          <ag-grid-angular #agGrid3 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
-            [rowData]="rowData2" [columnDefs]="columnDefs3" rowSelection="multiple" (gridReady)="onGridReady3($event)"
-            [suppressHorizontalScroll]=false [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true"
-            [paginationPageSize]="25">
-          </ag-grid-angular>
-          <div style="color: #ffff; z-index: 100; font-size: small;">Candidates selected({{ subCount }})</div>
-        </div>
-        <hr>
-        <button type="button" class="btn btn-outline-success" (click)="onAddSubs()">Add</button>
-        <button type="button" class="btn btn-outline-secondary ml-3" data-dismiss="modal">Cancel</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewJobDetails" tabindex="-1" role="dialog"
-  aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
-        <div class="card border-warning mb-3" style="width: 100%;">
-          <div class="card-header"><strong># {{ toViewJob.id }} </strong> | <strong> Status:
-              {{ toViewJob.status }}</strong></div>
-          <div class="card-body">
-            <h4 class="card-title">{{ toViewJob.title }}</h4>
-            <h6>Created By: {{ toViewJob.createdBy }} on {{ toViewJob.createdAt }}</h6>
-            <h6>Updated At: {{ toViewJob.updatedAt }}</h6>
-            <h6>Team: {{ toViewJob.team }}</h6>
-            <h6>Manager: {{ toViewJob.manager }}</h6>
-            <br>
-            <h6>Positions: {{ toViewJob.position }} | Submissions: {{ toViewJob.submission }}</h6>
-            <p class="card-text"><strong>Description:</strong><br> {{ toViewJob.description }} </p>
+        <div class="row">
+          <div class="col-md-2" style="align-self: center;">
+            <h4 style="color: thistle;">Selected Candidates:</h4>
+          </div>
+          <div class="col-md-10">
+            <ag-grid-angular #agGrid5 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
+              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData5" [columnDefs]="columnDefs5"
+              rowSelection="multiple" (gridReady)="onGridReady5($event)" [suppressHorizontalScroll]=false
+              [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+            </ag-grid-angular>
+            <div style="color: #ffff; z-index: 100; font-size: small;">Candidates selected({{ subCount }})</div>
           </div>
         </div>
         <hr>
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-      </form>
+        <div class="row">
+          <div class="col-md-2" style="align-self: center;">
+            <h4 style="color: thistle;">Selected Jobs:</h4>
+          </div>
+          <div class="col-md-10">
+            <ag-grid-angular #agGrid4 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
+              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData4" [columnDefs]="columnDefs4"
+              rowSelection="multiple" (gridReady)="onGridReady4($event)" [suppressHorizontalScroll]=false
+              [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+            </ag-grid-angular>
+          </div>
+        </div>
+        <hr>
+        <form class="text-center" style="margin: auto; width: 95%; padding: 2px;">
+          <button type="button" class="btn btn-outline-success" (click)="onAddSubs()">Add Submissions</button>
+          <button type="button" class="btn btn-outline-secondary ml-3" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade bd-example-modal-xl mt-2 mb-5" id="viewJobDetails" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <h2 class="mt-2 text-center" style="color: thistle;">Job Details</h2>
+        <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
+          <div class="card border-warning mb-3" style="width: 100%;">
+            <div class="card-header"><strong># {{ toViewJob.id }} </strong> | <strong> Status:
+                {{ toViewJob.status }}</strong></div>
+            <div class="card-body">
+              <h4 class="card-title">{{ toViewJob.title }}</h4>
+              <h6>Created By: {{ toViewJob.createdBy }} on {{ toViewJob.createdAt }}</h6>
+              <h6>Updated At: {{ toViewJob.updatedAt }}</h6>
+              <h6>Team: {{ toViewJob.team }}</h6>
+              <h6>Manager: {{ toViewJob.manager }}</h6>
+              <br>
+              <h6>Positions: {{ toViewJob.position }} | Submissions: {{ toViewJob.submission }}</h6>
+              <p class="card-text"><strong>Required Skills:</strong><br> {{ toViewJob.skills }} </p>
+              <p class="card-text"><strong>Description:</strong><br> {{ toViewJob.description }} </p>
+            </div>
+          </div>
+          <hr>
+          <div class="text-center">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
 
-<!--
+  <!--
   <div class="navbar navbar-default">
     <div class="navbar-header">
         <a class="navbar-brand" href>Angular2 File Upload</a>

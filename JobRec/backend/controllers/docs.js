@@ -11,6 +11,7 @@ exports.createDoc = (req, res, next) => {
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
+    skills: req.body.skills,
     jobs: req.body.jobs
   });
   doc
@@ -25,6 +26,7 @@ exports.createDoc = (req, res, next) => {
           fullName: addeddoc.fullName,
           email: addeddoc.email,
           phone: addeddoc.phone,
+          skills: addeddoc.skills,
           jobs: addeddoc.jobs
         }
       });
@@ -97,6 +99,7 @@ exports.updateDoc = (req, res, next) => {
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
+    skills: req.body.skills.split(','),
     jobs: req.body.jobs.split(',')
   });
   Doc.updateOne({ _id: req.params.id }, doc)
