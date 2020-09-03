@@ -68,7 +68,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'mcgeebenson@acumentor.com',
   //     phone: '(859) 575-3813',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Java',
   //       'Angular',
   //       'C#'
@@ -83,7 +83,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'Azure',
   //       'C++',
-  //       'HTNL',
+  //       'HTML',
   //       'C#'
   //     ],
   //     resume: '',
@@ -108,9 +108,9 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(982) 516-2830',
   //     skills: [
   //       'C++',
-  //       'HTNL',
+  //       'HTML',
   //       'C#',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -133,7 +133,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'knowlesturner@zytrex.com',
   //     phone: '(934) 508-2178',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Java',
   //       'React',
   //       'C#'
@@ -149,7 +149,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'C++',
   //       'Java',
   //       'Angular',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -160,9 +160,9 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(826) 543-3156',
   //     skills: [
   //       'AWS',
-  //       'HTNL',
+  //       'HTML',
   //       'Azure',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -185,7 +185,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'tranguzman@zaphire.com',
   //     phone: '(930) 400-2557',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Java',
   //       'C#',
   //       'Angular'
@@ -211,7 +211,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'molinamercado@zillacon.com',
   //     phone: '(877) 421-3368',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'C#',
   //       'Angular',
   //       'AWS'
@@ -225,7 +225,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(987) 509-3433',
   //     skills: [
   //       'React',
-  //       'HTNL',
+  //       'HTML',
   //       'Angular',
   //       'C++'
   //     ],
@@ -240,7 +240,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'Java',
   //       'Java',
   //       'JavaScript',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -341,7 +341,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'lorenarivera@flexigen.com',
   //     phone: '(953) 507-3473',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Azure',
   //       'C++',
   //       'C++'
@@ -354,7 +354,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'brewerstanley@coriander.com',
   //     phone: '(806) 427-2213',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'JavaScript',
   //       'Azure',
   //       'Azure'
@@ -395,7 +395,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'Azure',
   //       'AWS',
-  //       'HTNL',
+  //       'HTML',
   //       'React'
   //     ],
   //     resume: '',
@@ -420,7 +420,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(827) 456-2254',
   //     skills: [
   //       'JavaScript',
-  //       'HTNL',
+  //       'HTML',
   //       'Azure',
   //       'C++'
   //     ],
@@ -511,7 +511,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(985) 504-3189',
   //     skills: [
   //       'React',
-  //       'HTNL',
+  //       'HTML',
   //       'Java',
   //       'Angular'
   //     ],
@@ -524,7 +524,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(953) 403-2346',
   //     skills: [
   //       'React',
-  //       'HTNL',
+  //       'HTML',
   //       'Java',
   //       'C#'
   //     ],
@@ -538,7 +538,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'React',
   //       'C++',
-  //       'HTNL',
+  //       'HTML',
   //       'C++'
   //     ],
   //     resume: '',
@@ -563,9 +563,9 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(910) 557-3067',
   //     skills: [
   //       'AWS',
-  //       'HTNL',
+  //       'HTML',
   //       'React',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -603,7 +603,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'C++',
   //       'C++',
-  //       'HTNL',
+  //       'HTML',
   //       'React'
   //     ],
   //     resume: '',
@@ -629,7 +629,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'C++',
   //       'Angular',
-  //       'HTNL',
+  //       'HTML',
   //       'Angular'
   //     ],
   //     resume: '',
@@ -666,7 +666,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'stevensbond@datacator.com',
   //     phone: '(841) 456-2253',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Angular',
   //       'AWS',
   //       'Java'
@@ -732,7 +732,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(994) 455-3050',
   //     skills: [
   //       'JavaScript',
-  //       'HTNL',
+  //       'HTML',
   //       'C#',
   //       'C++'
   //     ],
@@ -745,7 +745,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(893) 534-2557',
   //     skills: [
   //       'React',
-  //       'HTNL',
+  //       'HTML',
   //       'C++',
   //       'JavaScript'
   //     ],
@@ -757,7 +757,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'earnestinesalinas@vantage.com',
   //     phone: '(864) 409-2364',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'C#',
   //       'Java',
   //       'React'
@@ -773,7 +773,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'Angular',
   //       'JavaScript',
   //       'React',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -783,7 +783,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'mirandachavez@egypto.com',
   //     phone: '(895) 584-3828',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'C#',
   //       'C#',
   //       'JavaScript'
@@ -901,7 +901,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(969) 585-2091',
   //     skills: [
   //       'Azure',
-  //       'HTNL',
+  //       'HTML',
   //       'Angular',
   //       'C#'
   //     ],
@@ -913,7 +913,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'carneyhansen@maximind.com',
   //     phone: '(941) 555-3880',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Azure',
   //       'AWS',
   //       'C++'
@@ -927,7 +927,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(833) 461-2965',
   //     skills: [
   //       'Java',
-  //       'HTNL',
+  //       'HTML',
   //       'Angular',
   //       'Azure'
   //     ],
@@ -940,7 +940,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(830) 526-2701',
   //     skills: [
   //       'Java',
-  //       'HTNL',
+  //       'HTML',
   //       'C#',
   //       'Azure'
   //     ],
@@ -981,7 +981,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'Java',
   //       'C++',
   //       'C++',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -994,7 +994,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'AWS',
   //       'Java',
   //       'JavaScript',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -1017,7 +1017,7 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'suttongregory@aeora.com',
   //     phone: '(970) 593-3350',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'C++',
   //       'Azure',
   //       'JavaScript'
@@ -1033,7 +1033,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'React',
   //       'C#',
   //       'C++',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -1057,7 +1057,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(972) 409-2898',
   //     skills: [
   //       'Angular',
-  //       'HTNL',
+  //       'HTML',
   //       'Azure',
   //       'Angular'
   //     ],
@@ -1084,7 +1084,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'JavaScript',
   //       'AWS',
-  //       'HTNL',
+  //       'HTML',
   //       'C#'
   //     ],
   //     resume: '',
@@ -1135,7 +1135,7 @@ export class DataService implements OnInit, OnDestroy {
   //     phone: '(960) 466-2348',
   //     skills: [
   //       'AWS',
-  //       'HTNL',
+  //       'HTML',
   //       'AWS',
   //       'C#'
   //     ],
@@ -1212,10 +1212,10 @@ export class DataService implements OnInit, OnDestroy {
   //     email: 'marilynmarsh@netur.com',
   //     phone: '(804) 597-3935',
   //     skills: [
-  //       'HTNL',
+  //       'HTML',
   //       'Java',
-  //       'HTNL',
-  //       'HTNL'
+  //       'HTML',
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -1266,7 +1266,7 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'Azure',
   //       'JavaScript',
-  //       'HTNL',
+  //       'HTML',
   //       'React'
   //     ],
   //     resume: '',
@@ -1279,8 +1279,8 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'Java',
   //       'C++',
-  //       'HTNL',
-  //       'HTNL'
+  //       'HTML',
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -1319,7 +1319,7 @@ export class DataService implements OnInit, OnDestroy {
   //       'C++',
   //       'Azure',
   //       'JavaScript',
-  //       'HTNL'
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -1331,8 +1331,8 @@ export class DataService implements OnInit, OnDestroy {
   //     skills: [
   //       'Java',
   //       'C++',
-  //       'HTNL',
-  //       'HTNL'
+  //       'HTML',
+  //       'HTML'
   //     ],
   //     resume: '',
   //     jobs: []
@@ -1354,7 +1354,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Avis Serrano',
       status: 'Closed',
       skills: [
-        'HTNL',
+        'HTML',
         'Angular',
         'Azure'
       ],
@@ -1518,7 +1518,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'Angular',
         'JavaScript',
-        'HTNL'
+        'HTML'
       ],
       description: 'Reprehenderit cillum ex cupidatat quis cillum voluptate elit labore nulla eiusmod enim labore. Elit reprehenderit minim voluptate anim nulla Lorem ullamco ullamco do do. Sunt incididunt esse ex dolor minim non. In laborum ex fugiat aliqua velit occaecat magna nisi ad et qui do. Ipsum elit proident ut ullamco pariatur consectetur minim commodo deserunt. Laboris nostrud nisi anim culpa et ex voluptate ullamco est nostrud.\r\n'
     },
@@ -1590,7 +1590,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'C#',
         'AWS',
-        'HTNL'
+        'HTML'
       ],
       description: 'Officia consequat Lorem nisi cupidatat qui sunt ad duis ex. Consectetur aliqua sit voluptate fugiat incididunt. Esse mollit deserunt anim mollit ullamco sit consectetur ea aliquip cupidatat. Dolor nostrud est quis ipsum dolor elit dolor ipsum qui aute ut incididunt. Irure do dolor aliquip sint velit excepteur tempor. Ex quis commodo labore adipisicing est anim consectetur excepteur cupidatat mollit cillum. Fugiat tempor voluptate consectetur anim ipsum irure.\r\n'
     },
@@ -1625,7 +1625,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Active',
       skills: [
         'React',
-        'HTNL',
+        'HTML',
         'AWS'
       ],
       description: 'Irure officia pariatur cillum pariatur sunt occaecat do laborum irure elit sit cupidatat et et. Non sunt cillum deserunt culpa ea aute veniam laborum non sint sunt dolor. Culpa culpa cupidatat qui fugiat nostrud veniam pariatur. Esse ut exercitation consequat deserunt consequat laborum do Lorem occaecat do. Cupidatat qui ullamco ipsum irure sunt excepteur deserunt deserunt ex elit ipsum ea ea sunt. Et proident aliqua elit mollit occaecat irure id irure adipisicing do. Ipsum consequat laboris enim in magna enim laboris voluptate laborum proident eu consequat.\r\n'
@@ -1643,7 +1643,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Closed',
       skills: [
         'React',
-        'HTNL',
+        'HTML',
         'Azure'
       ],
       description: 'Duis in incididunt aliquip irure. Exercitation ex est aliquip proident nisi adipisicing aliqua laborum. Ad culpa ipsum est adipisicing aliqua officia dolor amet consectetur mollit velit. Et ad dolor enim minim elit anim. Do ut fugiat cupidatat nostrud occaecat dolore ullamco aliqua. Deserunt ea ipsum anim esse mollit fugiat sint. Non minim minim ex Lorem dolore anim non nulla culpa fugiat tempor esse in.\r\n'
@@ -1660,7 +1660,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Walsh Sykes',
       status: 'Closed',
       skills: [
-        'HTNL',
+        'HTML',
         'Java',
         'AWS'
       ],
@@ -1678,7 +1678,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Bertha Vargas',
       status: 'Processing',
       skills: [
-        'HTNL',
+        'HTML',
         'Azure',
         'C++'
       ],
@@ -1698,7 +1698,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'C++',
         'C++',
-        'HTNL'
+        'HTML'
       ],
       description: 'Qui nisi proident occaecat excepteur velit elit quis ex excepteur dolor nisi aute ipsum. Dolor laborum proident tempor ea magna adipisicing aliquip tempor do. Ut irure Lorem cupidatat cupidatat irure reprehenderit in tempor qui ullamco. Cupidatat duis proident minim laboris exercitation fugiat minim consequat dolor in est. Proident exercitation ut sunt deserunt est. Sint reprehenderit dolore nisi ullamco minim aliqua in elit consequat mollit occaecat quis eu. Anim ad magna adipisicing et nostrud elit adipisicing ullamco minim qui excepteur culpa anim.\r\n'
     },
@@ -1770,7 +1770,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'C++',
         'JavaScript',
-        'HTNL'
+        'HTML'
       ],
       description: 'Cillum commodo adipisicing exercitation nostrud est et. Duis consequat culpa eiusmod id consectetur ipsum commodo amet duis aliqua irure consectetur ullamco veniam. Adipisicing Lorem adipisicing magna quis id dolor mollit duis do enim dolore duis. Elit dolore occaecat mollit magna incididunt tempor fugiat aliquip proident. Minim labore mollit reprehenderit adipisicing velit.\r\n'
     },
@@ -1788,7 +1788,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'Java',
         'React',
-        'HTNL'
+        'HTML'
       ],
       description: 'Exercitation ut fugiat velit est cupidatat aute id quis ad in. Sint Lorem elit do cupidatat dolor commodo consequat deserunt velit. Officia nostrud consectetur eiusmod magna commodo minim aute nulla Lorem commodo.\r\n'
     },
@@ -1823,7 +1823,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Active',
       skills: [
         'React',
-        'HTNL',
+        'HTML',
         'AWS'
       ],
       description: 'Sunt incididunt exercitation exercitation amet. Est incididunt anim non culpa. Aute consectetur nostrud incididunt dolore sunt. Nisi Lorem laborum quis aliquip incididunt mollit veniam. Dolor ipsum sit proident et veniam laborum cillum non exercitation duis commodo duis. Minim eu in velit qui tempor.\r\n'
@@ -1841,7 +1841,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Processing',
       skills: [
         'C#',
-        'HTNL',
+        'HTML',
         'React'
       ],
       description: 'Velit laboris aute velit do nostrud deserunt nulla. Est esse irure quis sit minim est reprehenderit labore non laboris ex eu. Velit exercitation tempor anim occaecat cillum sunt ullamco. Ea ipsum ullamco ullamco commodo sunt exercitation ut ea adipisicing dolor. Fugiat qui consectetur aliqua magna ex ad sint. Magna dolore exercitation Lorem nostrud anim enim labore adipisicing ipsum tempor. Minim eu nulla elit commodo.\r\n'
@@ -1912,8 +1912,8 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Marguerite Howe',
       status: 'Closed',
       skills: [
-        'HTNL',
-        'HTNL',
+        'HTML',
+        'HTML',
         'Angular'
       ],
       description: 'Duis velit officia quis dolor tempor ut. Ipsum ea exercitation commodo aute elit Lorem officia esse voluptate et. Ullamco magna adipisicing consequat do. Consectetur non eiusmod laborum est velit consequat quis. Dolor ut sunt consequat tempor ullamco do anim aliqua pariatur eu nisi veniam qui mollit. Fugiat nulla non aliqua nulla qui duis est ea labore nulla dolore id sit. Et elit enim qui consequat in incididunt exercitation eiusmod ullamco.\r\n'
@@ -2040,7 +2040,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'C++',
         'C#',
-        'HTNL'
+        'HTML'
       ],
       description: 'Occaecat eu nulla ad sint quis fugiat aliqua do et in nisi ut deserunt laboris. Lorem est quis elit ullamco eu ullamco mollit sint elit ad occaecat esse. Anim aliquip ullamco ex amet. Sunt adipisicing nulla ea et elit reprehenderit commodo magna.\r\n'
     },
@@ -2058,7 +2058,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'JavaScript',
         'C#',
-        'HTNL'
+        'HTML'
       ],
       description: 'Deserunt minim ad voluptate nostrud. Incididunt nulla pariatur anim nulla sit sunt velit cupidatat minim sint consequat excepteur elit. Nostrud commodo cupidatat dolore amet Lorem minim amet magna laboris voluptate excepteur aute officia veniam. Est non proident labore ad velit in quis enim incididunt in exercitation elit veniam incididunt. Nisi anim eiusmod mollit fugiat Lorem incididunt proident.\r\n'
     },
@@ -2165,7 +2165,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Closed',
       skills: [
         'AWS',
-        'HTNL',
+        'HTML',
         'C++'
       ],
       description: 'Labore cillum mollit voluptate amet amet est ipsum exercitation do esse incididunt Lorem. Occaecat fugiat sunt dolore quis anim sint commodo eiusmod ut laboris laboris eiusmod sint. Ullamco et ex proident commodo consequat duis incididunt excepteur velit nisi duis. Minim eiusmod ea Lorem minim magna culpa. Ea labore aliqua officia mollit ipsum quis in reprehenderit veniam et amet minim tempor. Elit eu mollit mollit commodo.\r\n'
@@ -2274,7 +2274,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'Angular',
         'C#',
-        'HTNL'
+        'HTML'
       ],
       description: 'Culpa voluptate eu est ex sint non. Nostrud adipisicing ullamco occaecat ex labore velit qui voluptate velit consectetur fugiat labore. Proident quis labore nulla sit. Voluptate reprehenderit amet esse fugiat eu ipsum pariatur.\r\n'
     },
@@ -2291,7 +2291,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Active',
       skills: [
         'JavaScript',
-        'HTNL',
+        'HTML',
         'AWS'
       ],
       description: 'Exercitation qui in et sit culpa et minim et sint veniam qui anim nulla pariatur. Enim dolor sunt veniam velit laboris excepteur nulla minim incididunt culpa voluptate velit ea veniam. Aute laborum irure fugiat consequat sunt sit ad velit eiusmod.\r\n'
@@ -2310,7 +2310,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'C#',
         'Angular',
-        'HTNL'
+        'HTML'
       ],
       description: 'Excepteur dolor laboris proident quis esse ex esse sint nostrud adipisicing id qui eu consectetur. Lorem nulla consectetur do anim id irure sunt sint adipisicing velit commodo ea. Nostrud qui deserunt tempor dolore est quis proident ex. Consectetur quis enim dolor qui aliquip est laborum quis Lorem et reprehenderit aute sunt sit. Aliqua mollit elit et laboris dolore elit nostrud id incididunt. Deserunt voluptate do ut laborum sit nostrud.\r\n'
     },
@@ -2346,7 +2346,7 @@ export class DataService implements OnInit, OnDestroy {
       skills: [
         'Angular',
         'JavaScript',
-        'HTNL'
+        'HTML'
       ],
       description: 'Labore id quis fugiat cillum consequat excepteur dolore minim velit eiusmod qui anim exercitation. Laborum veniam eu in mollit voluptate excepteur ut sit ea exercitation voluptate. Exercitation et id anim aliquip sunt officia nulla cupidatat nostrud pariatur veniam. Sint id aliquip ex elit labore adipisicing commodo officia voluptate. Reprehenderit dolor excepteur voluptate esse nisi in ut incididunt eiusmod aute eu sit ullamco enim. Dolore duis fugiat mollit ipsum quis officia in culpa culpa sunt excepteur cillum consequat. Dolor adipisicing culpa do ad esse nisi laborum sint minim amet laboris amet do.\r\n'
     },
@@ -2362,7 +2362,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Benson Gray',
       status: 'Closed',
       skills: [
-        'HTNL',
+        'HTML',
         'C#',
         'Angular'
       ],
@@ -2416,7 +2416,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Coleen Short',
       status: 'Closed',
       skills: [
-        'HTNL',
+        'HTML',
         'React',
         'C++'
       ],
@@ -2542,9 +2542,9 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Lilia Rollins',
       status: 'Processing',
       skills: [
-        'HTNL',
+        'HTML',
         'C#',
-        'HTNL'
+        'HTML'
       ],
       description: 'Consectetur nulla voluptate et deserunt enim officia nulla voluptate id labore. Do magna ut ut incididunt quis ex nulla enim laborum nulla fugiat Lorem est. Sit mollit nisi velit proident ea non voluptate aliqua. Deserunt Lorem velit dolor ut enim elit anim in. Ipsum aute fugiat ut cupidatat ex laboris Lorem eu culpa minim aliquip minim. Esse dolor deserunt aliqua esse do magna occaecat nulla consectetur reprehenderit amet laborum non.\r\n'
     },
@@ -2560,7 +2560,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Natalie Gentry',
       status: 'Active',
       skills: [
-        'HTNL',
+        'HTML',
         'C#',
         'Java'
       ],
@@ -2579,7 +2579,7 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Closed',
       skills: [
         'C#',
-        'HTNL',
+        'HTML',
         'Java'
       ],
       description: 'Labore mollit cupidatat dolore nulla aliquip esse et. Amet excepteur occaecat elit nisi incididunt pariatur ut id nisi aliqua. Culpa cillum ex esse occaecat eu.\r\n'
@@ -2615,8 +2615,8 @@ export class DataService implements OnInit, OnDestroy {
       status: 'Active',
       skills: [
         'C++',
-        'HTNL',
-        'HTNL'
+        'HTML',
+        'HTML'
       ],
       description: 'Exercitation adipisicing qui fugiat nostrud eiusmod occaecat tempor pariatur nostrud irure labore. Magna ex consectetur in qui proident aliqua sunt esse pariatur. Sit ullamco proident aute culpa. Adipisicing consequat in ex ut ullamco deserunt velit irure sunt aliquip et elit elit.\r\n'
     },
@@ -2866,8 +2866,8 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Moon Davidson',
       status: 'Processing',
       skills: [
-        'HTNL',
-        'HTNL',
+        'HTML',
+        'HTML',
         'C#'
       ],
       description: 'Quis dolore cillum qui laborum sit sunt et excepteur est dolor cillum dolor dolore. Elit reprehenderit nostrud do laborum nostrud eiusmod nisi incididunt laboris incididunt reprehenderit consequat aliqua quis. Irure magna culpa laboris dolor sit ipsum consectetur irure aliquip ad cupidatat amet occaecat mollit. Tempor ex ea aute ex mollit proident exercitation incididunt officia. Anim tempor aute excepteur nostrud do anim.\r\n'
@@ -2974,7 +2974,7 @@ export class DataService implements OnInit, OnDestroy {
       createdBy: 'Valenzuela Oliver',
       status: 'Processing',
       skills: [
-        'HTNL',
+        'HTML',
         'Angular',
         'Azure'
       ],
@@ -3154,9 +3154,9 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Odonnell Cohen',
         status: 'Processing',
         skills: [
-          'HTNL',
+          'HTML',
           'Azure',
-          'HTNL',
+          'HTML',
           'Java'
         ],
         description: 'Mollit nulla cupidatat cupidatat id et minim dolore proident elit pariatur sint pariatur. Excepteur qui commodo deserunt consectetur Lorem tempor do cupidatat voluptate proident qui sunt. Sunt aute Lorem nulla sit dolore nostrud ipsum consequat id sunt ut culpa.\r\n'
@@ -3175,7 +3175,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'JavaScript',
           'Angular',
-          'HTNL',
+          'HTML',
           'C++'
         ],
         description: 'Labore sit elit non velit eu ullamco. Et sint minim amet ad ea veniam Lorem laborum ipsum esse anim consequat velit. Ea dolore laboris amet tempor voluptate irure aute ad duis labore. Nisi dolor est ut velit eu deserunt amet ex dolore deserunt nostrud culpa voluptate magna. Culpa laborum labore incididunt Lorem eiusmod labore sint tempor.\r\n'
@@ -3192,7 +3192,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Helga Mcintyre',
         status: 'Active',
         skills: [
-          'HTNL',
+          'HTML',
           'Java',
           'Angular',
           'AWS'
@@ -3270,7 +3270,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'C#',
           'React',
-          'HTNL',
+          'HTML',
           'React'
         ],
         description: 'Nisi exercitation eiusmod dolor commodo commodo amet. Esse non sunt et laborum laboris esse officia sit. Nisi ad irure exercitation ad velit enim id cupidatat sit. Ut quis Lorem voluptate voluptate. Ut anim irure adipisicing occaecat eu aliqua aliquip irure proident. Officia sint est magna dolor excepteur minim sit mollit eu id incididunt. Ea officia do velit mollit adipisicing enim officia aliquip do anim occaecat Lorem.\r\n'
@@ -3288,7 +3288,7 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Closed',
         skills: [
           'Azure',
-          'HTNL',
+          'HTML',
           'Java',
           'AWS'
         ],
@@ -3309,7 +3309,7 @@ export class DataService implements OnInit, OnDestroy {
           'AWS',
           'React',
           'React',
-          'HTNL'
+          'HTML'
         ],
         description: 'Magna ea labore nisi exercitation quis eiusmod amet. Nulla exercitation adipisicing exercitation elit est commodo adipisicing ex id irure ut labore. Magna ex ut mollit et qui proident nostrud.\r\n'
       },
@@ -3404,7 +3404,7 @@ export class DataService implements OnInit, OnDestroy {
           'JavaScript',
           'Java',
           'JavaScript',
-          'HTNL'
+          'HTML'
         ],
         description: 'Fugiat dolore amet irure culpa minim ipsum non veniam esse magna. Consequat dolore qui elit eiusmod do exercitation irure quis aliqua nulla fugiat aute do. Deserunt voluptate sint est nostrud ut fugiat nulla laborum nostrud nisi ea amet enim voluptate. Quis exercitation est officia non dolore adipisicing veniam et Lorem adipisicing aliquip. Veniam Lorem minim dolor quis.\r\n'
       },
@@ -3478,7 +3478,7 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Closed',
         skills: [
           'AWS',
-          'HTNL',
+          'HTML',
           'AWS',
           'Azure'
         ],
@@ -3515,7 +3515,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Stanton Schroeder',
         status: 'Processing',
         skills: [
-          'HTNL',
+          'HTML',
           'Java',
           'Angular',
           'C++'
@@ -3534,9 +3534,9 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Latonya Salazar',
         status: 'Closed',
         skills: [
-          'HTNL',
+          'HTML',
           'C#',
-          'HTNL',
+          'HTML',
           'Angular'
         ],
         description: 'Non ad amet nostrud aliquip excepteur eiusmod. Culpa laboris deserunt ex occaecat ex labore ad labore aliquip nostrud laboris commodo. Nulla aliquip enim sint veniam esse reprehenderit aliqua laboris consectetur occaecat in mollit quis.\r\n'
@@ -3555,7 +3555,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'Azure',
           'JavaScript',
-          'HTNL',
+          'HTML',
           'AWS'
         ],
         description: 'Enim anim aliquip cupidatat aute esse duis. Do consectetur aliqua adipisicing ullamco ullamco sint consequat. Quis voluptate consectetur incididunt Lorem in officia velit fugiat esse. Deserunt velit culpa dolore id Lorem.\r\n'
@@ -3593,7 +3593,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'C#',
           'C#',
-          'HTNL',
+          'HTML',
           'Angular'
         ],
         description: 'Quis proident aliqua qui elit exercitation amet in labore do velit sunt. Ullamco magna ea enim adipisicing reprehenderit nostrud pariatur eiusmod cillum anim laboris aute fugiat occaecat. Ad aute reprehenderit non amet duis officia adipisicing ipsum. Cillum pariatur adipisicing sint in irure fugiat irure magna reprehenderit mollit anim Lorem tempor aute. Aliquip ut do duis ea eu reprehenderit dolor Lorem velit veniam.\r\n'
@@ -3629,7 +3629,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Beryl Patel',
         status: 'Closed',
         skills: [
-          'HTNL',
+          'HTML',
           'Azure',
           'Azure',
           'JavaScript'
@@ -3650,7 +3650,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'React',
           'AWS',
-          'HTNL',
+          'HTML',
           'AWS'
         ],
         description: 'Cillum enim cupidatat incididunt mollit aliqua consequat laborum exercitation labore veniam ad. Et non quis do culpa minim commodo consectetur ut amet excepteur. Anim ipsum est id exercitation in consectetur sit eu laboris magna in tempor sit in.\r\n'
@@ -3705,8 +3705,8 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Dickson Dorsey',
         status: 'Closed',
         skills: [
-          'HTNL',
-          'HTNL',
+          'HTML',
+          'HTML',
           'React',
           'AWS'
         ],
@@ -3745,7 +3745,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'C#',
           'Angular',
-          'HTNL',
+          'HTML',
           'C++'
         ],
         description: 'In non non ut adipisicing et nisi ad ea. Excepteur magna amet dolore ipsum nisi deserunt ut eu nisi dolor qui laborum ullamco ea. Aute cillum nulla fugiat est aliqua qui reprehenderit velit do deserunt consequat voluptate Lorem sunt.\r\n'
@@ -3781,7 +3781,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Porter Collins',
         status: 'Active',
         skills: [
-          'HTNL',
+          'HTML',
           'JavaScript',
           'C#',
           'Java'
@@ -3821,7 +3821,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'Angular',
           'React',
-          'HTNL',
+          'HTML',
           'Angular'
         ],
         description: 'Aliqua exercitation adipisicing consectetur laborum aute. Et tempor ipsum excepteur nulla. Mollit sit incididunt quis amet reprehenderit sunt exercitation.\r\n'
@@ -3896,7 +3896,7 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Closed',
         skills: [
           'React',
-          'HTNL',
+          'HTML',
           'Java',
           'Azure'
         ],
@@ -3934,9 +3934,9 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Processing',
         skills: [
           'Azure',
-          'HTNL',
+          'HTML',
           'C#',
-          'HTNL'
+          'HTML'
         ],
         description: 'Labore laboris duis ullamco pariatur ullamco do Lorem esse duis ea voluptate. Sit nisi eu aliquip veniam culpa proident voluptate do occaecat veniam nostrud deserunt dolore. Esse laboris cupidatat sint ex reprehenderit culpa dolor elit dolore. In aliquip aute enim eiusmod tempor duis Lorem. In do eu consequat cillum ipsum minim adipisicing aute in. Consequat exercitation non Lorem sint pariatur aute nisi sunt amet. Cillum nostrud fugiat laboris labore sunt proident reprehenderit ut.\r\n'
       },
@@ -3954,7 +3954,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'AWS',
           'C++',
-          'HTNL',
+          'HTML',
           'C++'
         ],
         description: 'Excepteur consequat sunt adipisicing labore ad fugiat laborum laborum tempor. Quis amet labore pariatur laborum pariatur id nostrud do irure elit minim adipisicing enim ipsum. Officia deserunt aute dolore consectetur non dolor in. Dolore sint ipsum culpa fugiat.\r\n'
@@ -3992,7 +3992,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'Java',
           'React',
-          'HTNL',
+          'HTML',
           'AWS'
         ],
         description: 'Veniam veniam labore adipisicing nulla quis in amet commodo duis sint nisi in labore excepteur. Et id et nisi do sint sit duis occaecat. Deserunt consequat pariatur consequat enim nulla veniam in velit ad quis. Officia sint cupidatat dolore ea nulla. Laboris do id qui est consectetur eu consectetur proident exercitation.\r\n'
@@ -4012,7 +4012,7 @@ export class DataService implements OnInit, OnDestroy {
           'JavaScript',
           'C#',
           'Java',
-          'HTNL'
+          'HTML'
         ],
         description: 'Velit adipisicing dolore consequat in sunt consectetur excepteur. Ea incididunt ea esse velit fugiat consequat laborum irure mollit est excepteur ut id. Sit ex ex duis sit ipsum. Culpa sint eiusmod est sint ullamco eu exercitation minim deserunt eu dolore voluptate. Reprehenderit non ex cillum sit eu laborum duis et.\r\n'
       },
@@ -4069,7 +4069,7 @@ export class DataService implements OnInit, OnDestroy {
           'C++',
           'AWS',
           'JavaScript',
-          'HTNL'
+          'HTML'
         ],
         description: 'Fugiat sunt irure anim consectetur Lorem ex cillum eu cillum Lorem sit culpa. Aliquip id adipisicing cillum do dolore aute elit tempor non. Esse elit excepteur mollit magna. Deserunt consequat voluptate est elit incididunt et eiusmod ea nisi aute laboris ea ullamco eiusmod. Aliqua est ut anim id officia id deserunt irure proident. Duis laborum enim ullamco aute laborum sit laborum cupidatat sunt. Sit in dolor eiusmod officia ipsum do nostrud adipisicing ullamco.\r\n'
       },
@@ -4202,7 +4202,7 @@ export class DataService implements OnInit, OnDestroy {
           'Java',
           'C#',
           'AWS',
-          'HTNL'
+          'HTML'
         ],
         description: 'Eiusmod velit laborum laborum excepteur laborum. Cillum ipsum excepteur magna aute duis velit exercitation quis qui Lorem ut incididunt. Do incididunt in esse eiusmod occaecat ullamco fugiat aliquip officia sit labore labore cupidatat. Laborum culpa minim ipsum dolore elit mollit reprehenderit laborum. Consectetur adipisicing aliquip sint consequat proident est. Eiusmod ipsum officia mollit est. Et ad nisi eiusmod consectetur fugiat ad.\r\n'
       },
@@ -4218,7 +4218,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Bertha Lane',
         status: 'Closed',
         skills: [
-          'HTNL',
+          'HTML',
           'Java',
           'AWS',
           'C++'
@@ -4297,7 +4297,7 @@ export class DataService implements OnInit, OnDestroy {
           'Java',
           'AWS',
           'React',
-          'HTNL'
+          'HTML'
         ],
         description: 'Anim minim reprehenderit qui pariatur in eu excepteur ipsum velit culpa nisi irure aliqua sunt. Nulla voluptate do est id eiusmod aliquip reprehenderit veniam irure ullamco nulla commodo commodo eiusmod. Tempor veniam sunt ea aliquip anim nostrud tempor occaecat amet cillum cillum sint elit. Sunt veniam ea laboris enim sint ad cupidatat. Dolore aliqua deserunt est occaecat fugiat mollit mollit eiusmod est aliqua nostrud. Nostrud velit ullamco proident sint enim incididunt occaecat.\r\n'
       },
@@ -4334,7 +4334,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'C#',
           'React',
-          'HTNL',
+          'HTML',
           'Azure'
         ],
         description: 'Deserunt culpa laborum id nulla labore incididunt ipsum incididunt. Amet fugiat occaecat ipsum dolore aute culpa velit ut elit deserunt. Lorem officia elit ipsum Lorem ad. Ad consequat anim eiusmod deserunt magna esse. Amet aute aute tempor deserunt in tempor quis ex aute laboris non commodo.\r\n'
@@ -4389,10 +4389,10 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Ortiz Drake',
         status: 'Active',
         skills: [
-          'HTNL',
+          'HTML',
           'C#',
           'C++',
-          'HTNL'
+          'HTML'
         ],
         description: 'Cillum ullamco dolor ut velit fugiat non veniam nostrud incididunt id ad. Quis voluptate consectetur eiusmod consequat. Proident ea ad velit aute culpa veniam consequat. Commodo ea elit deserunt et aute. Eu culpa magna culpa consequat nisi enim ut proident adipisicing fugiat quis laboris qui.\r\n'
       },
@@ -4411,7 +4411,7 @@ export class DataService implements OnInit, OnDestroy {
           'Angular',
           'Azure',
           'AWS',
-          'HTNL'
+          'HTML'
         ],
         description: 'Dolore dolore proident dolor occaecat labore laboris excepteur exercitation aute. Elit dolor excepteur Lorem cillum irure laboris anim eu adipisicing veniam exercitation fugiat. Excepteur sunt quis enim nostrud voluptate laboris magna consequat commodo. Laborum nulla non sint velit. Exercitation aute dolore pariatur aute.\r\n'
       },
@@ -4465,10 +4465,10 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Evans England',
         status: 'Active',
         skills: [
-          'HTNL',
+          'HTML',
           'Azure',
           'Azure',
-          'HTNL'
+          'HTML'
         ],
         description: 'Nulla nulla quis magna qui aliqua. Exercitation ut commodo qui laboris veniam anim proident est. Tempor voluptate proident laboris incididunt qui consequat in pariatur. Reprehenderit dolore veniam adipisicing anim tempor proident pariatur exercitation non ex eu tempor.\r\n'
       },
@@ -4560,7 +4560,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Flora Casey',
         status: 'Processing',
         skills: [
-          'HTNL',
+          'HTML',
           'Angular',
           'C++',
           'React'
@@ -4579,8 +4579,8 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Misty Quinn',
         status: 'Active',
         skills: [
-          'HTNL',
-          'HTNL',
+          'HTML',
+          'HTML',
           'Java',
           'Angular'
         ],
@@ -4599,7 +4599,7 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Closed',
         skills: [
           'C#',
-          'HTNL',
+          'HTML',
           'AWS',
           'Azure'
         ],
@@ -4658,7 +4658,7 @@ export class DataService implements OnInit, OnDestroy {
           'C#',
           'Java',
           'AWS',
-          'HTNL'
+          'HTML'
         ],
         description: 'Ipsum anim do et deserunt qui nostrud ex deserunt fugiat. Cillum minim minim cillum officia nisi non ad. Non laborum duis culpa duis nisi sit sint duis eiusmod voluptate labore consequat adipisicing ex. Deserunt sit ea dolore nostrud enim magna culpa nostrud occaecat est nisi elit sunt ex.\r\n'
       },
@@ -4675,7 +4675,7 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Closed',
         skills: [
           'Angular',
-          'HTNL',
+          'HTML',
           'Java',
           'C++'
         ],
@@ -4753,7 +4753,7 @@ export class DataService implements OnInit, OnDestroy {
           'Angular',
           'Angular',
           'C++',
-          'HTNL'
+          'HTML'
         ],
         description: 'Magna exercitation ad veniam laboris Lorem. Culpa consectetur ipsum exercitation deserunt non ut reprehenderit. Laborum pariatur consequat dolore laborum do aliqua incididunt do adipisicing et commodo consequat culpa mollit. Incididunt ex deserunt consequat aliquip aute est quis veniam ex sit laborum.\r\n'
       },
@@ -4772,7 +4772,7 @@ export class DataService implements OnInit, OnDestroy {
           'Angular',
           'React',
           'C#',
-          'HTNL'
+          'HTML'
         ],
         description: 'Dolore sit sint fugiat excepteur. Nostrud minim nostrud adipisicing tempor culpa. Incididunt ex proident minim esse quis aliquip elit. Amet est duis qui consequat est.\r\n'
       },
@@ -4829,7 +4829,7 @@ export class DataService implements OnInit, OnDestroy {
           'Java',
           'C++',
           'Angular',
-          'HTNL'
+          'HTML'
         ],
         description: 'Laborum occaecat Lorem aute qui deserunt culpa dolore mollit consectetur voluptate magna cillum non. Eiusmod cupidatat duis deserunt ullamco voluptate. Magna in nisi deserunt sint eiusmod culpa pariatur sunt adipisicing veniam amet. Aute aliqua incididunt nulla do in occaecat. Duis cillum ullamco ipsum commodo consequat mollit et laboris. Dolore et ad elit proident amet tempor incididunt consequat nisi anim. Irure velit pariatur excepteur commodo exercitation occaecat veniam magna sit magna.\r\n'
       },
@@ -4846,7 +4846,7 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Processing',
         skills: [
           'React',
-          'HTNL',
+          'HTML',
           'C#',
           'Angular'
         ],
@@ -4864,9 +4864,9 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Peck Sharp',
         status: 'Active',
         skills: [
-          'HTNL',
+          'HTML',
           'AWS',
-          'HTNL',
+          'HTML',
           'JavaScript'
         ],
         description: 'Fugiat dolor exercitation est ea quis ea nisi amet mollit sunt. Amet Lorem minim exercitation aliquip ut in adipisicing duis minim consectetur culpa. Consequat ad consequat veniam consequat consectetur in ullamco deserunt excepteur eiusmod cupidatat commodo. Cupidatat veniam dolore irure dolore elit do aute proident eu.\r\n'
@@ -4960,8 +4960,8 @@ export class DataService implements OnInit, OnDestroy {
         status: 'Processing',
         skills: [
           'Java',
-          'HTNL',
-          'HTNL',
+          'HTML',
+          'HTML',
           'React'
         ],
         description: 'Id ex laborum qui qui. Occaecat magna dolor occaecat qui nisi non est exercitation proident. Sit enim enim nisi pariatur esse ex in commodo fugiat deserunt. Aute pariatur laborum proident magna Lorem in ex dolor exercitation officia laboris laboris. Id Lorem excepteur quis occaecat ad eiusmod.\r\n'
@@ -4999,8 +4999,8 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'Java',
           'C++',
-          'HTNL',
-          'HTNL'
+          'HTML',
+          'HTML'
         ],
         description: 'Duis magna fugiat adipisicing Lorem ut voluptate ea deserunt velit consequat. Ad ipsum aute aute incididunt id exercitation consequat voluptate. Culpa incididunt eu sunt culpa sint esse deserunt esse consectetur eu quis sit. Laborum pariatur ad sint voluptate. Sunt enim laboris incididunt id proident deserunt anim voluptate.\r\n'
       },
@@ -5016,7 +5016,7 @@ export class DataService implements OnInit, OnDestroy {
         createdBy: 'Cantu Randolph',
         status: 'Processing',
         skills: [
-          'HTNL',
+          'HTML',
           'Azure',
           'Java',
           'C#'
@@ -5037,7 +5037,7 @@ export class DataService implements OnInit, OnDestroy {
         skills: [
           'Angular',
           'Angular',
-          'HTNL',
+          'HTML',
           'Azure'
         ],
         description: 'Excepteur enim consectetur proident nulla veniam excepteur in eu sit laborum magna. Est mollit commodo proident magna cupidatat consectetur reprehenderit tempor elit culpa voluptate eu fugiat. Est tempor magna in occaecat laborum ex eu cupidatat enim commodo do magna adipisicing. Veniam irure labore minim ullamco proident quis dolor enim.\r\n'
