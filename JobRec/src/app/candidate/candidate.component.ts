@@ -627,17 +627,136 @@ export class CandidateComponent implements OnInit, OnDestroy {
     }
   }
 
-  searchSubs() {}
+  autoMatch(){}
+
+  async searchSubs() {
+    if (this.searchSubsForm.valid && !this.searchSubsForm.value.search.match(/^\s+$/)) {
+      let oldInitialData = await [...this.dataService.getData()];
+      let queries = this.searchSubsForm.value.search.split(',');
+      let oldResults = [];
+      let results = [];
+      for (let query of queries) {
+        query = query.toLowerCase().trim();
+        if (
+          !isNaN(query) &&
+          query !== '' &&
+          !query.match(/^\s+$/) &&
+          query !== null
+        ) {
+          // Numbers
+          for (const job of oldInitialData) {
+            let dd = job.id + '';
+            if (dd.includes(query)) {
+              if (oldResults.indexOf(job) < 0) {
+                if (results.length === 0) {
+                  results[0] = { ...job, priority: 1 };
+                  oldResults[0] = job;
+                } else {
+                  results.unshift({ ...job, priority: 1 });
+                  oldResults.unshift(job);
+                }
+              } else {
+                const newP = results[oldResults.indexOf(job)].priority + 1;
+                results[oldResults.indexOf(job)] = {
+                  ...job,
+                  priority: newP,
+                };
+              }
+            }
+          }
+        } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
+          if (!isNaN(Date.parse(query))) {
+            // Dates
+            for (const job of oldInitialData) {
+              if (
+                job.createdAt.includes(query) ||
+                job.updatedAt.includes(query)
+              ) {
+                if (oldResults.indexOf(job) < 0) {
+                  if (results.length === 0) {
+                    results[0] = { ...job, priority: 1 };
+                    oldResults[0] = job;
+                  } else {
+                    results.unshift({ ...job, priority: 1 });
+                    oldResults.unshift(job);
+                  }
+                } else {
+                  const newP = results[oldResults.indexOf(job)].priority + 1;
+                  results[oldResults.indexOf(job)] = {
+                    ...job,
+                    priority: newP,
+                  };
+                }
+              }
+            }
+          } else {
+            // String
+            // tslint:disable-next-line: max-line-length
+            for (const job of oldInitialData) {
+              if (
+                job.title.toLowerCase().includes(query) ||
+                job.team.toLowerCase().includes(query) ||
+                job.manager.toLowerCase().includes(query) ||
+                job.createdBy.toLowerCase().includes(query) ||
+                job.description.toLowerCase().includes(query) ||
+                job.status.toLowerCase().includes(query)
+              ) {
+                if (oldResults.indexOf(job) < 0) {
+                  if(results.length === 0){
+                    results[0] = {...job, priority: 1};
+                    oldResults[0] = job;
+                  }else{
+                    results.unshift({...job, priority: 1});
+                    oldResults.unshift(job);
+                  }
+                } else {
+                  const newP = results[oldResults.indexOf(job)].priority + 1;
+                  results[oldResults.indexOf(job)] = {
+                    ...job,
+                    priority: newP,
+                  };
+                }
+              }
+              for (let skill of job.skills) {
+                skill = skill.toLowerCase().trim();
+                if (skill.includes(query)) {
+                  if (oldResults.indexOf(job) < 0) {
+                    if (results.length === 0){
+                      results[0] = {...job, priority: 1};
+                      oldResults[0] = job;
+                    }else{
+                      results.unshift({...job, priority: 1});
+                      oldResults.unshift(job);
+                    }
+                  } else {
+                    const newP = results[oldResults.indexOf(job)].priority + 1;
+                    results[oldResults.indexOf(job)] = {
+                      ...job,
+                      priority: newP,
+                    };
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      results.sort((a, b) => b.priority - a.priority);
+      this.rowData = results;
+    } else {
+      this.rowData = [...this.dataService.getData()];
+    }
+  }
 
   async search() {
     if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
-      this.docsService.getDocs();
-      let initialData;
+      let oldInitialData;
       let queries = this.searchForm.value.search.split(',');
+      let oldResults = [];
       let results = [];
-      let priority = [];
+      this.docsService.getDocs();
       await this.docsService.getDocsUpdateListener().subscribe((res) => {
-        initialData = res.docs;
+        oldInitialData = res.docs;
         for (let query of queries) {
           query = query.toLowerCase().trim();
           if (
@@ -647,18 +766,22 @@ export class CandidateComponent implements OnInit, OnDestroy {
             query !== null
           ) {
             // Numbers
-            for (const candidate of initialData) {
-              if (candidate.phone.includes(query)) {
-                if (results.indexOf(candidate) < 0) {
+            for (const candidate of oldInitialData) {
+              if (candidate._id.includes(query) || candidate.phone.includes(query)) {
+                if (oldResults.indexOf(candidate) < 0) {
                   if (results.length === 0) {
-                    results[0] = candidate;
-                    priority[0] = 1;
+                    results[0] = { ...candidate, priority: 1 };
+                    oldResults[0] = candidate;
                   } else {
-                    results.unshift(candidate);
-                    priority.unshift(1);
+                    results.unshift({ ...candidate, priority: 1 });
+                    oldResults.unshift(candidate);
                   }
                 } else {
-                  priority[results.indexOf(candidate)]++;
+                  const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                  results[oldResults.indexOf(candidate)] = {
+                    ...candidate,
+                    priority: newP,
+                  };
                 }
               }
               for (let job of candidate.jobs) {
@@ -666,15 +789,19 @@ export class CandidateComponent implements OnInit, OnDestroy {
                 if (job.includes(query)) {
                   if (results.indexOf(candidate) < 0) {
                     if (results.length === 0) {
-                      results[0] = candidate;
-                      priority[0] = 1;
+                      results[0] = { ...candidate, priority: 1 };
+                      oldResults[0] = candidate;
                     } else {
-                      results.unshift(candidate);
-                      priority.unshift(1);
+                      results.unshift({ ...candidate, priority: 1 });
+                      oldResults.unshift(candidate);
                     }
                     break;
                   } else {
-                    priority[results.indexOf(candidate)]++;
+                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    results[oldResults.indexOf(candidate)] = {
+                      ...candidate,
+                      priority: newP,
+                    };
                     break;
                   }
                 }
@@ -684,57 +811,48 @@ export class CandidateComponent implements OnInit, OnDestroy {
             if (!isNaN(Date.parse(query))) {
               // Dates
             } else {
-              // Strings
-              for (const candidate of initialData) {
-                const dd = candidate.id + '';
+              // String
+              // tslint:disable-next-line: max-line-length
+              for (const candidate of oldInitialData) {
                 if (
                   candidate.fullName.toLowerCase().includes(query) ||
                   candidate.email.toLowerCase().includes(query) ||
-                  dd.includes(query) ||
-                  candidate.phone.includes(query)
+                  candidate.phone.toLowerCase().includes(query) ||
+                  candidate._id.toLowerCase().includes(query)
                 ) {
-                  if (results.indexOf(candidate) < 0) {
-                    if (results.length === 0) {
-                      results[0] = candidate;
-                      priority[0] = 1;
-                    } else {
-                      results.unshift(candidate);
-                      priority.unshift(1);
+                  if (oldResults.indexOf(candidate) < 0) {
+                    if(results.length === 0){
+                      results[0] = {...candidate, priority: 1};
+                      oldResults[0] = candidate;
+                    }else{
+                      results.unshift({...candidate, priority: 1});
+                      oldResults.unshift(candidate);
                     }
                   } else {
-                    priority[results.indexOf(candidate)]++;
+                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    results[oldResults.indexOf(candidate)] = {
+                      ...candidate,
+                      priority: newP,
+                    };
                   }
                 }
-                for (let job of candidate.jobs) {
-                  job = job + '';
-                  if (job.includes(query)) {
-                    if (results.indexOf(candidate) < 0) {
-                      if (results.length === 0) {
-                        results[0] = candidate;
-                        priority[0] = 1;
-                      } else {
-                        results.unshift(candidate);
-                        priority.unshift(1);
-                      }
-                      break;
-                    } else {
-                      priority[results.indexOf(candidate)]++;
-                      break;
-                    }
-                  }
-                }
-                for (let skills of candidate.skills) {
-                  if (skills.includes(query)) {
-                    if (results.indexOf(candidate) < 0) {
-                      if (results.length === 0) {
-                        results[0] = candidate;
-                        priority[0] = 1;
-                      } else {
-                        results.unshift(candidate);
-                        priority.unshift(1);
+                for (let skill of candidate.skills) {
+                  skill = skill.toLowerCase().trim();
+                  if (skill.includes(query)) {
+                    if (oldResults.indexOf(candidate) < 0) {
+                      if (results.length === 0){
+                        results[0] = {...candidate, priority: 1};
+                        oldResults[0] = candidate;
+                      }else{
+                        results.unshift({...candidate, priority: 1});
+                        oldResults.unshift(candidate);
                       }
                     } else {
-                      priority[results.indexOf(candidate)]++;
+                      const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                      results[oldResults.indexOf(candidate)] = {
+                        ...candidate,
+                        priority: newP,
+                      };
                     }
                   }
                 }
@@ -742,17 +860,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
             }
           }
         }
-        let newRes = [];
-        for (const i of results) {
-          const max = Math.max(...priority);
-          if (newRes.length === 0) {
-            newRes[0] = results[priority.indexOf(max)];
-          } else {
-            newRes.push(results[priority.indexOf(max)]);
-          }
-          priority.splice(priority.indexOf(max), 1);
-        }
-        this.rowData2 = newRes;
+        results.sort((a, b) => b.priority - a.priority);
+        this.rowData2 = results;
       });
     } else {
       this.docsService.getDocs();

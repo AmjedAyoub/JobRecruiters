@@ -540,12 +540,135 @@ export class SearchComponent implements OnInit, OnDestroy {
   //   return null;
   // }
 
-  searchSubs() {}
+  async searchSubs() {
+    if (this.searchSubsForm.valid && !this.searchSubsForm.value.search.match(/^\s+$/)) {
+      let oldInitialData;
+      let queries = this.searchSubsForm.value.search.split(',');
+      let oldResults = [];
+      let results = [];
+      this.docsService.getDocs();
+      await this.docsService.getDocsUpdateListener().subscribe((res) => {
+        oldInitialData = res.docs;
+        for (let query of queries) {
+          query = query.toLowerCase().trim();
+          if (
+            !isNaN(query) &&
+            query !== '' &&
+            !query.match(/^\s+$/) &&
+            query !== null
+          ) {
+            // Numbers
+            for (const candidate of oldInitialData) {
+              if (candidate._id.includes(query) || candidate.phone.includes(query)) {
+                if (oldResults.indexOf(candidate) < 0) {
+                  if (results.length === 0) {
+                    results[0] = { ...candidate, priority: 1 };
+                    oldResults[0] = candidate;
+                  } else {
+                    results.unshift({ ...candidate, priority: 1 });
+                    oldResults.unshift(candidate);
+                  }
+                } else {
+                  const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                  results[oldResults.indexOf(candidate)] = {
+                    ...candidate,
+                    priority: newP,
+                  };
+                }
+              }
+              for (let job of candidate.jobs) {
+                job = job + '';
+                if (job.includes(query)) {
+                  if (results.indexOf(candidate) < 0) {
+                    if (results.length === 0) {
+                      results[0] = { ...candidate, priority: 1 };
+                      oldResults[0] = candidate;
+                    } else {
+                      results.unshift({ ...candidate, priority: 1 });
+                      oldResults.unshift(candidate);
+                    }
+                    break;
+                  } else {
+                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    results[oldResults.indexOf(candidate)] = {
+                      ...candidate,
+                      priority: newP,
+                    };
+                    break;
+                  }
+                }
+              }
+            }
+          } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
+            if (!isNaN(Date.parse(query))) {
+              // Dates
+            } else {
+              // String
+              // tslint:disable-next-line: max-line-length
+              for (const candidate of oldInitialData) {
+                if (
+                  candidate.fullName.toLowerCase().includes(query) ||
+                  candidate.email.toLowerCase().includes(query) ||
+                  candidate.phone.toLowerCase().includes(query) ||
+                  candidate._id.toLowerCase().includes(query)
+                ) {
+                  if (oldResults.indexOf(candidate) < 0) {
+                    if(results.length === 0){
+                      results[0] = {...candidate, priority: 1};
+                      oldResults[0] = candidate;
+                    }else{
+                      results.unshift({...candidate, priority: 1});
+                      oldResults.unshift(candidate);
+                    }
+                  } else {
+                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    results[oldResults.indexOf(candidate)] = {
+                      ...candidate,
+                      priority: newP,
+                    };
+                  }
+                }
+                for (let skill of candidate.skills) {
+                  skill = skill.toLowerCase().trim();
+                  if (skill.includes(query)) {
+                    if (oldResults.indexOf(candidate) < 0) {
+                      if (results.length === 0){
+                        results[0] = {...candidate, priority: 1};
+                        oldResults[0] = candidate;
+                      }else{
+                        results.unshift({...candidate, priority: 1});
+                        oldResults.unshift(candidate);
+                      }
+                    } else {
+                      const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                      results[oldResults.indexOf(candidate)] = {
+                        ...candidate,
+                        priority: newP,
+                      };
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        results.sort((a, b) => b.priority - a.priority);
+        this.rowData2 = results;
+      });
+    } else {
+      this.docsService.getDocs();
+      this.docsSub = this.docsService
+        .getDocsUpdateListener()
+        .subscribe((res) => {
+          this.rowData2 = res.docs;
+        });
+    }}
 
   async search() {
     if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
-      let initialData = await [...this.dataService.getData()];
+      let oldInitialData = await [...this.dataService.getData()];
       let queries = this.searchForm.value.search.split(',');
+      let oldResults = [];
       let results = [];
       for (let query of queries) {
         query = query.toLowerCase().trim();
@@ -556,51 +679,111 @@ export class SearchComponent implements OnInit, OnDestroy {
           query !== null
         ) {
           // Numbers
-          for (const job of initialData) {
+          for (const job of oldInitialData) {
             let dd = job.id + '';
             if (dd.includes(query)) {
-              if (results.indexOf(job) < 0) {
-                results.unshift(job);
+              if (oldResults.indexOf(job) < 0) {
+                if (results.length === 0) {
+                  results[0] = { ...job, priority: 1 };
+                  oldResults[0] = job;
+                } else {
+                  results.unshift({ ...job, priority: 1 });
+                  oldResults.unshift(job);
+                }
+              } else {
+                const newP = results[oldResults.indexOf(job)].priority + 1;
+                results[oldResults.indexOf(job)] = {
+                  ...job,
+                  priority: newP,
+                };
               }
             }
           }
         } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
           if (!isNaN(Date.parse(query))) {
             // Dates
-            for (const job of initialData) {
+            for (const job of oldInitialData) {
               if (
                 job.createdAt.includes(query) ||
                 job.updatedAt.includes(query)
               ) {
-                if (results.indexOf(job) < 0) {
-                  results.unshift(job);
+                if (oldResults.indexOf(job) < 0) {
+                  if (results.length === 0) {
+                    results[0] = { ...job, priority: 1 };
+                    oldResults[0] = job;
+                  } else {
+                    results.unshift({ ...job, priority: 1 });
+                    oldResults.unshift(job);
+                  }
+                } else {
+                  const newP = results[oldResults.indexOf(job)].priority + 1;
+                  results[oldResults.indexOf(job)] = {
+                    ...job,
+                    priority: newP,
+                  };
                 }
               }
             }
           } else {
             // String
             // tslint:disable-next-line: max-line-length
-            for (const job of initialData) {
+            for (const job of oldInitialData) {
               if (
                 job.title.toLowerCase().includes(query) ||
                 job.team.toLowerCase().includes(query) ||
                 job.manager.toLowerCase().includes(query) ||
                 job.createdBy.toLowerCase().includes(query) ||
+                job.description.toLowerCase().includes(query) ||
                 job.status.toLowerCase().includes(query)
               ) {
-                if (results.indexOf(job) < 0) {
-                  results.unshift(job);
+                if (oldResults.indexOf(job) < 0) {
+                  if(results.length === 0){
+                    results[0] = {...job, priority: 1};
+                    oldResults[0] = job;
+                  }else{
+                    results.unshift({...job, priority: 1});
+                    oldResults.unshift(job);
+                  }
+                } else {
+                  const newP = results[oldResults.indexOf(job)].priority + 1;
+                  results[oldResults.indexOf(job)] = {
+                    ...job,
+                    priority: newP,
+                  };
+                }
+              }
+              for (let skill of job.skills) {
+                skill = skill.toLowerCase().trim();
+                if (skill.includes(query)) {
+                  if (oldResults.indexOf(job) < 0) {
+                    if (results.length === 0){
+                      results[0] = {...job, priority: 1};
+                      oldResults[0] = job;
+                    }else{
+                      results.unshift({...job, priority: 1});
+                      oldResults.unshift(job);
+                    }
+                  } else {
+                    const newP = results[oldResults.indexOf(job)].priority + 1;
+                    results[oldResults.indexOf(job)] = {
+                      ...job,
+                      priority: newP,
+                    };
+                  }
                 }
               }
             }
           }
         }
       }
+      results.sort((a, b) => b.priority - a.priority);
       this.rowData = results;
     } else {
       this.rowData = [...this.dataService.getData()];
     }
   }
+
+  autoMatch(){}
 
   editJob(job: any) {
     this.editJobMode = true;
@@ -945,7 +1128,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     this.agGrid3.cellClicked.subscribe((res) => {
       if (res.colDef.field === '_id') {
-        console.log(res.data);
         this.rowData5.unshift(res.data);
         this.agGrid5.api.setRowData(this.rowData5);
         this.gridApi5.sizeColumnsToFit();

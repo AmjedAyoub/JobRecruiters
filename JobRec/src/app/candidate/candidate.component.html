@@ -251,7 +251,7 @@
                 style="display: flex; margin: auto; place-content: center;">
                 <input type="text" class="form-control form-control-sm" style="width: 50%;"
                   placeholder="Search Jobs by ID, Title, Team, Date, Skills, ...." formControlName="search"
-                  (ngModelChange)="search()" [ngClass]="
+                  (ngModelChange)="searchSubs()" [ngClass]="
                   searchSubsForm.get('search').errors &&
                   searchSubsForm.get('search').touched ?
                   'is-invalid' : searchSubsForm.get('search').valid ? 'is-valid' : ''
@@ -260,7 +260,7 @@
                   <button type="submit" class="btn btn-outline-primary btn-sm ml-2"
                     style="max-height: 40px;">Search</button>
                     <h6 class="ml-2 mr-2" style="color: thistle; padding-top: 5px;">OR TRY</h6>
-                    <button type="button" class="btn btn-outline-warning" data-toggle="tooltip"
+                    <button type="button" class="btn btn-outline-warning" (click)="autoMatch()" data-toggle="tooltip"
                     data-placement="auto" title="Auto match jobs based on selected candidates skills">
                     <fa-icon [icon]="faUserCog"></fa-icon>
                   </button>
