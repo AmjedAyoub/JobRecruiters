@@ -7,7 +7,12 @@ import {
   NgForm,
 } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
-import { faPlus, faTimes, faUserPlus, faUserCog } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faTimes,
+  faUserPlus,
+  faUserCog,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
@@ -411,7 +416,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       filter: true,
       resizable: true,
       width: 120,
-    }
+    },
   ];
 
   columnDefs5 = [
@@ -694,13 +699,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async onAddSubs() {
-    const selectedNodes = this.agGrid3.api.getSelectedNodes();
-    if (selectedNodes.length >= 1) {
-      const selectedData = selectedNodes.map((node) => node.data);
-      for (const candidate of selectedData) {
-        for (const job of this.selectedJobs) {
+    if (this.rowData4.length >= 1 && this.rowData5.length >= 1) {
+      for (const candidate of this.rowData5) {
+        for (const job of this.rowData4) {
           if (candidate.jobs.indexOf(job.id) < 0) {
-            candidate.jobs.unshift(job.id);
+            if (candidate.jobs.length === 0) {
+              candidate.jobs[0] = job.id;
+            } else {
+              candidate.jobs.unshift(job.id);
+            }
           }
         }
         await this.docsService
@@ -715,17 +722,17 @@ export class SearchComponent implements OnInit, OnDestroy {
           )
           .subscribe(() => {
             this.search();
+            this.dataService.getAllData();
           });
       }
-      this.dataService.addSubmissions();
-      await this.dataService.getDataChangedListener().subscribe((res) => {
-        this.rowData = res;
-      });
+      await this.dataService.addSubmissions();
+      this.rowData = [...this.dataService.getData()];
       setTimeout(() => {
         if (
           this.searchForm.valid &&
           !this.searchForm.value.search.match(/^\s+$/)
         ) {
+          this.rowData = [...this.dataService.getData()];
           this.search();
         }
       }, 400);
@@ -929,10 +936,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     this.docsService.getDocs();
     this.docsSub = await this.docsService
-    .getDocsUpdateListener()
-    .subscribe((res) => {
-      this.rowData2 = res.docs;
-    });
+      .getDocsUpdateListener()
+      .subscribe((res) => {
+        this.rowData2 = res.docs;
+      });
     this.agGrid3.selectionChanged.subscribe(() => {
       this.subCount = this.rowData5.length;
     });
@@ -942,12 +949,12 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.rowData5.unshift(res.data);
         this.agGrid5.api.setRowData(this.rowData5);
         this.gridApi5.sizeColumnsToFit();
-        for(let i = 0; i < this.rowData2.length; i++){
-          if(this.rowData2[i]._id === res.data._id) {
+        for (let i = 0; i < this.rowData2.length; i++) {
+          if (this.rowData2[i]._id === res.data._id) {
             this.rowData2.splice(i, 1);
             this.agGrid3.api.setRowData(this.rowData2);
             this.gridApi3.sizeColumnsToFit();
-           }
+          }
         }
       }
     });
@@ -964,15 +971,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     this.agGrid4.cellClicked.subscribe((res) => {
       if (res.colDef.field === 'delete') {
-        this.alertify.confirm('Are you sure you want to remove this job from submissions?', () => {
-          for(let i = 0; i < this.rowData4.length; i++){
-            if(this.rowData4[i].id === res.data.id) {
-              this.rowData4.splice(i, 1);
-              this.agGrid4.api.setRowData(this.rowData4);
-              this.gridApi4.sizeColumnsToFit();
-             }
+        this.alertify.confirm(
+          'Are you sure you want to remove this job from submissions?',
+          () => {
+            for (let i = 0; i < this.rowData4.length; i++) {
+              if (this.rowData4[i].id === res.data.id) {
+                this.rowData4.splice(i, 1);
+                this.agGrid4.api.setRowData(this.rowData4);
+                this.gridApi4.sizeColumnsToFit();
+              }
+            }
           }
-        });
+        );
       }
     });
   }
@@ -994,12 +1004,12 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.rowData2.unshift(res.data);
         this.agGrid3.api.setRowData(this.rowData2);
         this.gridApi3.sizeColumnsToFit();
-        for(let i = 0; i < this.rowData5.length; i++){
-          if(this.rowData5[i]._id === res.data._id) {
+        for (let i = 0; i < this.rowData5.length; i++) {
+          if (this.rowData5[i]._id === res.data._id) {
             this.rowData5.splice(i, 1);
             this.agGrid5.api.setRowData(this.rowData5);
             this.gridApi5.sizeColumnsToFit();
-           }
+          }
         }
       }
     });

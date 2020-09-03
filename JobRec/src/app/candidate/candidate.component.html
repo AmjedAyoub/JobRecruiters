@@ -5,7 +5,7 @@
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 90%;">
             <input type="text" class="form-control form-control-sm"
-              placeholder="Search by keyword, JobID, JobTitle, Manager, Team, Status or Date" formControlName="search"
+              placeholder="Search by CandidateID, Name, Email, Phone, Skills, ..." formControlName="search"
               (ngModelChange)="search()" [ngClass]="
               searchForm.get('search').errors &&
               searchForm.get('search').touched ?

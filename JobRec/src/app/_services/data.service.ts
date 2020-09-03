@@ -36,1308 +36,1308 @@ export class DataService implements OnInit, OnDestroy {
   >();
   private candidates1 = [];
 
-  private candidates = [
-    {
-      fullName: 'Kristin Horton',
-      email: 'bennettcarpenter@zoinage.com',
-      phone: '(961) 563-3478',
-      skills: [
-        'Java',
-        'Java',
-        'Angular',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Rice Aguirre',
-      email: 'henriettahouse@insuron.com',
-      phone: '(817) 580-2361',
-      skills: [
-        'Azure',
-        'Angular',
-        'Java',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Diaz Mcconnell',
-      email: 'mcgeebenson@acumentor.com',
-      phone: '(859) 575-3813',
-      skills: [
-        'HTNL',
-        'Java',
-        'Angular',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Liz Newman',
-      email: 'fisherhebert@hawkster.com',
-      phone: '(923) 592-2347',
-      skills: [
-        'Azure',
-        'C++',
-        'HTNL',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Atkins Maddox',
-      email: 'edwinaharvey@orbiflex.com',
-      phone: '(840) 530-2329',
-      skills: [
-        'React',
-        'C++',
-        'AWS',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Britney Vaughan',
-      email: 'brookeduffy@manufact.com',
-      phone: '(982) 516-2830',
-      skills: [
-        'C++',
-        'HTNL',
-        'C#',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Mallory Whitfield',
-      email: 'maxinegriffin@zillidium.com',
-      phone: '(898) 536-2857',
-      skills: [
-        'Java',
-        'Java',
-        'Azure',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Keith Workman',
-      email: 'knowlesturner@zytrex.com',
-      phone: '(934) 508-2178',
-      skills: [
-        'HTNL',
-        'Java',
-        'React',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Imogene Hinton',
-      email: 'crystalhale@zolavo.com',
-      phone: '(907) 430-2148',
-      skills: [
-        'C++',
-        'Java',
-        'Angular',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Baker Nixon',
-      email: 'garzaellis@comverges.com',
-      phone: '(826) 543-3156',
-      skills: [
-        'AWS',
-        'HTNL',
-        'Azure',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Simone Morris',
-      email: 'feliciacrosby@zaya.com',
-      phone: '(871) 542-2195',
-      skills: [
-        'Angular',
-        'React',
-        'C++',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Rachelle Humphrey',
-      email: 'tranguzman@zaphire.com',
-      phone: '(930) 400-2557',
-      skills: [
-        'HTNL',
-        'Java',
-        'C#',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Jannie Watts',
-      email: 'chrystallittle@sensate.com',
-      phone: '(932) 562-2240',
-      skills: [
-        'C++',
-        'React',
-        'AWS',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Savannah Erickson',
-      email: 'molinamercado@zillacon.com',
-      phone: '(877) 421-3368',
-      skills: [
-        'HTNL',
-        'C#',
-        'Angular',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Marian Conner',
-      email: 'wynnmurphy@fibrodyne.com',
-      phone: '(987) 509-3433',
-      skills: [
-        'React',
-        'HTNL',
-        'Angular',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Katherine Wolf',
-      email: 'benitasalas@sentia.com',
-      phone: '(940) 538-3123',
-      skills: [
-        'Java',
-        'Java',
-        'JavaScript',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Odom Garrison',
-      email: 'rosellacrane@petigems.com',
-      phone: '(906) 590-2329',
-      skills: [
-        'JavaScript',
-        'React',
-        'C++',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Bettie Kirkland',
-      email: 'castillofitzgerald@qot.com',
-      phone: '(978) 401-3149',
-      skills: [
-        'Java',
-        'Azure',
-        'Angular',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Marquez Lloyd',
-      email: 'colemanhayden@dognost.com',
-      phone: '(809) 443-3750',
-      skills: [
-        'React',
-        'Azure',
-        'Angular',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Melisa Duran',
-      email: 'rosettanorman@insurity.com',
-      phone: '(944) 428-2785',
-      skills: [
-        'Java',
-        'Azure',
-        'Azure',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Nell Shannon',
-      email: 'shepardmosley@zytrax.com',
-      phone: '(979) 554-3119',
-      skills: [
-        'React',
-        'Azure',
-        'Java',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Juliet Vazquez',
-      email: 'maureenstark@pheast.com',
-      phone: '(945) 597-3122',
-      skills: [
-        'C++',
-        'AWS',
-        'Azure',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Ortiz Reed',
-      email: 'sheltonbrewer@pigzart.com',
-      phone: '(993) 416-3748',
-      skills: [
-        'C++',
-        'JavaScript',
-        'Angular',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Estelle Stone',
-      email: 'lorenarivera@flexigen.com',
-      phone: '(953) 507-3473',
-      skills: [
-        'HTNL',
-        'Azure',
-        'C++',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Marisol Colon',
-      email: 'brewerstanley@coriander.com',
-      phone: '(806) 427-2213',
-      skills: [
-        'HTNL',
-        'JavaScript',
-        'Azure',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Lilly Goff',
-      email: 'kirkglass@zensor.com',
-      phone: '(955) 581-3448',
-      skills: [
-        'C++',
-        'Azure',
-        'Azure',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Duke Lee',
-      email: 'hardinhubbard@combot.com',
-      phone: '(949) 525-3627',
-      skills: [
-        'C++',
-        'React',
-        'AWS',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Obrien Cooke',
-      email: 'conradreid@calcu.com',
-      phone: '(879) 599-2183',
-      skills: [
-        'Azure',
-        'AWS',
-        'HTNL',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Grant Mejia',
-      email: 'florinewatkins@vortexaco.com',
-      phone: '(898) 442-2566',
-      skills: [
-        'JavaScript',
-        'C#',
-        'JavaScript',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Head Hudson',
-      email: 'elenaweeks@handshake.com',
-      phone: '(827) 456-2254',
-      skills: [
-        'JavaScript',
-        'HTNL',
-        'Azure',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'French Soto',
-      email: 'hickmanmadden@ecrater.com',
-      phone: '(842) 513-2759',
-      skills: [
-        'C#',
-        'C++',
-        'JavaScript',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Esperanza Parrish',
-      email: 'cainrice@krog.com',
-      phone: '(948) 430-3971',
-      skills: [
-        'C#',
-        'Azure',
-        'Azure',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Gayle Marquez',
-      email: 'vaughnterry@stockpost.com',
-      phone: '(960) 432-2072',
-      skills: [
-        'AWS',
-        'JavaScript',
-        'Java',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Scott Velez',
-      email: 'nievesrasmussen@telpod.com',
-      phone: '(942) 513-3194',
-      skills: [
-        'Azure',
-        'Angular',
-        'Azure',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Williams Whitehead',
-      email: 'roseknox@hairport.com',
-      phone: '(803) 580-3579',
-      skills: [
-        'React',
-        'Azure',
-        'Azure',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Shauna Rosales',
-      email: 'pansyrodriquez@uni.com',
-      phone: '(900) 417-2608',
-      skills: [
-        'JavaScript',
-        'Azure',
-        'React',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Connie Ruiz',
-      email: 'letagonzales@isologix.com',
-      phone: '(985) 504-3189',
-      skills: [
-        'React',
-        'HTNL',
-        'Java',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Clayton Koch',
-      email: 'frankiehiggins@injoy.com',
-      phone: '(953) 403-2346',
-      skills: [
-        'React',
-        'HTNL',
-        'Java',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Simmons Goodman',
-      email: 'chelseale@exposa.com',
-      phone: '(956) 593-3833',
-      skills: [
-        'React',
-        'C++',
-        'HTNL',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Hallie Jimenez',
-      email: 'reneejordan@elentrix.com',
-      phone: '(870) 451-2447',
-      skills: [
-        'Java',
-        'Azure',
-        'JavaScript',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Calderon Mitchell',
-      email: 'bonnerbell@entogrok.com',
-      phone: '(910) 557-3067',
-      skills: [
-        'AWS',
-        'HTNL',
-        'React',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Reed Montgomery',
-      email: 'prattsherman@micronaut.com',
-      phone: '(951) 596-3536',
-      skills: [
-        'C#',
-        'Azure',
-        'Angular',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Darla Huffman',
-      email: 'harriettschroeder@acium.com',
-      phone: '(977) 570-2798',
-      skills: [
-        'C++',
-        'JavaScript',
-        'Azure',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Beach Stanton',
-      email: 'angeliquecox@bizmatic.com',
-      phone: '(810) 478-2312',
-      skills: [
-        'C++',
-        'C++',
-        'HTNL',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Avis Allison',
-      email: 'jordanstevens@equitax.com',
-      phone: '(828) 445-2435',
-      skills: [
-        'AWS',
-        'C#',
-        'Java',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Pauline Melendez',
-      email: 'marshcunningham@toyletry.com',
-      phone: '(856) 546-2485',
-      skills: [
-        'C++',
-        'Angular',
-        'HTNL',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Fannie Case',
-      email: 'mcguireevans@thredz.com',
-      phone: '(810) 407-2502',
-      skills: [
-        'React',
-        'Java',
-        'AWS',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Maldonado Norton',
-      email: 'mitzihaney@ezent.com',
-      phone: '(976) 430-3105',
-      skills: [
-        'React',
-        'C#',
-        'Angular',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Kramer Wilder',
-      email: 'stevensbond@datacator.com',
-      phone: '(841) 456-2253',
-      skills: [
-        'HTNL',
-        'Angular',
-        'AWS',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Delia Weaver',
-      email: 'burkehunter@xumonk.com',
-      phone: '(920) 543-3692',
-      skills: [
-        'React',
-        'JavaScript',
-        'AWS',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Marianne Wallace',
-      email: 'stephensoneverett@magnemo.com',
-      phone: '(807) 574-2790',
-      skills: [
-        'C++',
-        'Azure',
-        'Angular',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Lillie Ferrell',
-      email: 'warnerzimmerman@genmy.com',
-      phone: '(884) 558-2131',
-      skills: [
-        'C++',
-        'React',
-        'Angular',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Dona Randolph',
-      email: 'dionnewood@obliq.com',
-      phone: '(980) 402-3318',
-      skills: [
-        'Angular',
-        'JavaScript',
-        'Java',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Joseph Mullen',
-      email: 'poolekeith@caxt.com',
-      phone: '(994) 455-3050',
-      skills: [
-        'JavaScript',
-        'HTNL',
-        'C#',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Bettye Murray',
-      email: 'samanthawiggins@vicon.com',
-      phone: '(893) 534-2557',
-      skills: [
-        'React',
-        'HTNL',
-        'C++',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Lucile Holcomb',
-      email: 'earnestinesalinas@vantage.com',
-      phone: '(864) 409-2364',
-      skills: [
-        'HTNL',
-        'C#',
-        'Java',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Leann Willis',
-      email: 'andrewspetty@datagene.com',
-      phone: '(813) 524-3107',
-      skills: [
-        'Angular',
-        'JavaScript',
-        'React',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Dixon Abbott',
-      email: 'mirandachavez@egypto.com',
-      phone: '(895) 584-3828',
-      skills: [
-        'HTNL',
-        'C#',
-        'C#',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Hahn Sanchez',
-      email: 'jamieortiz@polaria.com',
-      phone: '(855) 451-3270',
-      skills: [
-        'JavaScript',
-        'JavaScript',
-        'C#',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Wilson Robbins',
-      email: 'pollyduke@tubesys.com',
-      phone: '(864) 512-2700',
-      skills: [
-        'Azure',
-        'Angular',
-        'Azure',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Butler Ryan',
-      email: 'salliesummers@bytrex.com',
-      phone: '(857) 510-3235',
-      skills: [
-        'AWS',
-        'C#',
-        'C#',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Charmaine Gilbert',
-      email: 'altapatel@tingles.com',
-      phone: '(954) 445-3516',
-      skills: [
-        'AWS',
-        'Azure',
-        'JavaScript',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Ware Sullivan',
-      email: 'chrischapman@overplex.com',
-      phone: '(962) 590-3307',
-      skills: [
-        'Azure',
-        'Azure',
-        'C#',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Lambert Larson',
-      email: 'pittmanwinters@orbaxter.com',
-      phone: '(998) 482-3758',
-      skills: [
-        'AWS',
-        'React',
-        'Angular',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Bonita Boyle',
-      email: 'corinemontoya@xoggle.com',
-      phone: '(885) 421-2670',
-      skills: [
-        'Azure',
-        'C++',
-        'Angular',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Foreman Jones',
-      email: 'helenatkinson@quinex.com',
-      phone: '(912) 494-3910',
-      skills: [
-        'JavaScript',
-        'C#',
-        'React',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Natalie Kane',
-      email: 'avasuarez@insectus.com',
-      phone: '(969) 585-2091',
-      skills: [
-        'Azure',
-        'HTNL',
-        'Angular',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'David Park',
-      email: 'carneyhansen@maximind.com',
-      phone: '(941) 555-3880',
-      skills: [
-        'HTNL',
-        'Azure',
-        'AWS',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Pace Mendez',
-      email: 'angelitarussell@zensure.com',
-      phone: '(833) 461-2965',
-      skills: [
-        'Java',
-        'HTNL',
-        'Angular',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Juanita Henry',
-      email: 'joanneblevins@niquent.com',
-      phone: '(830) 526-2701',
-      skills: [
-        'Java',
-        'HTNL',
-        'C#',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Leonor Lang',
-      email: 'garnerbarker@tripsch.com',
-      phone: '(861) 587-3391',
-      skills: [
-        'Java',
-        'Azure',
-        'Angular',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Hammond Gibson',
-      email: 'rosaleshickman@ecstasia.com',
-      phone: '(956) 457-3840',
-      skills: [
-        'React',
-        'C++',
-        'JavaScript',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Hilda Zamora',
-      email: 'fredericklevy@imant.com',
-      phone: '(913) 484-3672',
-      skills: [
-        'Java',
-        'C++',
-        'C++',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Beryl Pierce',
-      email: 'jamesramsey@xyqag.com',
-      phone: '(949) 523-3149',
-      skills: [
-        'AWS',
-        'Java',
-        'JavaScript',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Hurst Adams',
-      email: 'princeperez@stelaecor.com',
-      phone: '(850) 582-2107',
-      skills: [
-        'React',
-        'React',
-        'React',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Isabella Poole',
-      email: 'suttongregory@aeora.com',
-      phone: '(970) 593-3350',
-      skills: [
-        'HTNL',
-        'C++',
-        'Azure',
-        'JavaScript'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Lena Shaw',
-      email: 'jamesreeves@pivitol.com',
-      phone: '(811) 414-3142',
-      skills: [
-        'React',
-        'C#',
-        'C++',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Susana Sanford',
-      email: 'jerrilangley@kengen.com',
-      phone: '(981) 431-2981',
-      skills: [
-        'C++',
-        'JavaScript',
-        'AWS',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Nannie Powell',
-      email: 'pattersoncummings@ronelon.com',
-      phone: '(972) 409-2898',
-      skills: [
-        'Angular',
-        'HTNL',
-        'Azure',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Patton Clemons',
-      email: 'maurasnider@zaggles.com',
-      phone: '(847) 462-2892',
-      skills: [
-        'C#',
-        'JavaScript',
-        'C#',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Dunn Griffith',
-      email: 'bethmclaughlin@bulljuice.com',
-      phone: '(959) 485-2612',
-      skills: [
-        'JavaScript',
-        'AWS',
-        'HTNL',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Eve Howard',
-      email: 'rhodeskline@evidends.com',
-      phone: '(984) 509-3014',
-      skills: [
-        'Java',
-        'C#',
-        'React',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Fox Morgan',
-      email: 'pottscruz@tubalum.com',
-      phone: '(836) 507-2125',
-      skills: [
-        'Angular',
-        'Angular',
-        'Java',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Harmon Berg',
-      email: 'margeryhahn@quonk.com',
-      phone: '(892) 560-3161',
-      skills: [
-        'C++',
-        'AWS',
-        'C#',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Barlow Fernandez',
-      email: 'nealclark@skybold.com',
-      phone: '(960) 466-2348',
-      skills: [
-        'AWS',
-        'HTNL',
-        'AWS',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Letha Alexander',
-      email: 'sharonmcneil@adornica.com',
-      phone: '(802) 525-3392',
-      skills: [
-        'JavaScript',
-        'C++',
-        'React',
-        'C++'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Gloria Monroe',
-      email: 'besthopper@reversus.com',
-      phone: '(980) 537-3988',
-      skills: [
-        'C#',
-        'JavaScript',
-        'C#',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Hester Burns',
-      email: 'bergwynn@oulu.com',
-      phone: '(858) 447-3669',
-      skills: [
-        'AWS',
-        'Java',
-        'AWS',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Janine Gallagher',
-      email: 'bridgetjensen@honotron.com',
-      phone: '(847) 474-2184',
-      skills: [
-        'Azure',
-        'AWS',
-        'JavaScript',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Chandler Vasquez',
-      email: 'lorriegillespie@eclipto.com',
-      phone: '(840) 403-2062',
-      skills: [
-        'C#',
-        'Java',
-        'Java',
-        'Angular'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Berta Mccarthy',
-      email: 'marilynmarsh@netur.com',
-      phone: '(804) 597-3935',
-      skills: [
-        'HTNL',
-        'Java',
-        'HTNL',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Emilia Ware',
-      email: 'evamiranda@digigene.com',
-      phone: '(933) 525-2528',
-      skills: [
-        'C++',
-        'Java',
-        'Azure',
-        'AWS'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Jessica Clements',
-      email: 'mendozagould@cubicide.com',
-      phone: '(940) 433-2943',
-      skills: [
-        'Angular',
-        'Java',
-        'Java',
-        'C#'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Gay Beasley',
-      email: 'riddlemoreno@syntac.com',
-      phone: '(985) 565-3458',
-      skills: [
-        'JavaScript',
-        'C#',
-        'JavaScript',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Mccoy Banks',
-      email: 'brightstephens@electonic.com',
-      phone: '(950) 461-2451',
-      skills: [
-        'Azure',
-        'JavaScript',
-        'HTNL',
-        'React'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Vinson Nunez',
-      email: 'elizabethfrazier@plexia.com',
-      phone: '(974) 416-2995',
-      skills: [
-        'Java',
-        'C++',
-        'HTNL',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Walsh Coleman',
-      email: 'elliottobrien@menbrain.com',
-      phone: '(877) 437-2766',
-      skills: [
-        'Java',
-        'C++',
-        'C#',
-        'Azure'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Janna Scott',
-      email: 'tabitharowe@kangle.com',
-      phone: '(832) 469-3672',
-      skills: [
-        'AWS',
-        'React',
-        'AWS',
-        'Java'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Angie Bradford',
-      email: 'barbaragrant@noralex.com',
-      phone: '(911) 487-2884',
-      skills: [
-        'C++',
-        'Azure',
-        'JavaScript',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    },
-    {
-      fullName: 'Bray Holland',
-      email: 'campbelldudley@freakin.com',
-      phone: '(964) 418-2948',
-      skills: [
-        'Java',
-        'C++',
-        'HTNL',
-        'HTNL'
-      ],
-      resume: '',
-      jobs: []
-    }
-  ];
+  // private candidates = [
+  //   {
+  //     fullName: 'Kristin Horton',
+  //     email: 'bennettcarpenter@zoinage.com',
+  //     phone: '(961) 563-3478',
+  //     skills: [
+  //       'Java',
+  //       'Java',
+  //       'Angular',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Rice Aguirre',
+  //     email: 'henriettahouse@insuron.com',
+  //     phone: '(817) 580-2361',
+  //     skills: [
+  //       'Azure',
+  //       'Angular',
+  //       'Java',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Diaz Mcconnell',
+  //     email: 'mcgeebenson@acumentor.com',
+  //     phone: '(859) 575-3813',
+  //     skills: [
+  //       'HTNL',
+  //       'Java',
+  //       'Angular',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Liz Newman',
+  //     email: 'fisherhebert@hawkster.com',
+  //     phone: '(923) 592-2347',
+  //     skills: [
+  //       'Azure',
+  //       'C++',
+  //       'HTNL',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Atkins Maddox',
+  //     email: 'edwinaharvey@orbiflex.com',
+  //     phone: '(840) 530-2329',
+  //     skills: [
+  //       'React',
+  //       'C++',
+  //       'AWS',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Britney Vaughan',
+  //     email: 'brookeduffy@manufact.com',
+  //     phone: '(982) 516-2830',
+  //     skills: [
+  //       'C++',
+  //       'HTNL',
+  //       'C#',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Mallory Whitfield',
+  //     email: 'maxinegriffin@zillidium.com',
+  //     phone: '(898) 536-2857',
+  //     skills: [
+  //       'Java',
+  //       'Java',
+  //       'Azure',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Keith Workman',
+  //     email: 'knowlesturner@zytrex.com',
+  //     phone: '(934) 508-2178',
+  //     skills: [
+  //       'HTNL',
+  //       'Java',
+  //       'React',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Imogene Hinton',
+  //     email: 'crystalhale@zolavo.com',
+  //     phone: '(907) 430-2148',
+  //     skills: [
+  //       'C++',
+  //       'Java',
+  //       'Angular',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Baker Nixon',
+  //     email: 'garzaellis@comverges.com',
+  //     phone: '(826) 543-3156',
+  //     skills: [
+  //       'AWS',
+  //       'HTNL',
+  //       'Azure',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Simone Morris',
+  //     email: 'feliciacrosby@zaya.com',
+  //     phone: '(871) 542-2195',
+  //     skills: [
+  //       'Angular',
+  //       'React',
+  //       'C++',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Rachelle Humphrey',
+  //     email: 'tranguzman@zaphire.com',
+  //     phone: '(930) 400-2557',
+  //     skills: [
+  //       'HTNL',
+  //       'Java',
+  //       'C#',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Jannie Watts',
+  //     email: 'chrystallittle@sensate.com',
+  //     phone: '(932) 562-2240',
+  //     skills: [
+  //       'C++',
+  //       'React',
+  //       'AWS',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Savannah Erickson',
+  //     email: 'molinamercado@zillacon.com',
+  //     phone: '(877) 421-3368',
+  //     skills: [
+  //       'HTNL',
+  //       'C#',
+  //       'Angular',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Marian Conner',
+  //     email: 'wynnmurphy@fibrodyne.com',
+  //     phone: '(987) 509-3433',
+  //     skills: [
+  //       'React',
+  //       'HTNL',
+  //       'Angular',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Katherine Wolf',
+  //     email: 'benitasalas@sentia.com',
+  //     phone: '(940) 538-3123',
+  //     skills: [
+  //       'Java',
+  //       'Java',
+  //       'JavaScript',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Odom Garrison',
+  //     email: 'rosellacrane@petigems.com',
+  //     phone: '(906) 590-2329',
+  //     skills: [
+  //       'JavaScript',
+  //       'React',
+  //       'C++',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Bettie Kirkland',
+  //     email: 'castillofitzgerald@qot.com',
+  //     phone: '(978) 401-3149',
+  //     skills: [
+  //       'Java',
+  //       'Azure',
+  //       'Angular',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Marquez Lloyd',
+  //     email: 'colemanhayden@dognost.com',
+  //     phone: '(809) 443-3750',
+  //     skills: [
+  //       'React',
+  //       'Azure',
+  //       'Angular',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Melisa Duran',
+  //     email: 'rosettanorman@insurity.com',
+  //     phone: '(944) 428-2785',
+  //     skills: [
+  //       'Java',
+  //       'Azure',
+  //       'Azure',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Nell Shannon',
+  //     email: 'shepardmosley@zytrax.com',
+  //     phone: '(979) 554-3119',
+  //     skills: [
+  //       'React',
+  //       'Azure',
+  //       'Java',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Juliet Vazquez',
+  //     email: 'maureenstark@pheast.com',
+  //     phone: '(945) 597-3122',
+  //     skills: [
+  //       'C++',
+  //       'AWS',
+  //       'Azure',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Ortiz Reed',
+  //     email: 'sheltonbrewer@pigzart.com',
+  //     phone: '(993) 416-3748',
+  //     skills: [
+  //       'C++',
+  //       'JavaScript',
+  //       'Angular',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Estelle Stone',
+  //     email: 'lorenarivera@flexigen.com',
+  //     phone: '(953) 507-3473',
+  //     skills: [
+  //       'HTNL',
+  //       'Azure',
+  //       'C++',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Marisol Colon',
+  //     email: 'brewerstanley@coriander.com',
+  //     phone: '(806) 427-2213',
+  //     skills: [
+  //       'HTNL',
+  //       'JavaScript',
+  //       'Azure',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Lilly Goff',
+  //     email: 'kirkglass@zensor.com',
+  //     phone: '(955) 581-3448',
+  //     skills: [
+  //       'C++',
+  //       'Azure',
+  //       'Azure',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Duke Lee',
+  //     email: 'hardinhubbard@combot.com',
+  //     phone: '(949) 525-3627',
+  //     skills: [
+  //       'C++',
+  //       'React',
+  //       'AWS',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Obrien Cooke',
+  //     email: 'conradreid@calcu.com',
+  //     phone: '(879) 599-2183',
+  //     skills: [
+  //       'Azure',
+  //       'AWS',
+  //       'HTNL',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Grant Mejia',
+  //     email: 'florinewatkins@vortexaco.com',
+  //     phone: '(898) 442-2566',
+  //     skills: [
+  //       'JavaScript',
+  //       'C#',
+  //       'JavaScript',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Head Hudson',
+  //     email: 'elenaweeks@handshake.com',
+  //     phone: '(827) 456-2254',
+  //     skills: [
+  //       'JavaScript',
+  //       'HTNL',
+  //       'Azure',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'French Soto',
+  //     email: 'hickmanmadden@ecrater.com',
+  //     phone: '(842) 513-2759',
+  //     skills: [
+  //       'C#',
+  //       'C++',
+  //       'JavaScript',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Esperanza Parrish',
+  //     email: 'cainrice@krog.com',
+  //     phone: '(948) 430-3971',
+  //     skills: [
+  //       'C#',
+  //       'Azure',
+  //       'Azure',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Gayle Marquez',
+  //     email: 'vaughnterry@stockpost.com',
+  //     phone: '(960) 432-2072',
+  //     skills: [
+  //       'AWS',
+  //       'JavaScript',
+  //       'Java',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Scott Velez',
+  //     email: 'nievesrasmussen@telpod.com',
+  //     phone: '(942) 513-3194',
+  //     skills: [
+  //       'Azure',
+  //       'Angular',
+  //       'Azure',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Williams Whitehead',
+  //     email: 'roseknox@hairport.com',
+  //     phone: '(803) 580-3579',
+  //     skills: [
+  //       'React',
+  //       'Azure',
+  //       'Azure',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Shauna Rosales',
+  //     email: 'pansyrodriquez@uni.com',
+  //     phone: '(900) 417-2608',
+  //     skills: [
+  //       'JavaScript',
+  //       'Azure',
+  //       'React',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Connie Ruiz',
+  //     email: 'letagonzales@isologix.com',
+  //     phone: '(985) 504-3189',
+  //     skills: [
+  //       'React',
+  //       'HTNL',
+  //       'Java',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Clayton Koch',
+  //     email: 'frankiehiggins@injoy.com',
+  //     phone: '(953) 403-2346',
+  //     skills: [
+  //       'React',
+  //       'HTNL',
+  //       'Java',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Simmons Goodman',
+  //     email: 'chelseale@exposa.com',
+  //     phone: '(956) 593-3833',
+  //     skills: [
+  //       'React',
+  //       'C++',
+  //       'HTNL',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Hallie Jimenez',
+  //     email: 'reneejordan@elentrix.com',
+  //     phone: '(870) 451-2447',
+  //     skills: [
+  //       'Java',
+  //       'Azure',
+  //       'JavaScript',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Calderon Mitchell',
+  //     email: 'bonnerbell@entogrok.com',
+  //     phone: '(910) 557-3067',
+  //     skills: [
+  //       'AWS',
+  //       'HTNL',
+  //       'React',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Reed Montgomery',
+  //     email: 'prattsherman@micronaut.com',
+  //     phone: '(951) 596-3536',
+  //     skills: [
+  //       'C#',
+  //       'Azure',
+  //       'Angular',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Darla Huffman',
+  //     email: 'harriettschroeder@acium.com',
+  //     phone: '(977) 570-2798',
+  //     skills: [
+  //       'C++',
+  //       'JavaScript',
+  //       'Azure',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Beach Stanton',
+  //     email: 'angeliquecox@bizmatic.com',
+  //     phone: '(810) 478-2312',
+  //     skills: [
+  //       'C++',
+  //       'C++',
+  //       'HTNL',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Avis Allison',
+  //     email: 'jordanstevens@equitax.com',
+  //     phone: '(828) 445-2435',
+  //     skills: [
+  //       'AWS',
+  //       'C#',
+  //       'Java',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Pauline Melendez',
+  //     email: 'marshcunningham@toyletry.com',
+  //     phone: '(856) 546-2485',
+  //     skills: [
+  //       'C++',
+  //       'Angular',
+  //       'HTNL',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Fannie Case',
+  //     email: 'mcguireevans@thredz.com',
+  //     phone: '(810) 407-2502',
+  //     skills: [
+  //       'React',
+  //       'Java',
+  //       'AWS',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Maldonado Norton',
+  //     email: 'mitzihaney@ezent.com',
+  //     phone: '(976) 430-3105',
+  //     skills: [
+  //       'React',
+  //       'C#',
+  //       'Angular',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Kramer Wilder',
+  //     email: 'stevensbond@datacator.com',
+  //     phone: '(841) 456-2253',
+  //     skills: [
+  //       'HTNL',
+  //       'Angular',
+  //       'AWS',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Delia Weaver',
+  //     email: 'burkehunter@xumonk.com',
+  //     phone: '(920) 543-3692',
+  //     skills: [
+  //       'React',
+  //       'JavaScript',
+  //       'AWS',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Marianne Wallace',
+  //     email: 'stephensoneverett@magnemo.com',
+  //     phone: '(807) 574-2790',
+  //     skills: [
+  //       'C++',
+  //       'Azure',
+  //       'Angular',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Lillie Ferrell',
+  //     email: 'warnerzimmerman@genmy.com',
+  //     phone: '(884) 558-2131',
+  //     skills: [
+  //       'C++',
+  //       'React',
+  //       'Angular',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Dona Randolph',
+  //     email: 'dionnewood@obliq.com',
+  //     phone: '(980) 402-3318',
+  //     skills: [
+  //       'Angular',
+  //       'JavaScript',
+  //       'Java',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Joseph Mullen',
+  //     email: 'poolekeith@caxt.com',
+  //     phone: '(994) 455-3050',
+  //     skills: [
+  //       'JavaScript',
+  //       'HTNL',
+  //       'C#',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Bettye Murray',
+  //     email: 'samanthawiggins@vicon.com',
+  //     phone: '(893) 534-2557',
+  //     skills: [
+  //       'React',
+  //       'HTNL',
+  //       'C++',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Lucile Holcomb',
+  //     email: 'earnestinesalinas@vantage.com',
+  //     phone: '(864) 409-2364',
+  //     skills: [
+  //       'HTNL',
+  //       'C#',
+  //       'Java',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Leann Willis',
+  //     email: 'andrewspetty@datagene.com',
+  //     phone: '(813) 524-3107',
+  //     skills: [
+  //       'Angular',
+  //       'JavaScript',
+  //       'React',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Dixon Abbott',
+  //     email: 'mirandachavez@egypto.com',
+  //     phone: '(895) 584-3828',
+  //     skills: [
+  //       'HTNL',
+  //       'C#',
+  //       'C#',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Hahn Sanchez',
+  //     email: 'jamieortiz@polaria.com',
+  //     phone: '(855) 451-3270',
+  //     skills: [
+  //       'JavaScript',
+  //       'JavaScript',
+  //       'C#',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Wilson Robbins',
+  //     email: 'pollyduke@tubesys.com',
+  //     phone: '(864) 512-2700',
+  //     skills: [
+  //       'Azure',
+  //       'Angular',
+  //       'Azure',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Butler Ryan',
+  //     email: 'salliesummers@bytrex.com',
+  //     phone: '(857) 510-3235',
+  //     skills: [
+  //       'AWS',
+  //       'C#',
+  //       'C#',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Charmaine Gilbert',
+  //     email: 'altapatel@tingles.com',
+  //     phone: '(954) 445-3516',
+  //     skills: [
+  //       'AWS',
+  //       'Azure',
+  //       'JavaScript',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Ware Sullivan',
+  //     email: 'chrischapman@overplex.com',
+  //     phone: '(962) 590-3307',
+  //     skills: [
+  //       'Azure',
+  //       'Azure',
+  //       'C#',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Lambert Larson',
+  //     email: 'pittmanwinters@orbaxter.com',
+  //     phone: '(998) 482-3758',
+  //     skills: [
+  //       'AWS',
+  //       'React',
+  //       'Angular',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Bonita Boyle',
+  //     email: 'corinemontoya@xoggle.com',
+  //     phone: '(885) 421-2670',
+  //     skills: [
+  //       'Azure',
+  //       'C++',
+  //       'Angular',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Foreman Jones',
+  //     email: 'helenatkinson@quinex.com',
+  //     phone: '(912) 494-3910',
+  //     skills: [
+  //       'JavaScript',
+  //       'C#',
+  //       'React',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Natalie Kane',
+  //     email: 'avasuarez@insectus.com',
+  //     phone: '(969) 585-2091',
+  //     skills: [
+  //       'Azure',
+  //       'HTNL',
+  //       'Angular',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'David Park',
+  //     email: 'carneyhansen@maximind.com',
+  //     phone: '(941) 555-3880',
+  //     skills: [
+  //       'HTNL',
+  //       'Azure',
+  //       'AWS',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Pace Mendez',
+  //     email: 'angelitarussell@zensure.com',
+  //     phone: '(833) 461-2965',
+  //     skills: [
+  //       'Java',
+  //       'HTNL',
+  //       'Angular',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Juanita Henry',
+  //     email: 'joanneblevins@niquent.com',
+  //     phone: '(830) 526-2701',
+  //     skills: [
+  //       'Java',
+  //       'HTNL',
+  //       'C#',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Leonor Lang',
+  //     email: 'garnerbarker@tripsch.com',
+  //     phone: '(861) 587-3391',
+  //     skills: [
+  //       'Java',
+  //       'Azure',
+  //       'Angular',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Hammond Gibson',
+  //     email: 'rosaleshickman@ecstasia.com',
+  //     phone: '(956) 457-3840',
+  //     skills: [
+  //       'React',
+  //       'C++',
+  //       'JavaScript',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Hilda Zamora',
+  //     email: 'fredericklevy@imant.com',
+  //     phone: '(913) 484-3672',
+  //     skills: [
+  //       'Java',
+  //       'C++',
+  //       'C++',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Beryl Pierce',
+  //     email: 'jamesramsey@xyqag.com',
+  //     phone: '(949) 523-3149',
+  //     skills: [
+  //       'AWS',
+  //       'Java',
+  //       'JavaScript',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Hurst Adams',
+  //     email: 'princeperez@stelaecor.com',
+  //     phone: '(850) 582-2107',
+  //     skills: [
+  //       'React',
+  //       'React',
+  //       'React',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Isabella Poole',
+  //     email: 'suttongregory@aeora.com',
+  //     phone: '(970) 593-3350',
+  //     skills: [
+  //       'HTNL',
+  //       'C++',
+  //       'Azure',
+  //       'JavaScript'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Lena Shaw',
+  //     email: 'jamesreeves@pivitol.com',
+  //     phone: '(811) 414-3142',
+  //     skills: [
+  //       'React',
+  //       'C#',
+  //       'C++',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Susana Sanford',
+  //     email: 'jerrilangley@kengen.com',
+  //     phone: '(981) 431-2981',
+  //     skills: [
+  //       'C++',
+  //       'JavaScript',
+  //       'AWS',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Nannie Powell',
+  //     email: 'pattersoncummings@ronelon.com',
+  //     phone: '(972) 409-2898',
+  //     skills: [
+  //       'Angular',
+  //       'HTNL',
+  //       'Azure',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Patton Clemons',
+  //     email: 'maurasnider@zaggles.com',
+  //     phone: '(847) 462-2892',
+  //     skills: [
+  //       'C#',
+  //       'JavaScript',
+  //       'C#',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Dunn Griffith',
+  //     email: 'bethmclaughlin@bulljuice.com',
+  //     phone: '(959) 485-2612',
+  //     skills: [
+  //       'JavaScript',
+  //       'AWS',
+  //       'HTNL',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Eve Howard',
+  //     email: 'rhodeskline@evidends.com',
+  //     phone: '(984) 509-3014',
+  //     skills: [
+  //       'Java',
+  //       'C#',
+  //       'React',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Fox Morgan',
+  //     email: 'pottscruz@tubalum.com',
+  //     phone: '(836) 507-2125',
+  //     skills: [
+  //       'Angular',
+  //       'Angular',
+  //       'Java',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Harmon Berg',
+  //     email: 'margeryhahn@quonk.com',
+  //     phone: '(892) 560-3161',
+  //     skills: [
+  //       'C++',
+  //       'AWS',
+  //       'C#',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Barlow Fernandez',
+  //     email: 'nealclark@skybold.com',
+  //     phone: '(960) 466-2348',
+  //     skills: [
+  //       'AWS',
+  //       'HTNL',
+  //       'AWS',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Letha Alexander',
+  //     email: 'sharonmcneil@adornica.com',
+  //     phone: '(802) 525-3392',
+  //     skills: [
+  //       'JavaScript',
+  //       'C++',
+  //       'React',
+  //       'C++'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Gloria Monroe',
+  //     email: 'besthopper@reversus.com',
+  //     phone: '(980) 537-3988',
+  //     skills: [
+  //       'C#',
+  //       'JavaScript',
+  //       'C#',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Hester Burns',
+  //     email: 'bergwynn@oulu.com',
+  //     phone: '(858) 447-3669',
+  //     skills: [
+  //       'AWS',
+  //       'Java',
+  //       'AWS',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Janine Gallagher',
+  //     email: 'bridgetjensen@honotron.com',
+  //     phone: '(847) 474-2184',
+  //     skills: [
+  //       'Azure',
+  //       'AWS',
+  //       'JavaScript',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Chandler Vasquez',
+  //     email: 'lorriegillespie@eclipto.com',
+  //     phone: '(840) 403-2062',
+  //     skills: [
+  //       'C#',
+  //       'Java',
+  //       'Java',
+  //       'Angular'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Berta Mccarthy',
+  //     email: 'marilynmarsh@netur.com',
+  //     phone: '(804) 597-3935',
+  //     skills: [
+  //       'HTNL',
+  //       'Java',
+  //       'HTNL',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Emilia Ware',
+  //     email: 'evamiranda@digigene.com',
+  //     phone: '(933) 525-2528',
+  //     skills: [
+  //       'C++',
+  //       'Java',
+  //       'Azure',
+  //       'AWS'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Jessica Clements',
+  //     email: 'mendozagould@cubicide.com',
+  //     phone: '(940) 433-2943',
+  //     skills: [
+  //       'Angular',
+  //       'Java',
+  //       'Java',
+  //       'C#'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Gay Beasley',
+  //     email: 'riddlemoreno@syntac.com',
+  //     phone: '(985) 565-3458',
+  //     skills: [
+  //       'JavaScript',
+  //       'C#',
+  //       'JavaScript',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Mccoy Banks',
+  //     email: 'brightstephens@electonic.com',
+  //     phone: '(950) 461-2451',
+  //     skills: [
+  //       'Azure',
+  //       'JavaScript',
+  //       'HTNL',
+  //       'React'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Vinson Nunez',
+  //     email: 'elizabethfrazier@plexia.com',
+  //     phone: '(974) 416-2995',
+  //     skills: [
+  //       'Java',
+  //       'C++',
+  //       'HTNL',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Walsh Coleman',
+  //     email: 'elliottobrien@menbrain.com',
+  //     phone: '(877) 437-2766',
+  //     skills: [
+  //       'Java',
+  //       'C++',
+  //       'C#',
+  //       'Azure'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Janna Scott',
+  //     email: 'tabitharowe@kangle.com',
+  //     phone: '(832) 469-3672',
+  //     skills: [
+  //       'AWS',
+  //       'React',
+  //       'AWS',
+  //       'Java'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Angie Bradford',
+  //     email: 'barbaragrant@noralex.com',
+  //     phone: '(911) 487-2884',
+  //     skills: [
+  //       'C++',
+  //       'Azure',
+  //       'JavaScript',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   },
+  //   {
+  //     fullName: 'Bray Holland',
+  //     email: 'campbelldudley@freakin.com',
+  //     phone: '(964) 418-2948',
+  //     skills: [
+  //       'Java',
+  //       'C++',
+  //       'HTNL',
+  //       'HTNL'
+  //     ],
+  //     resume: '',
+  //     jobs: []
+  //   }
+  // ];
 
   private rowData2 = [];
 
@@ -5131,7 +5131,7 @@ export class DataService implements OnInit, OnDestroy {
   }
 
   getCandidates() {
-    return this.candidates;
+    return this.candidates1;
   }
 
   updateData(id: any, Data: any) {

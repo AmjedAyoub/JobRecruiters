@@ -322,7 +322,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       cellRenderer: (params) => {
         // tslint:disable-next-line: max-line-length
         return `<button class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Jobs">${
-          params.value.length - 1
+          params.value?.length - 1 || 0
         }</button>`;
       },
     },
@@ -575,15 +575,57 @@ export class CandidateComponent implements OnInit, OnDestroy {
       this.gridApi5.sizeColumnsToFit();
       this.agGrid5.api.setRowData(this.rowData5);
       this.gridApi5.sizeColumnsToFit();
-      this.agGrid5.api.setRowData(this.rowData5);
-      this.gridApi5.sizeColumnsToFit();
+      this.agGrid4.api.setRowData(this.rowData4);
+      this.gridApi4.sizeColumnsToFit();
       $('#viewSubs').modal('show');
     } else {
       this.alertify.error('Please select candiates to add submissions');
     }
   }
 
-  onAddSubs() {}
+  async onAddSubs() {
+    if (this.rowData5.length >= 1) {
+      for (const candidate of this.rowData5) {
+        for (const job of this.rowData4) {
+          if (candidate.jobs.indexOf(job.id) < 0) {
+            if (candidate.jobs.length === 0) {
+              candidate.jobs[0] = job.id;
+            } else {
+              candidate.jobs.unshift(job.id);
+            }
+          }
+        }
+        await this.docsService
+          .updateDoc(
+            candidate._id,
+            candidate.fullName,
+            candidate.email,
+            candidate.phone,
+            candidate.skills,
+            candidate.jobs,
+            candidate.url
+          )
+          .subscribe(() => {
+            this.search();
+          });
+      }
+      this.dataService.addSubmissions();
+      await this.dataService.getDataChangedListener().subscribe((res) => {
+        this.rowData = res;
+      });
+      setTimeout(() => {
+        if (
+          this.searchForm.valid &&
+          !this.searchForm.value.search.match(/^\s+$/)
+        ) {
+          this.search();
+        }
+      }, 400);
+      $('#viewSubs').modal('hide');
+    } else {
+      this.alertify.error('Please select candidates to add submissions');
+    }
+  }
 
   searchSubs() {}
 
@@ -593,6 +635,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       let initialData;
       let queries = this.searchForm.value.search.split(',');
       let results = [];
+      let priority = [];
       await this.docsService.getDocsUpdateListener().subscribe((res) => {
         initialData = res.docs;
         for (let query of queries) {
@@ -607,14 +650,31 @@ export class CandidateComponent implements OnInit, OnDestroy {
             for (const candidate of initialData) {
               if (candidate.phone.includes(query)) {
                 if (results.indexOf(candidate) < 0) {
-                  results.unshift(candidate);
+                  if (results.length === 0) {
+                    results[0] = candidate;
+                    priority[0] = 1;
+                  } else {
+                    results.unshift(candidate);
+                    priority.unshift(1);
+                  }
+                } else {
+                  priority[results.indexOf(candidate)]++;
                 }
               }
               for (let job of candidate.jobs) {
                 job = job + '';
                 if (job.includes(query)) {
                   if (results.indexOf(candidate) < 0) {
-                    results.unshift(candidate);
+                    if (results.length === 0) {
+                      results[0] = candidate;
+                      priority[0] = 1;
+                    } else {
+                      results.unshift(candidate);
+                      priority.unshift(1);
+                    }
+                    break;
+                  } else {
+                    priority[results.indexOf(candidate)]++;
                     break;
                   }
                 }
@@ -634,14 +694,65 @@ export class CandidateComponent implements OnInit, OnDestroy {
                   candidate.phone.includes(query)
                 ) {
                   if (results.indexOf(candidate) < 0) {
-                    results.unshift(candidate);
+                    if (results.length === 0) {
+                      results[0] = candidate;
+                      priority[0] = 1;
+                    } else {
+                      results.unshift(candidate);
+                      priority.unshift(1);
+                    }
+                  } else {
+                    priority[results.indexOf(candidate)]++;
+                  }
+                }
+                for (let job of candidate.jobs) {
+                  job = job + '';
+                  if (job.includes(query)) {
+                    if (results.indexOf(candidate) < 0) {
+                      if (results.length === 0) {
+                        results[0] = candidate;
+                        priority[0] = 1;
+                      } else {
+                        results.unshift(candidate);
+                        priority.unshift(1);
+                      }
+                      break;
+                    } else {
+                      priority[results.indexOf(candidate)]++;
+                      break;
+                    }
+                  }
+                }
+                for (let skills of candidate.skills) {
+                  if (skills.includes(query)) {
+                    if (results.indexOf(candidate) < 0) {
+                      if (results.length === 0) {
+                        results[0] = candidate;
+                        priority[0] = 1;
+                      } else {
+                        results.unshift(candidate);
+                        priority.unshift(1);
+                      }
+                    } else {
+                      priority[results.indexOf(candidate)]++;
+                    }
                   }
                 }
               }
             }
           }
         }
-        this.rowData2 = results;
+        let newRes = [];
+        for (const i of results) {
+          const max = Math.max(...priority);
+          if (newRes.length === 0) {
+            newRes[0] = results[priority.indexOf(max)];
+          } else {
+            newRes.push(results[priority.indexOf(max)]);
+          }
+          priority.splice(priority.indexOf(max), 1);
+        }
+        this.rowData2 = newRes;
       });
     } else {
       this.docsService.getDocs();
@@ -676,6 +787,10 @@ export class CandidateComponent implements OnInit, OnDestroy {
 
   onNewCandidate() {
     if (!this.editJobMode) {
+      let newSkills = this.newCandidateForm.value.skills.split(',');
+      for (let newSkill of newSkills) {
+        newSkill.trim();
+      }
       // tslint:disable-next-line: max-line-length
       if (this.uploadImgForm.value.image !== null) {
         this.docsService
@@ -683,7 +798,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.newCandidateForm.value.fullName,
             this.newCandidateForm.value.email,
             this.newCandidateForm.value.phone,
-            this.newCandidateForm.value.skills,
+            newSkills,
             [],
             this.uploadImgForm.value.image
           )
@@ -703,7 +818,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.newCandidateForm.value.fullName,
             this.newCandidateForm.value.email,
             this.newCandidateForm.value.phone,
-            this.newCandidateForm.value.skills,
+            newSkills,
             [],
             'null'
           )
@@ -719,6 +834,10 @@ export class CandidateComponent implements OnInit, OnDestroy {
           });
       }
     } else {
+      let newSkills = this.newCandidateForm.value.skills.split(',');
+      for (let newSkill of newSkills) {
+        newSkill.trim();
+      }
       // tslint:disable-next-line: max-line-length
       if (this.uploadImgForm.value.image !== null) {
         this.docsService
@@ -727,7 +846,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.newCandidateForm.value.fullName,
             this.newCandidateForm.value.email,
             this.newCandidateForm.value.phone,
-            this.newCandidateForm.value.skills,
+            newSkills,
             this.prev.jobs,
             this.uploadImgForm.value.image
           )
@@ -748,7 +867,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.newCandidateForm.value.fullName,
             this.newCandidateForm.value.email,
             this.newCandidateForm.value.phone,
-            this.newCandidateForm.value.skills,
+            newSkills,
             this.prev.jobs,
             this.prev.url
           )
