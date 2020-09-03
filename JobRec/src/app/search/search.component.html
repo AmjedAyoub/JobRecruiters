@@ -1,19 +1,5 @@
 <div class="container-fluid center">
   <div class="row center">
-    <!-- <div class="col-md-2" style="white-space:nowrap; display: contents;">
-      <form class="form-inline my-2 my-lg-0" style="white-space:nowrap; display: flex;">
-        <a class="nav-link">
-          <button type="button" class="btn btn-outline-info btn-sm" (click)="newJob()" data-toggle="tooltip" data-placement="auto" title="Add New Job"><fa-icon [icon]="faPlus"></fa-icon></button>
-        </a>
-        <a class="nav-link">
-          <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteJob()" data-toggle="tooltip" data-placement="auto" title="Delete Job(s)"><fa-icon [icon]="faMinus"></fa-icon></button>
-        </a>
-        <a class="nav-link">
-          <button type="button" class="btn btn-outline-success ml-4 btn-sm" style="margin: auto;"
-            (click)="addSubmission()" data-toggle="tooltip" data-placement="auto" title="Add Submissions"><fa-icon [icon]="faUserPlus"></fa-icon></button>
-        </a>
-      </form>
-    </div> -->
     <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
         <div class="form-group has-success  has-danger" style="display: flex;">
@@ -74,7 +60,12 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <h2 class="mt-2" style="color: thistle;">{{!editJobMode? 'New Job' : 'Edit Job'}}</h2>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">{{!editJobMode? 'New Job' : 'Edit Job'}}</h3>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <!-- <hr> -->
         <form [formGroup]="newJobForm" (submit)="onNewJob()" class="center"
           style="margin: auto; width: 100%; padding: 20px;">
@@ -194,8 +185,13 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <h2 class="mt-2" style="color: thistle;">Submissions Details</h2>
-        <h4 style="color: thistle;">For Job #: {{ prev?.id || 0 }} - {{ prev?.title || '' }} </h4>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Submissions Details</h3>
+          <h4 class="modal-title text-center" style="color: thistle; flex: auto;">For Job #: {{ prev?.id || 0 }} - {{ prev?.title || '' }} </h4>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
             <ag-grid-angular #agGrid2 style="width: 99%; height: 350px; margin: auto;" class="ag-theme-alpine"
@@ -215,7 +211,12 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl candidateView">
       <div class="modal-content">
-        <h3 class="mt-2" style="color: thistle;">Add Submissions</h3>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Add Submissions</h3>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="row">
           <div class="col-md-12">
             <form [formGroup]="searchSubsForm" (submit)="searchSubs()" class="text-center mt-4"
@@ -223,7 +224,7 @@
               <div class="form-group has-success has-danger text-center"
                 style="display: flex; margin: auto; place-content: center;">
                 <input type="text" class="form-control form-control-sm" style="width: 50%;"
-                  placeholder="Search by keyword, Name, Phone, Email, Skills" formControlName="search"
+                  placeholder="Search Candidates by Name, Phone, Email, Skills, ..." formControlName="search"
                   (ngModelChange)="search()" [ngClass]="
                   searchSubsForm.get('search').errors &&
                   searchSubsForm.get('search').touched ?
@@ -289,7 +290,12 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <h2 class="mt-2 text-center" style="color: thistle;">Job Details</h2>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Job Details</h3>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
           <div class="card border-warning mb-3" style="width: 100%;">
             <div class="card-header"><strong># {{ toViewJob.id }} </strong> | <strong> Status:
@@ -314,133 +320,5 @@
       </div>
     </div>
   </div>
-
-
-
-  <!--
-  <div class="navbar navbar-default">
-    <div class="navbar-header">
-        <a class="navbar-brand" href>Angular2 File Upload</a>
-    </div>
-</div>
-
-<div class="row">
-
-    <div class="col-md-3">
-
-        <h3>Select files</h3>
-
-        <div ng2FileDrop
-             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-             (fileOver)="fileOverBase($event)"
-             [uploader]="uploader"
-             class="well my-drop-zone">
-            Base drop zone
-        </div>
-
-        Multiple
-        <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
-
-        Single
-        <input type="file" ng2FileSelect [uploader]="uploader" />
-    </div>
-
-    <div class="col-md-9" style="margin-bottom: 40px">
-
-        <h3>Upload queue</h3>
-        <p>Queue length: {{ uploader?.queue?.length }}</p>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th width="50%">Name</th>
-                <th>Size</th>
-                <th>Progress</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of uploader.queue">
-                <td><strong>{{ item?.file?.name }}</strong></td>
-                <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-                <td *ngIf="uploader.options.isHTML5">
-                    <div class="progress" style="margin-bottom: 0;">
-                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-                    </div>
-                </td>
-                <td class="text-center">
-                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                </td>
-                <td nowrap>
-                    <button type="button" class="btn btn-success btn-xs"
-                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                        <span class="glyphicon glyphicon-upload"></span> Upload
-                    </button>
-                    <button type="button" class="btn btn-warning btn-xs"
-                            (click)="item.cancel()" [disabled]="!item.isUploading">
-                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                    </button>
-                    <button type="button" class="btn btn-danger btn-xs"
-                            (click)="item.remove()">
-                        <span class="glyphicon glyphicon-trash"></span> Remove
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div>
-            <div>
-                Queue progress:
-                <div class="progress" style="">
-                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-                </div>
-            </div>
-            <button type="button" class="btn btn-success btn-s"
-                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-                <span class="glyphicon glyphicon-upload"></span> Upload all
-            </button>
-            <button type="button" class="btn btn-warning btn-s"
-                    (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-            </button>
-            <button type="button" class="btn btn-danger btn-s"
-                    (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-                <span class="glyphicon glyphicon-trash"></span> Remove all
-            </button>
-        </div>
-
-    </div>
-
-</div>
-
-<br><br>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">Response</div>
-            <div class="panel-body">
-              {{ response }}
-            </div>
-        </div>
-    </div>
-</div>
-
- -->
-
-
-
-
-
-
-
-
-
-
-
 
 </div>

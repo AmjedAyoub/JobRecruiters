@@ -1,19 +1,5 @@
 <div class="container-fluid center">
   <div class="row center">
-    <!-- <div class="col-md-2" style="white-space:nowrap; display: contents;">
-      <form class="form-inline my-2 my-lg-0" style="white-space:nowrap; display: flex;">
-        <a class="nav-link">
-          <button type="button" class="btn btn-outline-info btn-sm" (click)="newJob()" data-toggle="tooltip" data-placement="auto" title="Add New Job"><fa-icon [icon]="faPlus"></fa-icon></button>
-        </a>
-        <a class="nav-link">
-          <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteJob()" data-toggle="tooltip" data-placement="auto" title="Delete Job(s)"><fa-icon [icon]="faMinus"></fa-icon></button>
-        </a>
-        <a class="nav-link">
-          <button type="button" class="btn btn-outline-success ml-4 btn-sm" style="margin: auto;"
-            (click)="addSubmission()" data-toggle="tooltip" data-placement="auto" title="Add Submissions"><fa-icon [icon]="faUserPlus"></fa-icon></button>
-        </a>
-      </form>
-    </div> -->
     <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
         <div class="form-group has-success  has-danger" style="display: flex;">
@@ -25,7 +11,7 @@
               searchForm.get('search').touched ?
               'is-invalid' : searchForm.get('search').valid ? 'is-valid' : ''
             ">
-            <div class="invalid-feedback">You can use multiple search seperated by comma, for example: CandidateId, Name, Email, ...
+            <div class="invalid-feedback">You can use multiple search seperated by comma, for example: CandidateId, Name, Email, JobID, Skills ...
             </div>
           </div>
           <button type="submit" class="btn btn-outline-primary ml-0 btn-sm" style="max-height: 40px;">Search</button>
@@ -35,13 +21,13 @@
   </div>
   <span class="badge">
     <button type="button" class="btn btn-outline-info btn-sm" (click)="newCandidate()" data-toggle="tooltip"
-      data-placement="auto" title="Add New Job">
+      data-placement="auto" title="Add New Candidate">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
   </span>
   <span class="badge">
     <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteCandidate()" data-toggle="tooltip"
-      data-placement="auto" title="Delete Job(s)">
+      data-placement="auto" title="Delete Candidate(s)">
       <fa-icon [icon]="faTimes"></fa-icon>
     </button>
   </span>
@@ -73,7 +59,12 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <h2 class="mt-2" style="color: thistle;">{{!editJobMode? 'New Candidate' : 'Edit Candidate'}}</h2>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">{{!editJobMode? 'New Candidate' : 'Edit Candidate'}}</h3>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="row">
           <div class="col-md-12">
             <form [formGroup]="newCandidateForm" (submit)="onNewCandidate()" class="center"
@@ -151,8 +142,13 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <h2 class="mt-2" style="color: thistle;">Submissions Details</h2>
-        <h4 style="color: thistle;">For Candidate: {{ prev?.fullName || '' }} </h4>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Submissions Details</h3>
+          <h4 class="modal-title text-center" style="color: thistle; flex: auto;">For Candidate: {{ prev?.fullName || '' }} </h4>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
@@ -177,7 +173,12 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <h2 class="mt-2 text-center" style="color: thistle;">Candidate Details</h2>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Candidate Details</h3>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="card border-warning mb-3" style="width: 100%;">
@@ -236,7 +237,12 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl candidateView">
       <div class="modal-content">
-        <h3 class="mt-2" style="color: thistle;">Add Submissions</h3>
+        <div class="modal-header text-center">
+          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Add Submissions</h3>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="row">
           <div class="col-md-12">
             <form [formGroup]="searchSubsForm" (submit)="searchSubs()" class="text-center mt-4"
@@ -244,7 +250,7 @@
               <div class="form-group has-success has-danger text-center"
                 style="display: flex; margin: auto; place-content: center;">
                 <input type="text" class="form-control form-control-sm" style="width: 50%;"
-                  placeholder="Search by keyword, Name, Phone, Email, Skills" formControlName="search"
+                  placeholder="Search Jobs by ID, Title, Team, Date, Skills, ...." formControlName="search"
                   (ngModelChange)="search()" [ngClass]="
                   searchSubsForm.get('search').errors &&
                   searchSubsForm.get('search').touched ?
@@ -255,15 +261,15 @@
                     style="max-height: 40px;">Search</button>
                     <h6 class="ml-2 mr-2" style="color: thistle; padding-top: 5px;">OR TRY</h6>
                     <button type="button" class="btn btn-outline-warning" data-toggle="tooltip"
-                    data-placement="auto" title="Auto match the candidates based on their skills">
+                    data-placement="auto" title="Auto match jobs based on selected candidates skills">
                     <fa-icon [icon]="faUserCog"></fa-icon>
                   </button>
                 </div>
               </div>
               <div class="form-group">
-                <h6 class="mt-2" style="color: white; text-align: start;">Please select candidates:</h6>
+                <h6 class="mt-2" style="color: white; text-align: start;">Please select Jobs:</h6>
                 <ag-grid-angular #agGrid3 style="width: 99%; height: 350px; margin: auto; margin-top: 10px;"
-                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData2" [columnDefs]="columnDefs3"
+                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData" [columnDefs]="columnDefs2"
                   rowSelection="multiple" (gridReady)="onGridReady3($event)" [suppressHorizontalScroll]=false
                   [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
                 </ag-grid-angular>
@@ -273,26 +279,26 @@
         </div>
         <div class="row">
           <div class="col-md-2" style="align-self: center;">
-            <h4 style="color: thistle;">Selected Candidates:</h4>
-          </div>
-          <div class="col-md-10">
-            <ag-grid-angular #agGrid5 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
-              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData5" [columnDefs]="columnDefs5"
-              rowSelection="multiple" (gridReady)="onGridReady5($event)" [suppressHorizontalScroll]=false
-              [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
-            </ag-grid-angular>
-            <div style="color: #ffff; z-index: 100; font-size: small;">Candidates selected({{ candidateCount }})</div>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-md-2" style="align-self: center;">
             <h4 style="color: thistle;">Selected Jobs:</h4>
           </div>
           <div class="col-md-10">
             <ag-grid-angular #agGrid4 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
               class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData4" [columnDefs]="columnDefs4"
               rowSelection="multiple" (gridReady)="onGridReady4($event)" [suppressHorizontalScroll]=false
+              [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+            </ag-grid-angular>
+            <div style="color: #ffff; z-index: 100; font-size: small;">Jobs selected({{ candidateCount }})</div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-2" style="align-self: center;">
+            <h4 style="color: thistle;">Selected Candidates:</h4>
+          </div>
+          <div class="col-md-10">
+            <ag-grid-angular #agGrid5 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
+              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData5" [columnDefs]="columnDefs5"
+              rowSelection="multiple" (gridReady)="onGridReady5($event)" [suppressHorizontalScroll]=false
               [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
             </ag-grid-angular>
           </div>

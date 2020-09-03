@@ -483,17 +483,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     private docsService: DocsService
   ) {}
 
-  showCount() {
-    this.statusBar = {
-      statusPanels: [
-        {
-          statusPanel: this.rowCount,
-          align: 'left',
-        },
-      ],
-    };
-  }
-
   ngOnInit(): void {
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
@@ -996,6 +985,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         params.api.sizeColumnsToFit();
         this.getTableHeight();
       });
+    });
+    this.agGrid5.selectionChanged.subscribe(() => {
+      this.subCount = this.rowData5.length;
     });
     this.agGrid5.cellClicked.subscribe((res) => {
       if (res.colDef.field === 'delete') {
