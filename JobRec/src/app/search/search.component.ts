@@ -54,6 +54,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   rowData3: any[];
   rowData4: any[];
   rowData5: any[];
+  candidateData: any[];
   private docsSub: Subscription;
   prev;
   private statusBar;
@@ -499,13 +500,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.dataService.getDataChangedListener().subscribe((res) => {
       this.rowData = res;
       this.agGrid.api.setRowData(this.rowData);
-      this.agGrid.api.sizeColumnsToFit();
     });
-    this.docsService.getDocs();
-    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
-      this.rowData2 = res.docs;
-      this.agGrid3.api.setRowData(this.rowData2);
-    });
+    // this.docsService.getDocs().subscribe((res) => {
+    //   this.candidateData = res.docs;
+    // });
+    // this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
+    //   this.candidateData = res.docs;
+    // });
     this.createNewJobForm();
   }
 
@@ -546,8 +547,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       let queries = this.searchSubsForm.value.search.split(',');
       let oldResults = [];
       let results = [];
-      this.docsService.getDocs();
-      await this.docsService.getDocsUpdateListener().subscribe((res) => {
+      this.docsService.getDocs().subscribe((res) => {
         oldInitialData = res.docs;
         for (let query of queries) {
           query = query.toLowerCase().trim();
@@ -652,17 +652,59 @@ export class SearchComponent implements OnInit, OnDestroy {
             }
           }
         }
-        results.sort((a, b) => b.priority - a.priority);
-        this.rowData2 = results;
+        if(results.length > 0){
+          results.sort((a, b) => b.priority - a.priority);
+          if(this.rowData5.length === 0){
+            this.candidateData = results;
+          }else{
+            for(let cand of this.rowData5){
+              for(let i = 0 ; i < results.length; i++){
+                if (cand._id === results[i]._id){
+                  results.splice(i, 1);
+                  break;
+                }
+              }
+            }
+            this.candidateData = results;
+          }
+        }else{
+          this.docsService.getDocs().subscribe(res => {
+            if(this.rowData5.length === 0){
+              this.candidateData = res.docs;
+            }else{
+              let newData = res.docs;
+              for(let cand of this.rowData5){
+                for(let i = 0 ; i < newData.length; i++){
+                  if (cand._id === newData[i]._id){
+                    newData.splice(i, 1);
+                    break;
+                  }
+                }
+              }
+              this.candidateData = newData;
+            }
+          });
+        }
       });
     } else {
-      this.docsService.getDocs();
-      this.docsSub = this.docsService
-        .getDocsUpdateListener()
-        .subscribe((res) => {
-          this.rowData2 = res.docs;
-        });
-    }}
+      this.docsService.getDocs().subscribe(res => {
+        if(this.rowData5.length === 0){
+          this.candidateData = res.docs;
+        }else{
+          let newData = res.docs;
+          for(let cand of this.rowData5){
+            for(let i = 0 ; i < newData.length; i++){
+              if (cand._id === newData[i]._id){
+                newData.splice(i, 1);
+                break;
+              }
+            }
+          }
+          this.candidateData = newData;
+        }
+      });
+    }
+  }
 
   async search() {
     if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
@@ -776,8 +818,12 @@ export class SearchComponent implements OnInit, OnDestroy {
           }
         }
       }
-      results.sort((a, b) => b.priority - a.priority);
-      this.rowData = results;
+      if(results.length > 0){
+        results.sort((a, b) => b.priority - a.priority);
+        this.rowData = results;
+      }else{
+        this.rowData = [...this.dataService.getData()];
+      }
     } else {
       this.rowData = [...this.dataService.getData()];
     }
@@ -809,7 +855,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         'Are you sure you want to delete job(s)?',
         async () => {
           const selectedData = selectedNodes.map((node) => node.data);
-          for (const candidate of this.rowData2) {
+          for (const candidate of this.candidateData) {
             for (const job of selectedData) {
               for (let i = 0; i < candidate.jobs.length; i++) {
                 if (job.id === candidate.jobs[i]) {
@@ -869,6 +915,10 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.rowData5 = [];
       const selectedData = selectedNodes.map((node) => node.data);
       this.selectedJobs = selectedData;
+      this.docsService.getDocs().subscribe(res => {
+        this.candidateData = res.docs;
+      });
+      this.agGrid3.api.setRowData(this.candidateData);
       this.rowData4 = selectedData;
       this.gridApi3.sizeColumnsToFit();
       this.agGrid4.api.setRowData(this.rowData4);
@@ -882,7 +932,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async onAddSubs() {
-    if (this.rowData4.length >= 1 && this.rowData5.length >= 1) {
+    if (this.rowData5.length <= 0) {
+      this.alertify.error('Please add candidates!');
+    }else if (this.rowData4.length <= 0){
+      this.alertify.error('Please add jobs!');
+    }
+    else{
       for (const candidate of this.rowData5) {
         for (const job of this.rowData4) {
           if (candidate.jobs.indexOf(job.id) < 0) {
@@ -920,8 +975,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
       }, 400);
       $('#viewSubs').modal('hide');
-    } else {
-      this.alertify.error('Please select candidates to add submissions');
     }
   }
 
@@ -990,20 +1043,23 @@ export class SearchComponent implements OnInit, OnDestroy {
   onSubClick(job: any) {
     this.prev = job;
     this.rowData3 = [];
-    for (const candidate of this.rowData2) {
-      for (const candidateJob of candidate.jobs) {
-        if (candidateJob === job.id) {
-          if (this.rowData3.indexOf(candidate) < 0) {
-            this.rowData3.push(candidate);
+    this.docsService.getDocs().subscribe((res) => {
+      this.candidateData = res.docs;
+      for (const candidate of this.candidateData) {
+        for (const candidateJob of candidate.jobs) {
+          if (candidateJob === job.id) {
+            if (this.rowData3.indexOf(candidate) < 0) {
+              this.rowData3.push(candidate);
+            }
+            break;
           }
-          break;
         }
       }
-    }
-    $('#viewCandidate').modal('show');
-    this.agGrid2.api.setRowData(this.rowData3);
-    this.gridApi2.sizeColumnsToFit();
-    this.search();
+      $('#viewCandidate').modal('show');
+      this.agGrid2.api.setRowData(this.rowData3);
+      this.gridApi2.sizeColumnsToFit();
+      this.search();
+    });
   }
 
   onViewDetails(job: any) {
@@ -1117,12 +1173,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.getTableHeight();
       });
     });
-    this.docsService.getDocs();
-    this.docsSub = await this.docsService
-      .getDocsUpdateListener()
-      .subscribe((res) => {
-        this.rowData2 = res.docs;
-      });
     this.agGrid3.selectionChanged.subscribe(() => {
       this.subCount = this.rowData5.length;
     });
@@ -1131,10 +1181,10 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.rowData5.unshift(res.data);
         this.agGrid5.api.setRowData(this.rowData5);
         this.gridApi5.sizeColumnsToFit();
-        for (let i = 0; i < this.rowData2.length; i++) {
-          if (this.rowData2[i]._id === res.data._id) {
-            this.rowData2.splice(i, 1);
-            this.agGrid3.api.setRowData(this.rowData2);
+        for (let i = 0; i < this.candidateData.length; i++) {
+          if (this.candidateData[i]._id === res.data._id) {
+            this.candidateData.splice(i, 1);
+            this.agGrid3.api.setRowData(this.candidateData);
             this.gridApi3.sizeColumnsToFit();
           }
         }
@@ -1183,8 +1233,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     this.agGrid5.cellClicked.subscribe((res) => {
       if (res.colDef.field === 'delete') {
-        this.rowData2.unshift(res.data);
-        this.agGrid3.api.setRowData(this.rowData2);
+        this.candidateData.unshift(res.data);
+        this.agGrid3.api.setRowData(this.candidateData);
         this.gridApi3.sizeColumnsToFit();
         for (let i = 0; i < this.rowData5.length; i++) {
           if (this.rowData5[i]._id === res.data._id) {
@@ -1198,6 +1248,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.docsSub.unsubscribe();
+    // this.docsSub.unsubscribe();
   }
 }

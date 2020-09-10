@@ -243,7 +243,7 @@
               <div class="form-group">
                 <h6 class="mt-2" style="color: white; text-align: start;">Please select candidates:</h6>
                 <ag-grid-angular #agGrid3 style="width: 99%; height: 350px; margin: auto; margin-top: 10px;"
-                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData2" [columnDefs]="columnDefs3"
+                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="candidateData" [columnDefs]="columnDefs3"
                   rowSelection="multiple" (gridReady)="onGridReady3($event)" [suppressHorizontalScroll]=false
                   [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
                 </ag-grid-angular>

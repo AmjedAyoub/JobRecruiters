@@ -49,3 +49,11 @@
   border: dotted 3px green;
 }
 
+table{
+  width: fit-content !important;
+  margin: auto !important;
+  overflow-y:scroll;
+  overflow-x:scroll;
+  max-height:250px;
+  display:block;
+}

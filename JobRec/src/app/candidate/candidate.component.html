@@ -196,32 +196,34 @@
                   <div class="center"><a href="{{ toViewCandidate.url }}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume" [ngClass]="toViewCandidate.url==='null'? 'disabledResume' : ''">Resume</a></div>
                 </div>
               </div>
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Updated At</th>
-                    <th scope="col">Manager</th>
-                    <th scope="col">Created By</th>
-                    <th scope="col">Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table-active" *ngFor="let job of toViewCandiateJobs">
-                    <td>{{ job.id }}</td>
-                    <td>{{ job.title }}</td>
-                    <td>{{ job.status }}</td>
-                    <td>{{ job.updatedAt }}</td>
-                    <td>{{ job.manager }}</td>
-                    <td>{{ job.createdBy }}</td>
-                    <td>{{ job.createdAt }}</td>
-                  </tr>
-                  </tbody>
-              </table>
-              <p class="card-text">
-              </p>
+              <div class="row" *ngIf="toViewCandiateJobs.length > 0">
+                <div class="col-md-12">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Updated At</th>
+                        <th scope="col">Manager</th>
+                        <th scope="col">Created By</th>
+                        <th scope="col">Created At</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-active" *ngFor="let job of toViewCandiateJobs">
+                        <td>{{ job.id }}</td>
+                        <td>{{ job.title }}</td>
+                        <td>{{ job.status }}</td>
+                        <td>{{ job.updatedAt }}</td>
+                        <td>{{ job.manager }}</td>
+                        <td>{{ job.createdBy }}</td>
+                        <td>{{ job.createdAt }}</td>
+                      </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <hr>

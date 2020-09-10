@@ -39,18 +39,10 @@ export class DocsService {
             }),
           };
         })
-      )
-      .subscribe((transformedPostData) => {
-        this.docs = transformedPostData.docs;
-        this.docsUpdated.next({
-          docs: [...this.docs],
-        });
-      });
+      );
   }
 
   addDoc(fullName: string, email: string, phone: string, skills: any,  jobs: any, doc: File | string) {
-    console.log('jobs');
-    console.log(jobs);
     const postData = new FormData();
     postData.append('doc', doc);
     postData.append('fullName', fullName);
@@ -83,7 +75,7 @@ export class DocsService {
     postData.append('doc', resume);
     postData.append('id', id);
 
-    return this.http.put(BACKEND_URL + id, postData);
+    return this.http.put<{ message: string; doc: any }>(BACKEND_URL + id, postData);
   }
 
   getDocsUpdateListener() {

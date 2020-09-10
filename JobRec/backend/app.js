@@ -6,29 +6,40 @@ const mongoose = require("mongoose");
 const candidateRoutes = require("./routes/candidates");
 const docRoutes = require("./routes/docs");
 const jobRoutes = require("./routes/jobs");
+var cors = require('cors')
+
 
 const app = express();
-
+// 5afFn6jmKxPzq56
+// BQ7ZwR8CePYyf2Hl
 mongoose
-  .connect(
-    "mongodb+srv://amjed:fSv826sWkvpU7pQ0@cluster0.ggzbs.mongodb.net/rec-job?retryWrites=true&w=majority"
+.connect(
+  "mongodb+srv://amjed2:5afFn6jmKxPzq56@cluster0.ggzbs.mongodb.net/rec-job?retryWrites=true&w=majority", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true
+    }
   )
   .then(() => {
     console.log("Connected to database!");
   })
-  .catch(() => {
+  .catch((err) => {
     console.log("Connection failed!");
+    console.log(err);
   });
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/Docs", express.static(path.join("docs")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.setHeader("Access-Control-Allow-Credentials", "true");
+  // res.setHeader("Content-Type", "application/json;charset=utf-8, application/x-www-form-urlencoded, multipart/form-data, text/plain");
   res.setHeader(
-    "Access-Control-Allow-Headers", "application/pdf",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Access-Control-Allow-Headers, Content-Type, content-type, Accept, Authorization, application/pdf, application/json,charset=utf-8, application/x-www-form-urlencoded, multipart/form-data, text/plain, */*"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
