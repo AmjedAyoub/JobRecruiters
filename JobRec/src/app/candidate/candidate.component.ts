@@ -69,6 +69,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
   faTimes = faTimes;
   faUserPlus = faUserPlus;
   faUserCog = faUserCog;
+  noMatch = false;
 
   toViewCandidate = {
     _id: '',
@@ -688,7 +689,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
           this.rowData = results;
         }
       } else {
-        this.alertify.error('No matches found!');
+        this.alertify.error('No matches found based on candidate(s) skills!');
       }
     } else {
       this.alertify.error(
@@ -702,6 +703,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       this.searchSubsForm.valid &&
       !this.searchSubsForm.value.search.match(/^\s+$/)
     ) {
+      this.noMatch = false;
       let oldInitialData = await [...this.dataService.getData()];
       let queries = this.searchSubsForm.value.search.split(',');
       let oldResults = [];
@@ -825,9 +827,28 @@ export class CandidateComponent implements OnInit, OnDestroy {
               }
             }
           }
-          this.rowData = results;
+          if (results.length > 0) {
+            this.rowData = results;
+          }else{
+            this.noMatch = true;
+            if (this.rowData4.length === 0) {
+              this.rowData = [...this.dataService.getData()];
+            } else {
+              let newData = [...this.dataService.getData()];
+              for (let job of this.rowData4) {
+                for (let i = 0; i < newData.length; i++) {
+                  if (job.id === newData[i].id) {
+                    newData.splice(i, 1);
+                    break;
+                  }
+                }
+              }
+              this.rowData = newData;
+            }
+          }
         }
       } else {
+        this.noMatch = false;
         if (this.rowData4.length === 0) {
           this.rowData = [...this.dataService.getData()];
         } else {
@@ -844,6 +865,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
         }
       }
     } else {
+      this.noMatch = false;
       if (this.rowData4.length === 0) {
         this.rowData = [...this.dataService.getData()];
       } else {

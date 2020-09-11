@@ -66,6 +66,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   faTimes = faTimes;
   faUserPlus = faUserPlus;
   faUserCog = faUserCog;
+  noMatch = false;
 
   toViewJob = {
     id: '',
@@ -547,6 +548,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       let oldInitialData;
       let oldResults = [];
       let results = [];
+      console.log(this.rowData4);
       for (const job of this.rowData4) {
         for (const skill of job.skills) {
           if (skills.indexOf(skill) < 0) {
@@ -554,6 +556,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           }
         }
       }
+      console.log(skills);
       this.docsService.getDocs().subscribe((res) => {
         oldInitialData = res.docs;
         for (let query of skills) {
@@ -598,7 +601,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.candidateData = results;
           }
         } else {
-          this.alertify.error('No matches found!');
+          this.alertify.error('No matches found based on job(s) required skills!');
         }
       });
     } else {
@@ -611,6 +614,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.searchSubsForm.valid &&
       !this.searchSubsForm.value.search.match(/^\s+$/)
     ) {
+      this.noMatch = false;
       let oldInitialData;
       let queries = this.searchSubsForm.value.search.split(',');
       let oldResults = [];
@@ -740,9 +744,30 @@ export class SearchComponent implements OnInit, OnDestroy {
                 }
               }
             }
-            this.candidateData = results;
+            if (results.length > 0) {
+              this.candidateData = results;
+            }else{
+              this.noMatch = true;
+              this.docsService.getDocs().subscribe((res) => {
+                if (this.rowData5.length === 0) {
+                  this.candidateData = res.docs;
+                } else {
+                  let newData = res.docs;
+                  for (let cand of this.rowData5) {
+                    for (let i = 0; i < newData.length; i++) {
+                      if (cand._id === newData[i]._id) {
+                        newData.splice(i, 1);
+                        break;
+                      }
+                    }
+                  }
+                  this.candidateData = newData;
+                }
+              });
+            }
           }
         } else {
+          this.noMatch = false;
           this.docsService.getDocs().subscribe((res) => {
             if (this.rowData5.length === 0) {
               this.candidateData = res.docs;
@@ -762,6 +787,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
       });
     } else {
+      this.noMatch = false;
       this.docsService.getDocs().subscribe((res) => {
         if (this.rowData5.length === 0) {
           this.candidateData = res.docs;
@@ -1067,7 +1093,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         manager: this.newJobForm.value.manager,
         createdBy: this.newJobForm.value.createdBy,
         createdAt: newd,
-        skills: this.newJobForm.value.skills,
+        skills: this.newJobForm.value.skills.split(','),
         description: this.newJobForm.value.description,
       };
       this.dataService.addData(newRow);
@@ -1094,7 +1120,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         manager: this.newJobForm.value.manager,
         createdBy: this.newJobForm.value.createdBy,
         createdAt: this.prev.createdAt,
-        skills: this.prev.skills,
+        skills: this.newJobForm.value.skills.split(','),
         description: this.newJobForm.value.description,
       };
       this.dataService.updateData(this.prev.id, newRow);
