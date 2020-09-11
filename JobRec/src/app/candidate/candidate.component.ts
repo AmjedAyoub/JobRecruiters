@@ -61,7 +61,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
   fileToUpload: File = null;
   docs: any[];
   private docsSub: Subscription;
-  candidateCount = 0;z
+  candidateCount = 0;
+  rowCount = 0;
   domLayout = window.innerHeight;
   height;
   faPlus = faPlus;
@@ -492,13 +493,11 @@ export class CandidateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.docsService.getDocs();
-    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
+    this.docsService.getDocs().subscribe((res) => {
       this.rowData2 = res.docs;
     });
-    this.rowData = [...this.dataService.getData()];
-    this.dataService.getDataChangedListener().subscribe((res) => {
-      this.rowData = res;
+    this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
+      this.rowData2 = res.docs;
     });
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
@@ -570,6 +569,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       this.rowData4 = [];
       this.rowData5 = [];
       const selectedData = selectedNodes.map((node) => node.data);
+      this.rowData = [...this.dataService.getData()];
       this.agGrid3.api.setRowData(this.rowData);
       this.gridApi3.sizeColumnsToFit();
       this.selectedJobs = selectedData;
@@ -588,10 +588,9 @@ export class CandidateComponent implements OnInit, OnDestroy {
   async onAddSubs() {
     if (this.rowData5.length <= 0) {
       this.alertify.error('Please add candidates!');
-    }else if(this.rowData4.length <= 0){
+    } else if (this.rowData4.length <= 0) {
       this.alertify.error('Please add jobs!');
-    }
-    else{
+    } else {
       for (const candidate of this.rowData5) {
         for (const job of this.rowData4) {
           if (candidate.jobs.indexOf(job.id) < 0) {
@@ -628,14 +627,81 @@ export class CandidateComponent implements OnInit, OnDestroy {
           this.search();
         }
       }, 400);
+      this.rowCount = 0;
       $('#viewSubs').modal('hide');
     }
   }
 
-  autoMatch(){}
+  autoMatch() {
+    if (this.rowData5.length >= 1) {
+      let skills = [];
+      let oldInitialData;
+      let oldResults = [];
+      let results = [];
+      for (const can of this.rowData5) {
+        for (const skill of can.skills) {
+          if (skills.indexOf(skill) < 0) {
+            skills.push(skill);
+          }
+        }
+      }
+      oldInitialData = [...this.dataService.getData()];
+      for (let query of skills) {
+        query = query.toLowerCase().trim();
+        for (const job of oldInitialData) {
+          for (let skill of job.skills) {
+            skill = skill.toLowerCase().trim();
+            if (skill.includes(query)) {
+              if (oldResults.indexOf(job) < 0) {
+                if (results.length === 0) {
+                  results[0] = { ...job, priority: 1 };
+                  oldResults[0] = job;
+                } else {
+                  results.unshift({ ...job, priority: 1 });
+                  oldResults.unshift(job);
+                }
+              } else {
+                const newP =
+                  results[oldResults.indexOf(job)].priority + 1;
+                results[oldResults.indexOf(job)] = {
+                  ...job,
+                  priority: newP,
+                };
+              }
+            }
+          }
+        }
+      }
+      if (results.length > 0) {
+        results.sort((a, b) => b.priority - a.priority);
+        if (this.rowData4.length === 0) {
+          this.rowData = results;
+        } else {
+          for (let job of this.rowData4) {
+            for (let i = 0; i < results.length; i++) {
+              if (job.id === results[i].id) {
+                results.splice(i, 1);
+                break;
+              }
+            }
+          }
+          this.rowData = results;
+        }
+      } else {
+        this.alertify.error('No matches found!');
+      }
+    } else {
+      this.alertify.error(
+        'Please go back and select candidates for auto match!'
+      );
+    }
+  }
 
   async searchSubs() {
-    if (this.searchSubsForm.valid && !this.searchSubsForm.value.search.match(/^\s+$/)) {
+    if (
+      this.searchSubsForm.valid &&
+      !this.searchSubsForm.value.search.match(/^\s+$/)
+    ) {
       let oldInitialData = await [...this.dataService.getData()];
       let queries = this.searchSubsForm.value.search.split(',');
       let oldResults = [];
@@ -707,11 +773,11 @@ export class CandidateComponent implements OnInit, OnDestroy {
                 job.status.toLowerCase().includes(query)
               ) {
                 if (oldResults.indexOf(job) < 0) {
-                  if(results.length === 0){
-                    results[0] = {...job, priority: 1};
+                  if (results.length === 0) {
+                    results[0] = { ...job, priority: 1 };
                     oldResults[0] = job;
-                  }else{
-                    results.unshift({...job, priority: 1});
+                  } else {
+                    results.unshift({ ...job, priority: 1 });
                     oldResults.unshift(job);
                   }
                 } else {
@@ -726,11 +792,11 @@ export class CandidateComponent implements OnInit, OnDestroy {
                 skill = skill.toLowerCase().trim();
                 if (skill.includes(query)) {
                   if (oldResults.indexOf(job) < 0) {
-                    if (results.length === 0){
-                      results[0] = {...job, priority: 1};
+                    if (results.length === 0) {
+                      results[0] = { ...job, priority: 1 };
                       oldResults[0] = job;
-                    }else{
-                      results.unshift({...job, priority: 1});
+                    } else {
+                      results.unshift({ ...job, priority: 1 });
                       oldResults.unshift(job);
                     }
                   } else {
@@ -746,14 +812,52 @@ export class CandidateComponent implements OnInit, OnDestroy {
           }
         }
       }
-      if(results.length > 0){
+      if (results.length > 0) {
         results.sort((a, b) => b.priority - a.priority);
-        this.rowData = results;
-      }else{
-        this.rowData = [...this.dataService.getData()];
+        if (this.rowData4.length === 0) {
+          this.rowData = results;
+        } else {
+          for (let job of this.rowData4) {
+            for (let i = 0; i < results.length; i++) {
+              if (job.id === results[i].id) {
+                results.splice(i, 1);
+                break;
+              }
+            }
+          }
+          this.rowData = results;
+        }
+      } else {
+        if (this.rowData4.length === 0) {
+          this.rowData = [...this.dataService.getData()];
+        } else {
+          let newData = [...this.dataService.getData()];
+          for (let job of this.rowData4) {
+            for (let i = 0; i < newData.length; i++) {
+              if (job.id === newData[i].id) {
+                newData.splice(i, 1);
+                break;
+              }
+            }
+          }
+          this.rowData = newData;
+        }
       }
     } else {
-      this.rowData = [...this.dataService.getData()];
+      if (this.rowData4.length === 0) {
+        this.rowData = [...this.dataService.getData()];
+      } else {
+        let newData = [...this.dataService.getData()];
+        for (let job of this.rowData4) {
+          for (let i = 0; i < newData.length; i++) {
+            if (job.id === newData[i].id) {
+              newData.splice(i, 1);
+              break;
+            }
+          }
+        }
+        this.rowData = newData;
+      }
     }
   }
 
@@ -763,8 +867,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       let queries = this.searchForm.value.search.split(',');
       let oldResults = [];
       let results = [];
-      this.docsService.getDocs();
-      await this.docsService.getDocsUpdateListener().subscribe((res) => {
+      this.docsService.getDocs().subscribe((res) => {
         oldInitialData = res.docs;
         for (let query of queries) {
           query = query.toLowerCase().trim();
@@ -776,7 +879,10 @@ export class CandidateComponent implements OnInit, OnDestroy {
           ) {
             // Numbers
             for (const candidate of oldInitialData) {
-              if (candidate._id.includes(query) || candidate.phone.includes(query)) {
+              if (
+                candidate._id.includes(query) ||
+                candidate.phone.includes(query)
+              ) {
                 if (oldResults.indexOf(candidate) < 0) {
                   if (results.length === 0) {
                     results[0] = { ...candidate, priority: 1 };
@@ -786,7 +892,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
                     oldResults.unshift(candidate);
                   }
                 } else {
-                  const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                  const newP =
+                    results[oldResults.indexOf(candidate)].priority + 1;
                   results[oldResults.indexOf(candidate)] = {
                     ...candidate,
                     priority: newP,
@@ -806,7 +913,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
                     }
                     break;
                   } else {
-                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    const newP =
+                      results[oldResults.indexOf(candidate)].priority + 1;
                     results[oldResults.indexOf(candidate)] = {
                       ...candidate,
                       priority: newP,
@@ -830,15 +938,16 @@ export class CandidateComponent implements OnInit, OnDestroy {
                   candidate._id.toLowerCase().includes(query)
                 ) {
                   if (oldResults.indexOf(candidate) < 0) {
-                    if(results.length === 0){
-                      results[0] = {...candidate, priority: 1};
+                    if (results.length === 0) {
+                      results[0] = { ...candidate, priority: 1 };
                       oldResults[0] = candidate;
-                    }else{
-                      results.unshift({...candidate, priority: 1});
+                    } else {
+                      results.unshift({ ...candidate, priority: 1 });
                       oldResults.unshift(candidate);
                     }
                   } else {
-                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    const newP =
+                      results[oldResults.indexOf(candidate)].priority + 1;
                     results[oldResults.indexOf(candidate)] = {
                       ...candidate,
                       priority: newP,
@@ -849,15 +958,16 @@ export class CandidateComponent implements OnInit, OnDestroy {
                   skill = skill.toLowerCase().trim();
                   if (skill.includes(query)) {
                     if (oldResults.indexOf(candidate) < 0) {
-                      if (results.length === 0){
-                        results[0] = {...candidate, priority: 1};
+                      if (results.length === 0) {
+                        results[0] = { ...candidate, priority: 1 };
                         oldResults[0] = candidate;
-                      }else{
-                        results.unshift({...candidate, priority: 1});
+                      } else {
+                        results.unshift({ ...candidate, priority: 1 });
                         oldResults.unshift(candidate);
                       }
                     } else {
-                      const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                      const newP =
+                        results[oldResults.indexOf(candidate)].priority + 1;
                       results[oldResults.indexOf(candidate)] = {
                         ...candidate,
                         priority: newP,
@@ -869,25 +979,19 @@ export class CandidateComponent implements OnInit, OnDestroy {
             }
           }
         }
-        if(results.length > 0){
+        if (results.length > 0) {
           results.sort((a, b) => b.priority - a.priority);
           this.rowData2 = results;
-        }else{
-          this.docsService.getDocs();
-          this.docsSub = this.docsService
-            .getDocsUpdateListener()
-            .subscribe((res) => {
-              this.rowData2 = res.docs;
-            });
+        } else {
+          this.docsService.getDocs().subscribe((res) => {
+            this.rowData2 = res.docs;
+          });
         }
       });
     } else {
-      this.docsService.getDocs();
-      this.docsSub = this.docsService
-        .getDocsUpdateListener()
-        .subscribe((res) => {
-          this.rowData2 = res.docs;
-        });
+      this.docsService.getDocs().subscribe((res) => {
+        this.rowData2 = res.docs;
+      });
     }
   }
 
@@ -932,12 +1036,9 @@ export class CandidateComponent implements OnInit, OnDestroy {
           )
           .subscribe((res) => {
             this.alertify.success('Candidate has been added successfully');
-            this.docsService.getDocs();
-            this.docsSub = this.docsService
-              .getDocsUpdateListener()
-              .subscribe((response) => {
-                this.rowData2 = response.docs;
-              });
+            this.docsService.getDocs().subscribe((response) => {
+              this.rowData2 = response.docs;
+            });
             this.search();
           });
       } else {
@@ -952,12 +1053,9 @@ export class CandidateComponent implements OnInit, OnDestroy {
           )
           .subscribe((res) => {
             this.alertify.success('Candidate has been added successfully');
-            this.docsService.getDocs();
-            this.docsSub = this.docsService
-              .getDocsUpdateListener()
-              .subscribe((response) => {
-                this.rowData2 = response.docs;
-              });
+            this.docsService.getDocs().subscribe((response) => {
+              this.rowData2 = response.docs;
+            });
             this.search();
           });
       }
@@ -979,19 +1077,18 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.prev.jobs,
             this.uploadImgForm.value.image
           )
-          .subscribe((res) => {
-            this.alertify.success('Candidate has been updated successfully');
-            this.docsService.getDocs();
-            this.docsSub = this.docsService
-              .getDocsUpdateListener()
-              .subscribe((response) => {
+          .subscribe(
+            (res) => {
+              this.alertify.success('Candidate has been updated successfully');
+              this.docsService.getDocs().subscribe((response) => {
                 this.rowData2 = response.docs;
               });
-            this.search();
-          },
-          (err) => {
-            console.log(err);
-          });
+              this.search();
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
       } else {
         this.docsService
           .updateDoc(
@@ -1003,22 +1100,22 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.prev.jobs,
             this.prev.url
           )
-          .subscribe((res) => {
-            this.alertify.success('Candidate has been updated successfully');
-            this.docsService.getDocs();
-            this.docsSub = this.docsService
-              .getDocsUpdateListener()
-              .subscribe((response) => {
+          .subscribe(
+            (res) => {
+              this.alertify.success('Candidate has been updated successfully');
+              this.docsService.getDocs().subscribe((response) => {
                 this.rowData2 = response.docs;
               });
-            this.search();
-          },
-          (err) => {
-            console.log(err);
-          });
+              this.search();
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
       }
     }
     this.newCandidateForm.reset();
+    this.rowCount = 0;
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
   }
@@ -1033,12 +1130,10 @@ export class CandidateComponent implements OnInit, OnDestroy {
           for (const candidate of selectedData) {
             this.docsService.deleteDoc(candidate._id).subscribe((res) => {
               this.alertify.success('Candidate has been deleted successfully');
-              this.docsService.getDocs();
-              this.docsSub = this.docsService
-                .getDocsUpdateListener()
-                .subscribe((response) => {
-                  this.rowData2 = response.docs;
-                });
+              this.rowCount = 0;
+              this.docsService.getDocs().subscribe((response) => {
+                this.rowData2 = response.docs;
+              });
               this.search();
             });
           }
@@ -1051,12 +1146,9 @@ export class CandidateComponent implements OnInit, OnDestroy {
 
   async onJobsClick(candidate: any) {
     this.prev = candidate;
-    this.docsService.getDocs();
-    this.docsSub = this.docsService
-      .getDocsUpdateListener()
-      .subscribe((response) => {
-        this.rowData2 = response.docs;
-      });
+    this.docsService.getDocs().subscribe((response) => {
+      this.rowData2 = response.docs;
+    });
     let jobs = await [...this.dataService.getData()];
     this.rowData3 = [];
     for (const job of candidate.jobs) {
@@ -1130,7 +1222,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
       }
     });
     this.agGrid.selectionChanged.subscribe(() => {
-      this.candidateCount = this.agGrid.api.getSelectedRows().length;
+      this.rowCount = this.agGrid.api.getSelectedRows().length;
     });
   }
 

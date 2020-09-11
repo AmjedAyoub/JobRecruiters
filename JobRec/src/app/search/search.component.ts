@@ -541,8 +541,76 @@ export class SearchComponent implements OnInit, OnDestroy {
   //   return null;
   // }
 
+  autoMatch() {
+    if (this.rowData4.length >= 1) {
+      let skills = [];
+      let oldInitialData;
+      let oldResults = [];
+      let results = [];
+      for (const job of this.rowData4) {
+        for (const skill of job.skills) {
+          if (skills.indexOf(skill) < 0) {
+            skills.push(skill);
+          }
+        }
+      }
+      this.docsService.getDocs().subscribe((res) => {
+        oldInitialData = res.docs;
+        for (let query of skills) {
+          query = query.toLowerCase().trim();
+          for (const candidate of oldInitialData) {
+            for (let skill of candidate.skills) {
+              skill = skill.toLowerCase().trim();
+              if (skill.includes(query)) {
+                if (oldResults.indexOf(candidate) < 0) {
+                  if (results.length === 0) {
+                    results[0] = { ...candidate, priority: 1 };
+                    oldResults[0] = candidate;
+                  } else {
+                    results.unshift({ ...candidate, priority: 1 });
+                    oldResults.unshift(candidate);
+                  }
+                } else {
+                  const newP =
+                    results[oldResults.indexOf(candidate)].priority + 1;
+                  results[oldResults.indexOf(candidate)] = {
+                    ...candidate,
+                    priority: newP,
+                  };
+                }
+              }
+            }
+          }
+        }
+        if (results.length > 0) {
+          results.sort((a, b) => b.priority - a.priority);
+          if (this.rowData5.length === 0) {
+            this.candidateData = results;
+          } else {
+            for (let cand of this.rowData5) {
+              for (let i = 0; i < results.length; i++) {
+                if (cand._id === results[i]._id) {
+                  results.splice(i, 1);
+                  break;
+                }
+              }
+            }
+            this.candidateData = results;
+          }
+        } else {
+          this.alertify.error('No matches found!');
+        }
+      });
+    } else {
+      this.alertify.error('Please go back and select jobs for auto match!');
+    }
+  }
+
   async searchSubs() {
-    if (this.searchSubsForm.valid && !this.searchSubsForm.value.search.match(/^\s+$/)) {
+    if (
+      this.searchSubsForm.valid &&
+      !this.searchSubsForm.value.search.match(/^\s+$/)
+    ) {
       let oldInitialData;
       let queries = this.searchSubsForm.value.search.split(',');
       let oldResults = [];
@@ -559,7 +627,10 @@ export class SearchComponent implements OnInit, OnDestroy {
           ) {
             // Numbers
             for (const candidate of oldInitialData) {
-              if (candidate._id.includes(query) || candidate.phone.includes(query)) {
+              if (
+                candidate._id.includes(query) ||
+                candidate.phone.includes(query)
+              ) {
                 if (oldResults.indexOf(candidate) < 0) {
                   if (results.length === 0) {
                     results[0] = { ...candidate, priority: 1 };
@@ -569,7 +640,8 @@ export class SearchComponent implements OnInit, OnDestroy {
                     oldResults.unshift(candidate);
                   }
                 } else {
-                  const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                  const newP =
+                    results[oldResults.indexOf(candidate)].priority + 1;
                   results[oldResults.indexOf(candidate)] = {
                     ...candidate,
                     priority: newP,
@@ -589,7 +661,8 @@ export class SearchComponent implements OnInit, OnDestroy {
                     }
                     break;
                   } else {
-                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    const newP =
+                      results[oldResults.indexOf(candidate)].priority + 1;
                     results[oldResults.indexOf(candidate)] = {
                       ...candidate,
                       priority: newP,
@@ -613,15 +686,16 @@ export class SearchComponent implements OnInit, OnDestroy {
                   candidate._id.toLowerCase().includes(query)
                 ) {
                   if (oldResults.indexOf(candidate) < 0) {
-                    if(results.length === 0){
-                      results[0] = {...candidate, priority: 1};
+                    if (results.length === 0) {
+                      results[0] = { ...candidate, priority: 1 };
                       oldResults[0] = candidate;
-                    }else{
-                      results.unshift({...candidate, priority: 1});
+                    } else {
+                      results.unshift({ ...candidate, priority: 1 });
                       oldResults.unshift(candidate);
                     }
                   } else {
-                    const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                    const newP =
+                      results[oldResults.indexOf(candidate)].priority + 1;
                     results[oldResults.indexOf(candidate)] = {
                       ...candidate,
                       priority: newP,
@@ -632,15 +706,16 @@ export class SearchComponent implements OnInit, OnDestroy {
                   skill = skill.toLowerCase().trim();
                   if (skill.includes(query)) {
                     if (oldResults.indexOf(candidate) < 0) {
-                      if (results.length === 0){
-                        results[0] = {...candidate, priority: 1};
+                      if (results.length === 0) {
+                        results[0] = { ...candidate, priority: 1 };
                         oldResults[0] = candidate;
-                      }else{
-                        results.unshift({...candidate, priority: 1});
+                      } else {
+                        results.unshift({ ...candidate, priority: 1 });
                         oldResults.unshift(candidate);
                       }
                     } else {
-                      const newP = results[oldResults.indexOf(candidate)].priority + 1;
+                      const newP =
+                        results[oldResults.indexOf(candidate)].priority + 1;
                       results[oldResults.indexOf(candidate)] = {
                         ...candidate,
                         priority: newP,
@@ -652,14 +727,14 @@ export class SearchComponent implements OnInit, OnDestroy {
             }
           }
         }
-        if(results.length > 0){
+        if (results.length > 0) {
           results.sort((a, b) => b.priority - a.priority);
-          if(this.rowData5.length === 0){
+          if (this.rowData5.length === 0) {
             this.candidateData = results;
-          }else{
-            for(let cand of this.rowData5){
-              for(let i = 0 ; i < results.length; i++){
-                if (cand._id === results[i]._id){
+          } else {
+            for (let cand of this.rowData5) {
+              for (let i = 0; i < results.length; i++) {
+                if (cand._id === results[i]._id) {
                   results.splice(i, 1);
                   break;
                 }
@@ -667,15 +742,15 @@ export class SearchComponent implements OnInit, OnDestroy {
             }
             this.candidateData = results;
           }
-        }else{
-          this.docsService.getDocs().subscribe(res => {
-            if(this.rowData5.length === 0){
+        } else {
+          this.docsService.getDocs().subscribe((res) => {
+            if (this.rowData5.length === 0) {
               this.candidateData = res.docs;
-            }else{
+            } else {
               let newData = res.docs;
-              for(let cand of this.rowData5){
-                for(let i = 0 ; i < newData.length; i++){
-                  if (cand._id === newData[i]._id){
+              for (let cand of this.rowData5) {
+                for (let i = 0; i < newData.length; i++) {
+                  if (cand._id === newData[i]._id) {
                     newData.splice(i, 1);
                     break;
                   }
@@ -687,14 +762,14 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.docsService.getDocs().subscribe(res => {
-        if(this.rowData5.length === 0){
+      this.docsService.getDocs().subscribe((res) => {
+        if (this.rowData5.length === 0) {
           this.candidateData = res.docs;
-        }else{
+        } else {
           let newData = res.docs;
-          for(let cand of this.rowData5){
-            for(let i = 0 ; i < newData.length; i++){
-              if (cand._id === newData[i]._id){
+          for (let cand of this.rowData5) {
+            for (let i = 0; i < newData.length; i++) {
+              if (cand._id === newData[i]._id) {
                 newData.splice(i, 1);
                 break;
               }
@@ -779,11 +854,11 @@ export class SearchComponent implements OnInit, OnDestroy {
                 job.status.toLowerCase().includes(query)
               ) {
                 if (oldResults.indexOf(job) < 0) {
-                  if(results.length === 0){
-                    results[0] = {...job, priority: 1};
+                  if (results.length === 0) {
+                    results[0] = { ...job, priority: 1 };
                     oldResults[0] = job;
-                  }else{
-                    results.unshift({...job, priority: 1});
+                  } else {
+                    results.unshift({ ...job, priority: 1 });
                     oldResults.unshift(job);
                   }
                 } else {
@@ -798,11 +873,11 @@ export class SearchComponent implements OnInit, OnDestroy {
                 skill = skill.toLowerCase().trim();
                 if (skill.includes(query)) {
                   if (oldResults.indexOf(job) < 0) {
-                    if (results.length === 0){
-                      results[0] = {...job, priority: 1};
+                    if (results.length === 0) {
+                      results[0] = { ...job, priority: 1 };
                       oldResults[0] = job;
-                    }else{
-                      results.unshift({...job, priority: 1});
+                    } else {
+                      results.unshift({ ...job, priority: 1 });
                       oldResults.unshift(job);
                     }
                   } else {
@@ -818,18 +893,16 @@ export class SearchComponent implements OnInit, OnDestroy {
           }
         }
       }
-      if(results.length > 0){
+      if (results.length > 0) {
         results.sort((a, b) => b.priority - a.priority);
         this.rowData = results;
-      }else{
+      } else {
         this.rowData = [...this.dataService.getData()];
       }
     } else {
       this.rowData = [...this.dataService.getData()];
     }
   }
-
-  autoMatch(){}
 
   editJob(job: any) {
     this.editJobMode = true;
@@ -882,6 +955,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           await this.dataService.getDataChangedListener().subscribe((res) => {
             this.rowData = res;
           });
+          this.rowCount = 0;
           setTimeout(() => {
             if (
               this.searchForm.valid &&
@@ -915,7 +989,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.rowData5 = [];
       const selectedData = selectedNodes.map((node) => node.data);
       this.selectedJobs = selectedData;
-      this.docsService.getDocs().subscribe(res => {
+      this.docsService.getDocs().subscribe((res) => {
         this.candidateData = res.docs;
       });
       this.agGrid3.api.setRowData(this.candidateData);
@@ -934,10 +1008,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   async onAddSubs() {
     if (this.rowData5.length <= 0) {
       this.alertify.error('Please add candidates!');
-    }else if (this.rowData4.length <= 0){
+    } else if (this.rowData4.length <= 0) {
       this.alertify.error('Please add jobs!');
-    }
-    else{
+    } else {
       for (const candidate of this.rowData5) {
         for (const job of this.rowData4) {
           if (candidate.jobs.indexOf(job.id) < 0) {
@@ -974,6 +1047,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.search();
         }
       }, 400);
+      this.rowCount = 0;
       $('#viewSubs').modal('hide');
     }
   }
@@ -1036,6 +1110,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     }
     this.newJobForm.reset();
+    this.rowCount = 0;
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
   }
@@ -1055,6 +1130,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           }
         }
       }
+      this.rowCount = 0;
       $('#viewCandidate').modal('show');
       this.agGrid2.api.setRowData(this.rowData3);
       this.gridApi2.sizeColumnsToFit();
