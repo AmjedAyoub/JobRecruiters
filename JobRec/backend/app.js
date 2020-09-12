@@ -32,11 +32,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/Docs", express.static(path.join("docs")));
+app.use("/", express.static(path.join(__dirname, "angular")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  // res.setHeader("Access-Control-Allow-Credentials", "true");
-  // res.setHeader("Content-Type", "application/json;charset=utf-8, application/x-www-form-urlencoded, multipart/form-data, text/plain");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Access-Control-Allow-Headers, Content-Type, content-type, Accept, Authorization, application/pdf, application/json,charset=utf-8, application/x-www-form-urlencoded, multipart/form-data, text/plain, */*"
@@ -51,5 +50,8 @@ app.use((req, res, next) => {
 app.use("/api/candidates", candidateRoutes);
 app.use("/api/docs", docRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "angular", "index.html"));
+});
 
 module.exports = app;
