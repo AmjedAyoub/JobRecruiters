@@ -18,6 +18,7 @@ import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Subscription } from 'rxjs';
 import { DocsService } from '../_services/doc.service';
+import { async } from 'rxjs/internal/scheduler/async';
 
 declare var $: any;
 
@@ -601,7 +602,9 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.candidateData = results;
           }
         } else {
-          this.alertify.error('No matches found based on job(s) required skills!');
+          this.alertify.error(
+            'No matches found based on job(s) required skills!'
+          );
         }
       });
     } else {
@@ -746,7 +749,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             }
             if (results.length > 0) {
               this.candidateData = results;
-            }else{
+            } else {
               this.noMatch = true;
               this.docsService.getDocs().subscribe((res) => {
                 if (this.rowData5.length === 0) {
@@ -953,43 +956,46 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.alertify.confirm(
         'Are you sure you want to delete job(s)?',
         async () => {
-          const selectedData = selectedNodes.map((node) => node.data);
-          for (const candidate of this.candidateData) {
-            for (const job of selectedData) {
-              for (let i = 0; i < candidate.jobs.length; i++) {
-                if (job.id === candidate.jobs[i]) {
-                  candidate.jobs.splice(i, 1);
-                  break;
+          this.docsService.getDocs().subscribe( async (res) => {
+            this.candidateData = res.docs;
+            const selectedData = selectedNodes.map((node) => node.data);
+            for (const candidate of this.candidateData) {
+              for (const job of selectedData) {
+                for (let i = 0; i < candidate.jobs.length; i++) {
+                  if (job.id === candidate.jobs[i]) {
+                    candidate.jobs.splice(i, 1);
+                    break;
+                  }
                 }
               }
+              await this.docsService
+                .updateDoc(
+                  candidate._id,
+                  candidate.fullName,
+                  candidate.email,
+                  candidate.phone,
+                  candidate.skills,
+                  candidate.jobs,
+                  candidate.url
+                )
+                .subscribe(() => {
+                  this.search();
+                });
             }
-            await this.docsService
-              .updateDoc(
-                candidate._id,
-                candidate.fullName,
-                candidate.email,
-                candidate.phone,
-                candidate.skills,
-                candidate.jobs,
-                candidate.url
-              )
-              .subscribe(() => {
+            await this.dataService.deleteData(selectedNodes);
+            await this.dataService.getDataChangedListener().subscribe((res) => {
+              this.rowData = res;
+            });
+            this.rowCount = 0;
+            setTimeout(() => {
+              if (
+                this.searchForm.valid &&
+                !this.searchForm.value.search.match(/^\s+$/)
+              ) {
                 this.search();
-              });
-          }
-          await this.dataService.deleteData(selectedNodes);
-          await this.dataService.getDataChangedListener().subscribe((res) => {
-            this.rowData = res;
+              }
+            }, 500);
           });
-          this.rowCount = 0;
-          setTimeout(() => {
-            if (
-              this.searchForm.valid &&
-              !this.searchForm.value.search.match(/^\s+$/)
-            ) {
-              this.search();
-            }
-          }, 500);
         }
       );
     } else {
@@ -1080,6 +1086,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   onNewJob() {
     if (!this.editJobMode) {
+      this.newJobForm.value.skills += '';
+      let newSkills = this.newJobForm.value.skills.split(',');
+      for (let newSkill of newSkills) {
+        newSkill = newSkill.trim();
+      }
       const newd = new Date().toLocaleString();
       // tslint:disable-next-line: max-line-length
       const newRow = {
@@ -1093,7 +1104,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         manager: this.newJobForm.value.manager,
         createdBy: this.newJobForm.value.createdBy,
         createdAt: newd,
-        skills: this.newJobForm.value.skills.split(','),
+        skills: newSkills,
         description: this.newJobForm.value.description,
       };
       this.dataService.addData(newRow);
@@ -1107,6 +1118,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.search();
       }
     } else {
+      this.newJobForm.value.skills += '';
+      let newSkills = this.newJobForm.value.skills.split(',');
+      for (let newSkill of newSkills) {
+        newSkill = newSkill.trim();
+      }
       const newd = new Date().toLocaleDateString('en-US');
       // tslint:disable-next-line: max-line-length
       const newRow = {
@@ -1120,7 +1136,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         manager: this.newJobForm.value.manager,
         createdBy: this.newJobForm.value.createdBy,
         createdAt: this.prev.createdAt,
-        skills: this.newJobForm.value.skills.split(','),
+        skills: newSkills,
         description: this.newJobForm.value.description,
       };
       this.dataService.updateData(this.prev.id, newRow);

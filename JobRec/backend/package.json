@@ -1,6 +1,7 @@
 {
   "name": "job-rec",
   "version": "0.0.0",
+  "main": "server.js",
   "scripts": {
     "ng": "ng",
     "start": "node server.js",

@@ -1018,6 +1018,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
   }
 
   editCandidate(candidate: any) {
+    this.uploadImgForm.reset();
     this.editJobMode = true;
     this.prev = candidate;
     this.newCandidateForm.patchValue({
@@ -1035,6 +1036,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
   newCandidate() {
     this.editJobMode = false;
     this.newCandidateForm.reset();
+    this.uploadImgForm.reset();
     $('#newCandidate').modal('show');
   }
 
@@ -1108,6 +1110,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
               this.search();
             },
             (err) => {
+              this.alertify.error('Failed to update candidate!');
               console.log(err);
             }
           );
@@ -1131,12 +1134,14 @@ export class CandidateComponent implements OnInit, OnDestroy {
               this.search();
             },
             (err) => {
+              this.alertify.error('Failed to update candidate!');
               console.log(err);
             }
           );
       }
     }
     this.newCandidateForm.reset();
+    this.uploadImgForm.reset();
     this.rowCount = 0;
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
