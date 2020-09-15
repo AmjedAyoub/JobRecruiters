@@ -1099,15 +1099,18 @@ export class CandidateComponent implements OnInit, OnDestroy {
         if (results.length > 0) {
           results.sort((a, b) => b.priority - a.priority);
           this.rowData2 = results;
+          this.loadProducts();
         } else {
           this.docsService.getDocs().subscribe((res) => {
             this.rowData2 = res.docs;
+            this.loadProducts();
           });
         }
       });
     } else {
       this.docsService.getDocs().subscribe((res) => {
         this.rowData2 = res.docs;
+        this.loadProducts();
       });
     }
   }

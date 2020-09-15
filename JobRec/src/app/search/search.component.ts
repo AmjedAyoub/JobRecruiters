@@ -980,11 +980,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       if (results.length > 0) {
         results.sort((a, b) => b.priority - a.priority);
         this.rowData = results;
+        this.loadProducts();
       } else {
         this.rowData = [...this.dataService.getData()];
+        this.loadProducts();
       }
     } else {
       this.rowData = [...this.dataService.getData()];
+      this.loadProducts();
     }
   }
 
