@@ -536,6 +536,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
     });
     this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
       this.rowData2 = res.docs;
+      this.loadProducts();
     });
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
