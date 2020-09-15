@@ -13,12 +13,15 @@ import {
   faUserPlus,
   faUserCog,
 } from '@fortawesome/free-solid-svg-icons';
+import { GridDataResult } from '@progress/kendo-angular-grid';
+import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
+import { PageSizeItem } from '@progress/kendo-angular-grid';
+import { SelectableSettings } from '@progress/kendo-angular-grid';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Subscription } from 'rxjs';
 import { DocsService } from '../_services/doc.service';
-import { async } from 'rxjs/internal/scheduler/async';
 
 declare var $: any;
 
@@ -33,8 +36,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid3') agGrid3: AgGridAngular;
   @ViewChild('agGrid4') agGrid4: AgGridAngular;
   @ViewChild('agGrid5') agGrid5: AgGridAngular;
+  @ViewChild('kGrid') kGrid: AgGridAngular;
   editJobMode = false;
-  title = 'app';
   private gridApi;
   private gridColumnApi;
   private gridApi2;
@@ -68,6 +71,36 @@ export class SearchComponent implements OnInit, OnDestroy {
   faUserPlus = faUserPlus;
   faUserCog = faUserCog;
   noMatch = false;
+  isKendo = true;
+  private editedRowIndex: number;
+  public sort: SortDescriptor[] = [
+    {
+      field: 'ProductName',
+      dir: 'asc',
+    },
+  ];
+  public gridView: GridDataResult;
+  public pageSize = 25;
+  public skip = 0;
+  public pageSizes: PageSizeItem[] = [
+    {
+      text: '25',
+      value: 25,
+    },
+    {
+      text: '50',
+      value: 50,
+    },
+    {
+      text: '100',
+      value: 100,
+    },
+    {
+      text: 'All',
+      value: 'all',
+    },
+  ];
+  public mySelection: any[] = [];
 
   toViewJob = {
     id: '',
@@ -501,7 +534,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.rowData = [...this.dataService.getData()];
     this.dataService.getDataChangedListener().subscribe((res) => {
       this.rowData = res;
-      this.agGrid.api.setRowData(this.rowData);
+      if (!this.isKendo) {
+        this.agGrid.api.setRowData(this.rowData);
+      }
     });
     // this.docsService.getDocs().subscribe((res) => {
     //   this.candidateData = res.docs;
@@ -510,6 +545,26 @@ export class SearchComponent implements OnInit, OnDestroy {
     //   this.candidateData = res.docs;
     // });
     this.createNewJobForm();
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.loadProducts();
+  }
+
+  private loadProducts(): void {
+    this.gridView = {
+      data: orderBy(this.rowData, this.sort),
+      total: this.rowData.length,
+    };
+  }
+
+  public sliderChange(pageIndex: number): void {
+    this.skip = (pageIndex - 1) * this.pageSize;
+  }
+
+  public onPageChange(state: any): void {
+    this.pageSize = state.take;
   }
 
   sizeGrid(param) {
@@ -951,55 +1006,110 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async deleteJob() {
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if (selectedNodes.length >= 1) {
-      this.alertify.confirm(
-        'Are you sure you want to delete job(s)?',
-        async () => {
-          this.docsService.getDocs().subscribe( async (res) => {
-            this.candidateData = res.docs;
-            const selectedData = selectedNodes.map((node) => node.data);
-            for (const candidate of this.candidateData) {
-              for (const job of selectedData) {
-                for (let i = 0; i < candidate.jobs.length; i++) {
-                  if (job.id === candidate.jobs[i]) {
-                    candidate.jobs.splice(i, 1);
-                    break;
+    if (!this.isKendo) {
+      const selectedNodes = this.agGrid.api.getSelectedNodes();
+      if (selectedNodes.length >= 1) {
+        this.alertify.confirm(
+          'Are you sure you want to delete job(s)?',
+          async () => {
+            this.docsService.getDocs().subscribe(async (res) => {
+              this.candidateData = res.docs;
+              const selectedData = selectedNodes.map((node) => node.data);
+              for (const candidate of this.candidateData) {
+                for (const job of selectedData) {
+                  for (let i = 0; i < candidate.jobs.length; i++) {
+                    if (job.id === candidate.jobs[i]) {
+                      candidate.jobs.splice(i, 1);
+                      break;
+                    }
                   }
                 }
+                await this.docsService
+                  .updateDoc(
+                    candidate._id,
+                    candidate.fullName,
+                    candidate.email,
+                    candidate.phone,
+                    candidate.skills,
+                    candidate.jobs,
+                    candidate.url
+                  )
+                  .subscribe(() => {
+                    this.search();
+                  });
               }
-              await this.docsService
-                .updateDoc(
-                  candidate._id,
-                  candidate.fullName,
-                  candidate.email,
-                  candidate.phone,
-                  candidate.skills,
-                  candidate.jobs,
-                  candidate.url
-                )
-                .subscribe(() => {
-                  this.search();
+              await this.dataService.deleteData(selectedNodes);
+              await this.dataService
+                .getDataChangedListener()
+                .subscribe((res) => {
+                  this.rowData = res;
                 });
-            }
-            await this.dataService.deleteData(selectedNodes);
-            await this.dataService.getDataChangedListener().subscribe((res) => {
-              this.rowData = res;
+              this.rowCount = 0;
+              setTimeout(() => {
+                if (
+                  this.searchForm.valid &&
+                  !this.searchForm.value.search.match(/^\s+$/)
+                ) {
+                  this.search();
+                }
+              }, 500);
             });
-            this.rowCount = 0;
-            setTimeout(() => {
-              if (
-                this.searchForm.valid &&
-                !this.searchForm.value.search.match(/^\s+$/)
-              ) {
-                this.search();
-              }
-            }, 500);
-          });
-        }
-      );
+          }
+        );
+      } else {
+        this.alertify.error('Please select jobs to delete');
+      }
     } else {
-      this.alertify.error('Please select jobs to delete');
+      if (this.mySelection.length >= 1) {
+        this.alertify.confirm(
+          'Are you sure you want to delete job(s)?',
+          async () => {
+            this.docsService.getDocs().subscribe(async (res) => {
+              this.candidateData = res.docs;
+              for (const candidate of this.candidateData) {
+                for (const job of this.mySelection) {
+                  for (let i = 0; i < candidate.jobs.length; i++) {
+                    if (job === candidate.jobs[i]) {
+                      candidate.jobs.splice(i, 1);
+                      break;
+                    }
+                  }
+                }
+                await this.docsService
+                  .updateDoc(
+                    candidate._id,
+                    candidate.fullName,
+                    candidate.email,
+                    candidate.phone,
+                    candidate.skills,
+                    candidate.jobs,
+                    candidate.url
+                  )
+                  .subscribe(() => {
+                    this.search();
+                  });
+              }
+              await this.dataService.deleteforKendo(this.mySelection);
+              await this.dataService
+                .getDataChangedListener()
+                .subscribe((res) => {
+                  this.rowData = res;
+                });
+              this.rowCount = 0;
+              setTimeout(() => {
+                if (
+                  this.searchForm.valid &&
+                  !this.searchForm.value.search.match(/^\s+$/)
+                ) {
+                  this.search();
+                }
+              }, 500);
+            });
+          }
+        );
+      } else {
+        this.alertify.error('Please select jobs to delete');
+      }
     }
   }
 
@@ -1015,25 +1125,54 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   addSubmission() {
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if (selectedNodes.length >= 1) {
-      this.rowData4 = [];
-      this.rowData5 = [];
-      const selectedData = selectedNodes.map((node) => node.data);
-      this.selectedJobs = selectedData;
-      this.docsService.getDocs().subscribe((res) => {
-        this.candidateData = res.docs;
-      });
-      this.agGrid3.api.setRowData(this.candidateData);
-      this.rowData4 = selectedData;
-      this.gridApi3.sizeColumnsToFit();
-      this.agGrid4.api.setRowData(this.rowData4);
-      this.gridApi4.sizeColumnsToFit();
-      this.agGrid5.api.setRowData(this.rowData5);
-      this.gridApi5.sizeColumnsToFit();
-      $('#viewSubs').modal('show');
+    if (!this.isKendo) {
+      const selectedNodes = this.agGrid.api.getSelectedNodes();
+      if (selectedNodes.length >= 1) {
+        this.rowData4 = [];
+        this.rowData5 = [];
+        const selectedData = selectedNodes.map((node) => node.data);
+        this.selectedJobs = selectedData;
+        this.docsService.getDocs().subscribe((res) => {
+          this.candidateData = res.docs;
+        });
+        this.agGrid3.api.setRowData(this.candidateData);
+        this.rowData4 = selectedData;
+        this.gridApi3.sizeColumnsToFit();
+        this.agGrid4.api.setRowData(this.rowData4);
+        this.gridApi4.sizeColumnsToFit();
+        this.agGrid5.api.setRowData(this.rowData5);
+        this.gridApi5.sizeColumnsToFit();
+        $('#viewSubs').modal('show');
+      } else {
+        this.alertify.error('Please select jobs to add submissions');
+      }
     } else {
-      this.alertify.error('Please select jobs to add submissions');
+      if (this.mySelection.length >= 1) {
+        this.rowData4 = [];
+        this.rowData5 = [];
+        let selectedData = [];
+        for (const id of this.mySelection) {
+          for (const job of this.rowData) {
+            if (id === job.id) {
+              selectedData.push(job);
+            }
+          }
+        }
+        this.selectedJobs = selectedData;
+        this.docsService.getDocs().subscribe((res) => {
+          this.candidateData = res.docs;
+        });
+        this.agGrid3.api.setRowData(this.candidateData);
+        this.rowData4 = selectedData;
+        this.gridApi3.sizeColumnsToFit();
+        this.agGrid4.api.setRowData(this.rowData4);
+        this.gridApi4.sizeColumnsToFit();
+        this.agGrid5.api.setRowData(this.rowData5);
+        this.gridApi5.sizeColumnsToFit();
+        $('#viewSubs').modal('show');
+      } else {
+        this.alertify.error('Please select jobs to add submissions');
+      }
     }
   }
 
@@ -1153,6 +1292,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
     this.newJobForm.reset();
     this.rowCount = 0;
+    this.loadProducts();
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
   }
@@ -1233,41 +1373,43 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(params): void {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    if (!this.isKendo) {
+      this.gridApi = params.api;
+      this.gridColumnApi = params.columnApi;
 
-    window.addEventListener('resize', () => {
+      window.addEventListener('resize', () => {
+        setTimeout(() => {
+          params.api.sizeColumnsToFit();
+          this.getTableHeight();
+        });
+      });
+
       setTimeout(() => {
         params.api.sizeColumnsToFit();
-        this.getTableHeight();
+      }, 500);
+
+      this.agGrid.heightScaleChanged.subscribe(() => this.getTableHeight());
+      this.agGrid.bodyHeightChanged.subscribe(() => this.getTableHeight());
+
+      this.agGrid.selectionChanged.subscribe(() => {
+        this.rowCount = this.agGrid.api.getSelectedRows().length;
       });
-    });
-
-    setTimeout(() => {
-      params.api.sizeColumnsToFit();
-    }, 500);
-
-    this.agGrid.heightScaleChanged.subscribe(() => this.getTableHeight());
-    this.agGrid.bodyHeightChanged.subscribe(() => this.getTableHeight());
-
-    this.agGrid.selectionChanged.subscribe(() => {
-      this.rowCount = this.agGrid.api.getSelectedRows().length;
-    });
-    this.agGrid.cellClicked.subscribe((res) => {
-      if (res.colDef.field === 'submission') {
-        this.onSubClick(res.data);
-      } else if (
-        res.colDef.field === 'description' ||
-        res.colDef.field === 'id' ||
-        res.colDef.field === 'skills'
-      ) {
-        this.onViewDetails(res.data);
-      } else if (res.colDef.field === 'edit') {
-        this.editJob(res.data);
-      }
-    });
-    this.gridApi.doLayout();
-    this.gridApi.sizeColumnsToFit();
+      this.agGrid.cellClicked.subscribe((res) => {
+        if (res.colDef.field === 'submission') {
+          this.onSubClick(res.data);
+        } else if (
+          res.colDef.field === 'description' ||
+          res.colDef.field === 'id' ||
+          res.colDef.field === 'skills'
+        ) {
+          this.onViewDetails(res.data);
+        } else if (res.colDef.field === 'edit') {
+          this.editJob(res.data);
+        }
+      });
+      this.gridApi.doLayout();
+      this.gridApi.sizeColumnsToFit();
+    }
   }
 
   onGridReady2(params): void {

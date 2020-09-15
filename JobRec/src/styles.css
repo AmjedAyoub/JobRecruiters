@@ -66,6 +66,30 @@ body{
 .ag-body-horizontal-scroll .ag-body-horizontal-scroll-viewport .ag-body-horizontal-scroll-container {
   display: none !important;
 }
+
+.k-grid{
+  font-size: 12px !important;
+}
+
+.k-grid-table{
+  color: rgb(0, 0, 0) !important;
+}
+
+.k-grid-header{
+  font-weight: bold;
+  background-color: #686179 !important;
+  color: aliceblue !important;
+}
+
+/* .k-grid-table tr{
+  background-color: #e4f1f7 !important;
+}
+
+.k-alt{
+  background-color: #92c6db !important;
+  color: rgb(0, 0, 0) !important;
+} */
+
 /* .ag-header-cell {
   width: fit-content !important;
 }

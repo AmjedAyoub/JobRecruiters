@@ -14,6 +14,10 @@ import {
   faUserPlus,
   faUserCog,
 } from '@fortawesome/free-solid-svg-icons';
+import { GridDataResult } from '@progress/kendo-angular-grid';
+import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
+import { PageSizeItem } from '@progress/kendo-angular-grid';
+import { SelectableSettings } from '@progress/kendo-angular-grid';
 
 import { DataService } from '../_services/data.service';
 import { AlertifyService } from '../_services/alertify.service';
@@ -34,8 +38,8 @@ export class CandidateComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid3') agGrid3: AgGridAngular;
   @ViewChild('agGrid4') agGrid4: AgGridAngular;
   @ViewChild('agGrid5') agGrid5: AgGridAngular;
+  @ViewChild('kGrid') kGrid: AgGridAngular;
   editJobMode = false;
-  title = 'app';
   private gridApi;
   private gridColumnApi;
   private gridApi2;
@@ -70,6 +74,36 @@ export class CandidateComponent implements OnInit, OnDestroy {
   faUserPlus = faUserPlus;
   faUserCog = faUserCog;
   noMatch = false;
+  isKendo = true;
+  private editedRowIndex: number;
+  public sort: SortDescriptor[] = [
+    {
+      field: 'ProductName',
+      dir: 'asc',
+    },
+  ];
+  public gridView: GridDataResult;
+  public pageSize = 25;
+  public skip = 0;
+  public pageSizes: PageSizeItem[] = [
+    {
+      text: '25',
+      value: 25,
+    },
+    {
+      text: '50',
+      value: 50,
+    },
+    {
+      text: '100',
+      value: 100,
+    },
+    {
+      text: 'All',
+      value: 'all',
+    },
+  ];
+  public mySelection: any[] = [];
 
   toViewCandidate = {
     _id: '',
@@ -496,6 +530,9 @@ export class CandidateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.docsService.getDocs().subscribe((res) => {
       this.rowData2 = res.docs;
+      if (this.isKendo) {
+        this.loadProducts();
+      }
     });
     this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
       this.rowData2 = res.docs;
@@ -521,6 +558,26 @@ export class CandidateComponent implements OnInit, OnDestroy {
       skills: ['', Validators.required],
       resume: [null],
     });
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.loadProducts();
+  }
+
+  private loadProducts(): void {
+    this.gridView = {
+      data: orderBy(this.rowData2, this.sort),
+      total: this.rowData2.length,
+    };
+  }
+
+  public sliderChange(pageIndex: number): void {
+    this.skip = (pageIndex - 1) * this.pageSize;
+  }
+
+  public onPageChange(state: any): void {
+    this.pageSize = state.take;
   }
 
   sizeGrid(param) {
@@ -564,25 +621,63 @@ export class CandidateComponent implements OnInit, OnDestroy {
     }
   }
 
+  switchKendo(){
+    this.isKendo = !this.isKendo;
+    this.docsService.getDocs().subscribe((res) => {
+      this.rowData2 = res.docs;
+      if (this.isKendo) {
+        this.loadProducts();
+      }
+    });
+  }
+
   addSubmission() {
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if (selectedNodes.length >= 1) {
-      this.rowData4 = [];
-      this.rowData5 = [];
-      const selectedData = selectedNodes.map((node) => node.data);
-      this.rowData = [...this.dataService.getData()];
-      this.agGrid3.api.setRowData(this.rowData);
-      this.gridApi3.sizeColumnsToFit();
-      this.selectedJobs = selectedData;
-      this.rowData5 = selectedData;
-      this.gridApi5.sizeColumnsToFit();
-      this.agGrid5.api.setRowData(this.rowData5);
-      this.gridApi5.sizeColumnsToFit();
-      this.agGrid4.api.setRowData(this.rowData4);
-      this.gridApi4.sizeColumnsToFit();
-      $('#viewSubs').modal('show');
-    } else {
-      this.alertify.error('Please select candiates to add submissions');
+    if (!this.isKendo) {
+      const selectedNodes = this.agGrid.api.getSelectedNodes();
+      if (selectedNodes.length >= 1) {
+        this.rowData4 = [];
+        this.rowData5 = [];
+        const selectedData = selectedNodes.map((node) => node.data);
+        this.rowData = [...this.dataService.getData()];
+        this.agGrid3.api.setRowData(this.rowData);
+        this.gridApi3.sizeColumnsToFit();
+        this.selectedJobs = selectedData;
+        this.rowData5 = selectedData;
+        this.gridApi5.sizeColumnsToFit();
+        this.agGrid5.api.setRowData(this.rowData5);
+        this.gridApi5.sizeColumnsToFit();
+        this.agGrid4.api.setRowData(this.rowData4);
+        this.gridApi4.sizeColumnsToFit();
+        $('#viewSubs').modal('show');
+      } else {
+        this.alertify.error('Please select candidates to add submissions');
+      }
+    }else{
+      if (this.mySelection.length >= 1) {
+        this.rowData4 = [];
+        this.rowData5 = [];
+        let selectedData = [];
+        for (const id of this.mySelection) {
+          for (const candidate of this.rowData2) {
+            if (id === candidate._id) {
+              selectedData.push(candidate);
+            }
+          }
+        }
+        this.rowData = [...this.dataService.getData()];
+        this.agGrid3.api.setRowData(this.rowData);
+        this.gridApi3.sizeColumnsToFit();
+        this.selectedJobs = selectedData;
+        this.rowData5 = selectedData;
+        this.gridApi5.sizeColumnsToFit();
+        this.agGrid5.api.setRowData(this.rowData5);
+        this.gridApi5.sizeColumnsToFit();
+        this.agGrid4.api.setRowData(this.rowData4);
+        this.gridApi4.sizeColumnsToFit();
+        $('#viewSubs').modal('show');
+      } else {
+        this.alertify.error('Please select candidates to add submissions');
+      }
     }
   }
 
@@ -662,8 +757,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
                   oldResults.unshift(job);
                 }
               } else {
-                const newP =
-                  results[oldResults.indexOf(job)].priority + 1;
+                const newP = results[oldResults.indexOf(job)].priority + 1;
                 results[oldResults.indexOf(job)] = {
                   ...job,
                   priority: newP,
@@ -829,7 +923,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
           }
           if (results.length > 0) {
             this.rowData = results;
-          }else{
+          } else {
             this.noMatch = true;
             if (this.rowData4.length === 0) {
               this.rowData = [...this.dataService.getData()];
@@ -1062,6 +1156,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.alertify.success('Candidate has been added successfully');
             this.docsService.getDocs().subscribe((response) => {
               this.rowData2 = response.docs;
+              this.loadProducts();
             });
             this.search();
           });
@@ -1079,6 +1174,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.alertify.success('Candidate has been added successfully');
             this.docsService.getDocs().subscribe((response) => {
               this.rowData2 = response.docs;
+              this.loadProducts();
             });
             this.search();
           });
@@ -1106,6 +1202,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
               this.alertify.success('Candidate has been updated successfully');
               this.docsService.getDocs().subscribe((response) => {
                 this.rowData2 = response.docs;
+                this.loadProducts();
               });
               this.search();
             },
@@ -1130,6 +1227,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
               this.alertify.success('Candidate has been updated successfully');
               this.docsService.getDocs().subscribe((response) => {
                 this.rowData2 = response.docs;
+                this.loadProducts();
               });
               this.search();
             },
@@ -1143,31 +1241,55 @@ export class CandidateComponent implements OnInit, OnDestroy {
     this.newCandidateForm.reset();
     this.uploadImgForm.reset();
     this.rowCount = 0;
+    this.loadProducts();
     $('.modal').modal('hide');
     // this.agGrid.api.setRowData(this.rowData);
   }
 
   deleteCandidate() {
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
-    if (selectedNodes.length >= 1) {
-      this.alertify.confirm(
-        'Are you sure you want to delete candidate(s)?',
-        async () => {
-          const selectedData = selectedNodes.map((node) => node.data);
-          for (const candidate of selectedData) {
-            this.docsService.deleteDoc(candidate._id).subscribe((res) => {
-              this.alertify.success('Candidate has been deleted successfully');
-              this.rowCount = 0;
-              this.docsService.getDocs().subscribe((response) => {
-                this.rowData2 = response.docs;
+    if (!this.isKendo) {
+      const selectedNodes = this.agGrid.api.getSelectedNodes();
+      if (selectedNodes.length >= 1) {
+        this.alertify.confirm(
+          'Are you sure you want to delete candidate(s)?',
+          async () => {
+            const selectedData = selectedNodes.map((node) => node.data);
+            for (const candidate of selectedData) {
+              this.docsService.deleteDoc(candidate._id).subscribe((res) => {
+                this.alertify.success('Candidate has been deleted successfully');
+                this.rowCount = 0;
+                this.docsService.getDocs().subscribe((response) => {
+                  this.rowData2 = response.docs;
+                });
+                this.search();
               });
-              this.search();
-            });
+            }
           }
-        }
-      );
-    } else {
-      this.alertify.error('Please select candidates to delete');
+        );
+      } else {
+        this.alertify.error('Please select candidates to delete');
+      }
+    }else{
+      if (this.mySelection.length >= 1) {
+        this.alertify.confirm(
+          'Are you sure you want to delete candidate(s)?',
+          async () => {
+            for (const candidate of this.mySelection) {
+              this.docsService.deleteDoc(candidate).subscribe((res) => {
+                this.alertify.success('Candidate has been deleted successfully');
+                this.rowCount = 0;
+                this.docsService.getDocs().subscribe((response) => {
+                  this.rowData2 = response.docs;
+                  this.loadProducts();
+                });
+                this.search();
+              });
+            }
+          }
+        );
+      } else {
+        this.alertify.error('Please select candidates to delete');
+      }
     }
   }
 
@@ -1224,33 +1346,35 @@ export class CandidateComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(params): void {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    if (!this.isKendo) {
+      this.gridApi = params.api;
+      this.gridColumnApi = params.columnApi;
 
-    params.api.sizeColumnsToFit();
-    window.addEventListener('resize', () => {
-      setTimeout(() => {
-        params.api.sizeColumnsToFit();
+      params.api.sizeColumnsToFit();
+      window.addEventListener('resize', () => {
+        setTimeout(() => {
+          params.api.sizeColumnsToFit();
+        });
       });
-    });
 
-    this.agGrid.heightScaleChanged.subscribe(() => this.getTableHeight());
-    this.agGrid.bodyHeightChanged.subscribe(() => this.getTableHeight());
+      this.agGrid.heightScaleChanged.subscribe(() => this.getTableHeight());
+      this.agGrid.bodyHeightChanged.subscribe(() => this.getTableHeight());
 
-    params.api.sizeColumnsToFit();
+      params.api.sizeColumnsToFit();
 
-    this.agGrid.cellClicked.subscribe((res) => {
-      if (res.colDef.field === 'jobs') {
-        this.onJobsClick(res.data);
-      } else if (res.colDef.field === '_id') {
-        this.onViewDetails(res.data);
-      } else if (res.colDef.field === 'edit') {
-        this.editCandidate(res.data);
-      }
-    });
-    this.agGrid.selectionChanged.subscribe(() => {
-      this.rowCount = this.agGrid.api.getSelectedRows().length;
-    });
+      this.agGrid.cellClicked.subscribe((res) => {
+        if (res.colDef.field === 'jobs') {
+          this.onJobsClick(res.data);
+        } else if (res.colDef.field === '_id') {
+          this.onViewDetails(res.data);
+        } else if (res.colDef.field === 'edit') {
+          this.editCandidate(res.data);
+        }
+      });
+      this.agGrid.selectionChanged.subscribe(() => {
+        this.rowCount = this.agGrid.api.getSelectedRows().length;
+      });
+    }
   }
 
   onGridReady2(params): void {

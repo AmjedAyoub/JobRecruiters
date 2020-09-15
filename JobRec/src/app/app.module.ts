@@ -4,9 +4,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'ng2-file-upload';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AgGridModule } from 'ag-grid-angular';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { DropDownListModule } from '@progress/kendo-angular-dropdowns';
+import { SliderModule } from '@progress/kendo-angular-inputs';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AgGridModule } from 'ag-grid-angular';
 
 import { AuthService } from './_services/auth.service';
 
@@ -16,6 +19,9 @@ import { LoginComponent } from './login/login.component';
 import { SearchComponent } from './search/search.component';
 import { DataService } from './_services/data.service';
 import { CandidateComponent } from './candidate/candidate.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 @NgModule({
   declarations: [
@@ -33,7 +39,11 @@ import { CandidateComponent } from './candidate/candidate.component';
     FileUploadModule,
     HttpClientModule,
     FontAwesomeModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
+    GridModule,
+    DropDownListModule,
+    SliderModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthService, DataService],
   bootstrap: [AppComponent]

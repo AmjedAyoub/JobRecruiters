@@ -5033,6 +5033,23 @@ export class DataService implements OnInit, OnDestroy {
     }
   }
 
+  async deleteforKendo(jobs: any){
+    for (const j of jobs) {
+    for (let i = 0; i < this.rowData.length; i++) {
+        if (this.rowData[i].id === j) {
+          this.rowData.splice(i, 1);
+          break;
+        }
+      }
+    }
+    this.getAllData();
+    if (jobs.length > 1){
+      this.alertify.success('Jobs have been deleted successfully');
+    }else{
+      this.alertify.success('Job has been deleted successfully');
+    }
+  }
+
   getDataChangedListener() {
     this.updateSubs();
     return this.dataChangedListener.asObservable();

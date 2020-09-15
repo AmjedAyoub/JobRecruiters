@@ -2,6 +2,9 @@
   <div class="row center">
     <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
+        <button type="button" class="btn btn-outline-secondary btn-sm mr-5 badge-pill" data-toggle="tooltip"
+        data-placement="auto" title="Switch to" style="float: left;" (click)="isKendo = !isKendo"> {{ isKendo ? 'AG-Grid' : 'Kendo-Grid' }}
+      </button>
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 90%;">
             <input type="text" class="form-control form-control-sm"
@@ -38,7 +41,7 @@
       <fa-icon [icon]="faUserPlus"></fa-icon>
     </button>
   </span>
-  <div class="row center" style="height: 100%; position: relative;">
+  <div class="row center" style="height: 100%; position: relative;" *ngIf="!isKendo">
     <ag-grid-angular #agGrid style="width: 100%; margin: auto; position: absolute; font: small !important;"
       [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs"
       rowSelection="multiple" (gridReady)="onGridReady($event)" [suppressHorizontalScroll]=false rowHeight='30'
@@ -54,6 +57,86 @@
         <fa-icon [icon]="faUserPlus"></fa-icon>
       </button>
     </div>
+  </div>
+
+  <div class="row center" style="height: 100%; position: relative;" *ngIf="isKendo">
+    <kendo-grid #kGrid id="kGrid" style="color: #656565 !important;" [data]="gridView"
+    [ngStyle]="getTableHeight()" [navigable]="true" [reorderable]="true"
+    [resizable]="true" [height]="480" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
+    [resizable]="true" [sortable]="{
+              allowUnsort: true,
+              mode: 'single'
+              }" [sort]="sort" (sortChange)="sortChange($event)" [kendoGridBinding]="rowData" [pageSize]="pageSize"
+    [skip]="skip" [pageable]="{
+      buttonCount: 4,
+      info: true,
+      previousNext: true
+  }" (pageChange)="onPageChange($event)"
+  kendoGridSelectBy="id"
+  [selectedKeys]="mySelection">
+    <kendo-grid-checkbox-column width="50">
+      <ng-template kendoGridCellTemplate let-idx="rowIndex">
+        <input [kendoGridSelectionCheckbox]="idx" />
+      </ng-template>
+    </kendo-grid-checkbox-column>
+    <kendo-grid-command-column>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button (click)="editJob(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="Edit Job">Edit</button>
+      </ng-template>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="id" title="#">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button (click)="onViewDetails(dataItem)" class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; border-color: lime; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job">{{ dataItem.id }}</button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="title" title="Job Title">
+    </kendo-grid-column>
+    <kendo-grid-column field="team" title="Team">
+    </kendo-grid-column>
+    <kendo-grid-column field="position" title="#Pos.">
+    </kendo-grid-column>
+    <kendo-grid-column field="submission" title="#Subs.">
+      <ng-template kendoGridCellTemplate let-dataItem>
+      <button (click)="onSubClick(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">{{ dataItem.submission }}</button>
+    </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="status" title="Status">
+    </kendo-grid-column>
+    <kendo-grid-column field="skills" title="Skills">  <ng-template kendoGridCellTemplate let-dataItem>
+      <div (click)="onViewDetails(dataItem)" class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job Details">{{ dataItem.description }}</div>
+    </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="description" title="Description">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div (click)="onViewDetails(dataItem)" class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job Details">{{ dataItem.description }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="updatedAt" title="Updated At">
+    </kendo-grid-column>
+    <kendo-grid-column field="manager" title="Manager">
+    </kendo-grid-column>
+    <kendo-grid-column field="createdBy" title="Created By">
+    </kendo-grid-column>
+    <kendo-grid-column field="createdAt" title="Created At">
+    </kendo-grid-column>
+    <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+      <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+      <!-- <kendo-slider [showButtons]="false" tickPlacement="none" [max]="totalPages" [min]="1"
+        (valueChange)="sliderChange($event)" [value]="currentPage">
+      </kendo-slider> -->
+      <kendo-pager-info></kendo-pager-info>
+      <kendo-pager-next-buttons></kendo-pager-next-buttons>
+      <kendo-pager-page-sizes [pageSizes]="pageSizes"></kendo-pager-page-sizes>
+    </ng-template>
+  </kendo-grid>
+    <!-- <div style="color: #ffff; z-index: 100; font-size: small; position: relative; height: 100%;"
+      [ngStyle]="getHeight()">Jobs
+      selected <strong>{{ rowCount }}</strong>
+      <button type="button" class="btn btn-outline-success ml-4 btn-sm ml-3" style="margin: auto;"
+        (click)="addSubmission()" data-toggle="tooltip" data-placement="auto" title="Add Submissions">
+        <fa-icon [icon]="faUserPlus"></fa-icon>
+      </button>
+    </div> -->
   </div>
 
   <div class="modal fade bd-example-modal-xl mt-5 mb-5 text-center" id="newJob" tabindex="-1" role="dialog"
