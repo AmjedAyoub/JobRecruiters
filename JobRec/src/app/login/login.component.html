@@ -1,20 +1,29 @@
 <div class="container">
   <div class="row mt-5 center">
     <div class="col-md-3">
-      <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+      <div class="card text-white bg-warning mb-3 mt-5" style="max-width: 20rem;">
         <div class="card-header"></div>
         <div class="card-body">
           <h4 class="card-title">Before you start!</h4>
-          <p class="card-text">This website is not supported by a backend server so the data provided is hard coded. You may add new data or edit existing data.<br>
-            <strong style="color: red;">IMPORTANT </strong>If you refresh the page, you will lose all your work and the data will go back to the initial state. </p>
-          <p>To Sign In please use the following credentials:<br><strong>Username: </strong> rec@recjob.com<br> <strong>Password: </strong> password </p>
+          <p class="card-text">This website is supported by a backend server only for candidates, but not for jobs so
+            the data provided is hard coded. You may add new data or edit existing data.<br>
+            <strong style="color: red;">IMPORTANT </strong>If you refresh the page, you will lose all your work on the
+            jobs side and the data will go back to the initial state. </p>
         </div>
       </div>
     </div>
     <div class="col-md-9 center">
       <form [formGroup]="signInForm" (submit)="onSigningIn()" class="center mt-5" style="margin: auto; width: 350px;">
+        <div class="card text-white bg-warning mb-3" style="max-width: 20rem; background-color: orangered !important;">
+          <div class="card-header"></div>
+          <div class="card-body">
+            <p class="card-text">To Sign In please use the following credentials:<br><strong>Username: </strong> rec@recjob.com<br>
+              <strong>Password: </strong> password </p>
+          </div>
+        </div>
         <div class="form-group has-success  has-danger">
-          <input style="width: 300px;" type="text" class="form-control" placeholder="@Username" formControlName="email" [ngClass]="
+          <input style="width: 300px;" type="text" class="form-control" placeholder="@Username" formControlName="email"
+            [ngClass]="
             signInForm.get('email').errors &&
             signInForm.get('email').touched ?
             'is-invalid' : signInForm.get('email').valid ? 'is-valid' : ''
@@ -23,7 +32,8 @@
         </div>
 
         <div class="form-group has-success has-danger">
-          <input style="width: 300px;" type="password" class="form-control" placeholder="Password" formControlName="password" [ngClass]="
+          <input style="width: 300px;" type="password" class="form-control" placeholder="Password"
+            formControlName="password" [ngClass]="
             signInForm.get('password').errors &&
             signInForm.get('password').touched ?
             'is-invalid' : signInForm.get('password').valid ? 'is-valid' : ''
