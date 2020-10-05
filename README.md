@@ -58,6 +58,8 @@ ng serve
 
 ## Technologies & Tools
 * Angular
+* NodeJS
+* MongoDB
 
 ## Links
 This program is deployed on [AWS](http://recjobs.us-east-2.elasticbeanstalk.com).\
