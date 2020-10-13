@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://recjobs.us-east-2.elasticbeanstalk.com/api'
+  apiUrl: 'http://jobrec-env.eba-f2ufeakw.us-east-2.elasticbeanstalk.com/api'
 };

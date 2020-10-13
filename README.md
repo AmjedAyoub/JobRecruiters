@@ -62,7 +62,7 @@ ng serve
 * MongoDB
 
 ## Links
-This program is deployed on [AWS](http://recjobs.us-east-2.elasticbeanstalk.com).\
+This program is deployed on [AWS](http://jobrec-env.eba-f2ufeakw.us-east-2.elasticbeanstalk.com).\
 This program is published on [GitHub](https://github.com/AmjedAyoub/JobRecruiters).
 
 ## Authors
