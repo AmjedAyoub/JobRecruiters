@@ -5,8 +5,6 @@ const Candidate = require("../models/candidate");
 
 exports.addNewCandidate = (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
-  console.log('req.file')
-  console.log(req.file)
   const candidate = new Candidate({
     fullName: req.body.fullName,
     email: req.body.email,

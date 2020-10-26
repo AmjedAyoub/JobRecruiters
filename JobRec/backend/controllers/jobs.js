@@ -2,7 +2,6 @@ const Job = require("../models/job");
 
 exports.addNewJob = (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
-  // console.log(req.file);
 
   let d = new Date();
   const job = new Job({
@@ -97,7 +96,6 @@ exports.getJob = (req, res, next) => {
 exports.deleteJob = (req, res, next) => {
   Job.deleteOne({ _id: req.params.id })
     .then(result => {
-      console.log(result);
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });
       } else {

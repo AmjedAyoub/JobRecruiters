@@ -72,7 +72,6 @@ exports.getDoc = (req, res, next) => {
 exports.deleteDoc = (req, res, next) => {
   Doc.deleteOne({ _id: req.params.id })
     .then(result => {
-      console.log(result);
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });
       } else {
@@ -92,7 +91,6 @@ exports.updateDoc = (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     docPath = url + "/Docs/" + req.file.filename;
   }
-  console.log(req.body);
   const doc = new Doc({
     _id: req.body.id,
     url: docPath,
