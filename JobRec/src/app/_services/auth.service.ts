@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private router: Router, private alertifyService: AlertifyService) {}
 
   login(email: string, password: string): void {
-    if (email === 'rec@recjob.com' && password === 'password'){
+    if (email === 'rec@jobrec.com' && password === 'password'){
       this.isAuthenticated = true;
       this.authStatusListener.next(true);
       localStorage.setItem('isAuth', 'true');

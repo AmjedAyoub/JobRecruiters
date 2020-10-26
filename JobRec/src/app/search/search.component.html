@@ -103,7 +103,7 @@
     <kendo-grid-column field="status" title="Status">
     </kendo-grid-column>
     <kendo-grid-column field="skills" title="Skills">  <ng-template kendoGridCellTemplate let-dataItem>
-      <div (click)="onViewDetails(dataItem)" class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job Details">{{ dataItem.description }}</div>
+      <div (click)="onViewDetails(dataItem)" class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job Details">{{ dataItem.skills }}</div>
     </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Description">
