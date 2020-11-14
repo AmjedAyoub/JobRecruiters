@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="height: 45px;">
-  <a class="navbar-brand" routerLink="">JobRec</a>
+  <a class="navbar-brand">JobRec</a>
 
   <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,16 @@
 
         <button type="button" class="btn btn-outline-success mr-3 btn-sm" (click)="onPageChanged('search')" *ngIf="!isSearch && isAuth">Go To Jobs</button>
 
-        <button type="button" class="btn btn-outline-danger btn-sm" (click)="logout()" *ngIf="isAuth">Logout</button>
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown" *ngIf="isAuth">
+          <!-- <button type="button" class="btn btn-outline-danger"></button> -->
+          <div class="btn-group" role="group">
+            <button id="btnGroupDrop4" type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="faCog"></fa-icon></button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop4" style="position: absolute; left: -105px; background-color: black;">
+              <a class="dropdown-item" (click)="switchMode()" style="color: #dc3545 !important;"> {{ isDark ? 'Light Mode' : 'Dark mode' }}</a>
+              <a class="dropdown-item" (click)="logout()" style="color: #dc3545 !important;">Logout</a>
+            </div>
+          </div>
+        </div>
     </form>
   </div>
 </nav>

@@ -1,18 +1,20 @@
 const express = require("express");
 
 const CandidateController = require("../controllers/candidates");
+
+// const checkAuth = require("../middleware/check-auth");
 const extractFile = require("../middleware/file");
 
 const router = express.Router();
 
-router.post("", extractFile, CandidateController.addNewCandidate);
+router.post("", extractFile, CandidateController.createCandidate);
 
 router.get("", CandidateController.getCandidates);
 
 router.get("/:id", CandidateController.getCandidate);
 
-router.put("/:id", CandidateController.updateCandidate);
+router.delete("/:id", CandidateController.deleteCandidate);
 
-// router.post("/login", CandidateController.userLogin);
+router.put("/:id", extractFile, CandidateController.updateCandidate);
 
 module.exports = router;

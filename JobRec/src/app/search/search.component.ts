@@ -6,22 +6,24 @@ import {
   FormBuilder,
   NgForm,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   faPlus,
   faTimes,
   faUserPlus,
   faUserCog,
+  faCog
 } from '@fortawesome/free-solid-svg-icons';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import { PageSizeItem } from '@progress/kendo-angular-grid';
 import { SelectableSettings } from '@progress/kendo-angular-grid';
 
-import { DataService } from '../_services/data.service';
+import { JobService } from '../_services/job.service';
 import { AlertifyService } from '../_services/alertify.service';
-import { Subscription } from 'rxjs';
-import { DocsService } from '../_services/doc.service';
+import { AuthService } from '../_services/auth.service';
+import { CandidatesService } from '../_services/candidate.service';
 
 declare var $: any;
 
@@ -38,21 +40,21 @@ export class SearchComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid5') agGrid5: AgGridAngular;
   @ViewChild('kGrid') kGrid: AgGridAngular;
   editJobMode = false;
-  private gridApi;
-  private gridColumnApi;
-  private gridApi2;
-  private gridColumnApi2;
-  private gridApi3;
-  private gridColumnApi3;
-  private gridApi4;
-  private gridColumnApi4;
-  private gridApi5;
-  private gridColumnApi5;
+  private gridApi: { doLayout: () => void; sizeColumnsToFit: () => void; };
+  private gridColumnApi: any;
+  private gridApi2: any;
+  private gridColumnApi2: any;
+  private gridApi3: any;
+  private gridColumnApi3: any;
+  private gridApi4: any;
+  private gridColumnApi4: any;
+  private gridApi5: any;
+  private gridColumnApi5: any;
   selectedJobs = [];
   searchForm: FormGroup;
   newJobForm: FormGroup;
   searchSubsForm: FormGroup;
-  d = new Date().toLocaleString();
+  d = new Date().toLocaleDateString('en-US').toString();
   rowData: any[];
   rowData2: any[];
   rowData3: any[];
@@ -60,23 +62,22 @@ export class SearchComponent implements OnInit, OnDestroy {
   rowData5: any[];
   candidateData: any[];
   private docsSub: Subscription;
-  prev;
-  private statusBar;
+  prev: any;
+  private statusBar: any;
   rowCount = 0;
   subCount = 0;
   domLayout = window.innerHeight;
-  height;
+  height: any;
   faPlus = faPlus;
   faTimes = faTimes;
   faUserPlus = faUserPlus;
   faUserCog = faUserCog;
   noMatch = false;
-  isKendo = true;
-  private editedRowIndex: number;
+  isDark = false;
   public sort: SortDescriptor[] = [
     {
-      field: 'ProductName',
-      dir: 'asc',
+      field: 'updatedAt',
+      dir: 'desc',
     },
   ];
   public gridView: GridDataResult;
@@ -103,7 +104,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   public mySelection: any[] = [];
 
   toViewJob = {
-    id: '',
+    _id: '',
     title: '',
     team: '',
     manager: '',
@@ -126,7 +127,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       checkboxSelection: true,
       resizable: true,
       width: 30,
-      headerCheckboxSelection: function (params) {
+      headerCheckboxSelection (
+        params: {
+          columnApi: {
+            getRowGroupColumns: () => {
+              (): any;
+              new(): any;
+              length: number;
+            };
+          };
+        })
+        {
         return params.columnApi.getRowGroupColumns().length === 0;
       },
     },
@@ -144,14 +155,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     },
     {
       headerName: '#',
-      field: 'id',
+      field: '_id',
       sortable: true,
       filter: true,
       resizable: true,
       width: 90,
-      cellRenderer: (params) => {
+      cellRenderer: (params: any) => {
         // tslint:disable-next-line: max-line-length
-        return `<button class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; border-color: lime; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job">${params.value}</button>`;
+        return `<button class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; border-color: lime; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job">View</button>`;
       },
     },
     {
@@ -180,14 +191,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     },
     {
       headerName: '#Subs.',
-      field: 'submission',
+      field: 'candidates',
       sortable: true,
       filter: true,
       resizable: true,
       width: 95,
-      cellRenderer: (params) => {
+      cellRenderer: (params: { value: any; }) => {
         // tslint:disable-next-line: max-line-length
-        return `<button class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">${params.value}</button>`;
+        return `<button class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">${params.value?.length || 0}</button>`;
       },
     },
     {
@@ -205,7 +216,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       filter: true,
       resizable: true,
       width: 150,
-      cellRenderer: (params) => {
+      cellRenderer: (params: { value: any; }) => {
         // tslint:disable-next-line: max-line-length
         return `<div class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job Details">${params.value}</div>`;
       },
@@ -217,7 +228,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       filter: true,
       resizable: true,
       width: 240,
-      cellRenderer: (params) => {
+      cellRenderer: (params: { value: any; }) => {
         // tslint:disable-next-line: max-line-length
         return `<div class="descriptionCell" style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job Details">${params.value}</div>`;
       },
@@ -304,7 +315,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       filter: true,
       resizable: true,
       width: 120,
-      cellRenderer: (params) => {
+      cellRenderer: (params: { value: string; }) => {
         // tslint:disable-next-line: max-line-length
         if (params.value !== 'null') {
           return `<a href="${params.value}" target="_blank" class="btn btn-info" style="font: small;  height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a>`;
@@ -366,7 +377,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       filter: true,
       resizable: true,
       width: 120,
-      cellRenderer: (params) => {
+      cellRenderer: (params: { value: string; }) => {
         // tslint:disable-next-line: max-line-length
         if (params.value !== 'null') {
           return `<a href="${params.value}" target="_blank" class="btn btn-info" style="font: small; height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a>`;
@@ -391,7 +402,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     },
     {
       headerName: '#',
-      field: 'id',
+      field: '_id',
       sortable: true,
       filter: true,
       resizable: true,
@@ -423,12 +434,16 @@ export class SearchComponent implements OnInit, OnDestroy {
     },
     {
       headerName: '#Subs.',
-      field: 'submission',
+      field: 'candidates',
       sortable: true,
       filter: true,
       resizable: true,
       width: 95,
-    },
+      cellRenderer: (params: { value: any; }) => {
+        // tslint:disable-next-line: max-line-length
+        return `<div style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black">${params.value?.length || 0}</div>`;
+      }
+  },
     {
       headerName: 'Status',
       field: 'status',
@@ -507,7 +522,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       filter: true,
       resizable: true,
       width: 120,
-      cellRenderer: (params) => {
+      cellRenderer: (params: { value: string; }) => {
         // tslint:disable-next-line: max-line-length
         if (params.value !== 'null') {
           return `<div><a href="${params.value}" target="_blank" class="btn btn-info" style="font: small; height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a></div>`;
@@ -518,32 +533,40 @@ export class SearchComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private dataService: DataService,
+    private jobService: JobService,
     private fb: FormBuilder,
     private alertify: AlertifyService,
-    private docsService: DocsService
+    private candidatesService: CandidatesService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.isDark = this.authService.getisDark();
+    this.authService.getisDarkListener().subscribe(res => {
+      this.isDark = res;
+    });
     this.searchForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
     });
     this.searchSubsForm = new FormGroup({
       search: new FormControl(null, { validators: [Validators.required] }),
     });
-    this.rowData = [...this.dataService.getData()];
-    this.dataService.getDataChangedListener().subscribe((res) => {
-      this.rowData = res;
-      if (!this.isKendo) {
+    this.jobService.getData().subscribe((res) => {
+      this.rowData = res.jobs;
+      if (this.isDark) {
+        this.loadProducts();
+      }else{
         this.agGrid.api.setRowData(this.rowData);
       }
     });
-    // this.docsService.getDocs().subscribe((res) => {
-    //   this.candidateData = res.docs;
-    // });
-    // this.docsSub = this.docsService.getDocsUpdateListener().subscribe((res) => {
-    //   this.candidateData = res.docs;
-    // });
+    this.jobService.getjobChangedListener().subscribe((res) => {
+      this.rowData = res;
+      if (this.isDark) {
+        this.loadProducts();
+      }else{
+        this.agGrid.api.setRowData(this.rowData);
+      }
+    });
     this.createNewJobForm();
   }
 
@@ -567,7 +590,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.pageSize = state.take;
   }
 
-  sizeGrid(param) {
+  sizeGrid(param: any) {
     this.gridApi.doLayout();
     this.gridApi.sizeColumnsToFit();
   }
@@ -575,7 +598,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   createNewJobForm() {
     this.newJobForm = this.fb.group(
       {
-        id: [null, Validators.required],
+        id: [''],
         title: ['', Validators.required],
         team: ['', Validators.required],
         positions: [null, Validators.required],
@@ -585,26 +608,20 @@ export class SearchComponent implements OnInit, OnDestroy {
         skills: ['', Validators.required],
         description: ['', Validators.required],
       }
-      // { asyncValidators: this.idCheckValidator }
     );
   }
 
-  // idCheckValidator(form: FormGroup) {
-  //   for (let i = 0; i < this.rowData.length; i++) {
-  //     if (+form.get('id').value === this.rowData[i].id) {
-  //       return { exists: true };
-  //     }
-  //   }
-  //   return null;
-  // }
+  switchKendo(){
+    this.authService.switchMode();
+    this.isDark = this.authService.getisDark();
+  }
 
   autoMatch() {
     if (this.rowData4.length >= 1) {
-      let skills = [];
-      let oldInitialData;
-      let oldResults = [];
-      let results = [];
-      console.log(this.rowData4);
+      const skills = [];
+      let oldInitialData: any;
+      const oldResults = [];
+      const results = [];
       for (const job of this.rowData4) {
         for (const skill of job.skills) {
           if (skills.indexOf(skill) < 0) {
@@ -612,8 +629,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           }
         }
       }
-      console.log(skills);
-      this.docsService.getDocs().subscribe((res) => {
+      this.candidatesService.getCandidates().subscribe((res) => {
         oldInitialData = res.docs;
         for (let query of skills) {
           query = query.toLowerCase().trim();
@@ -646,7 +662,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           if (this.rowData5.length === 0) {
             this.candidateData = results;
           } else {
-            for (let cand of this.rowData5) {
+            for (const cand of this.rowData5) {
               for (let i = 0; i < results.length; i++) {
                 if (cand._id === results[i]._id) {
                   results.splice(i, 1);
@@ -673,11 +689,11 @@ export class SearchComponent implements OnInit, OnDestroy {
       !this.searchSubsForm.value.search.match(/^\s+$/)
     ) {
       this.noMatch = false;
-      let oldInitialData;
-      let queries = this.searchSubsForm.value.search.split(',');
-      let oldResults = [];
-      let results = [];
-      this.docsService.getDocs().subscribe((res) => {
+      let oldInitialData: any;
+      const queries = this.searchSubsForm.value.search.split(',');
+      const oldResults = [];
+      const results = [];
+      this.candidatesService.getCandidates().subscribe((res) => {
         oldInitialData = res.docs;
         for (let query of queries) {
           query = query.toLowerCase().trim();
@@ -794,7 +810,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           if (this.rowData5.length === 0) {
             this.candidateData = results;
           } else {
-            for (let cand of this.rowData5) {
+            for (const cand of this.rowData5) {
               for (let i = 0; i < results.length; i++) {
                 if (cand._id === results[i]._id) {
                   results.splice(i, 1);
@@ -806,12 +822,12 @@ export class SearchComponent implements OnInit, OnDestroy {
               this.candidateData = results;
             } else {
               this.noMatch = true;
-              this.docsService.getDocs().subscribe((res) => {
+              this.candidatesService.getCandidates().subscribe((res) => {
                 if (this.rowData5.length === 0) {
                   this.candidateData = res.docs;
                 } else {
-                  let newData = res.docs;
-                  for (let cand of this.rowData5) {
+                  const newData = res.docs;
+                  for (const cand of this.rowData5) {
                     for (let i = 0; i < newData.length; i++) {
                       if (cand._id === newData[i]._id) {
                         newData.splice(i, 1);
@@ -826,12 +842,12 @@ export class SearchComponent implements OnInit, OnDestroy {
           }
         } else {
           this.noMatch = false;
-          this.docsService.getDocs().subscribe((res) => {
+          this.candidatesService.getCandidates().subscribe((res) => {
             if (this.rowData5.length === 0) {
               this.candidateData = res.docs;
             } else {
-              let newData = res.docs;
-              for (let cand of this.rowData5) {
+              const newData = res.docs;
+              for (const cand of this.rowData5) {
                 for (let i = 0; i < newData.length; i++) {
                   if (cand._id === newData[i]._id) {
                     newData.splice(i, 1);
@@ -846,12 +862,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
     } else {
       this.noMatch = false;
-      this.docsService.getDocs().subscribe((res) => {
+      this.candidatesService.getCandidates().subscribe((res) => {
         if (this.rowData5.length === 0) {
           this.candidateData = res.docs;
         } else {
-          let newData = res.docs;
-          for (let cand of this.rowData5) {
+          const newData = res.docs;
+          for (const cand of this.rowData5) {
             for (let i = 0; i < newData.length; i++) {
               if (cand._id === newData[i]._id) {
                 newData.splice(i, 1);
@@ -867,47 +883,24 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   async search() {
     if (this.searchForm.valid && !this.searchForm.value.search.match(/^\s+$/)) {
-      let oldInitialData = await [...this.dataService.getData()];
-      let queries = this.searchForm.value.search.split(',');
-      let oldResults = [];
-      let results = [];
-      for (let query of queries) {
-        query = query.toLowerCase().trim();
-        if (
-          !isNaN(query) &&
-          query !== '' &&
-          !query.match(/^\s+$/) &&
-          query !== null
-        ) {
-          // Numbers
-          for (const job of oldInitialData) {
-            let dd = job.id + '';
-            if (dd.includes(query)) {
-              if (oldResults.indexOf(job) < 0) {
-                if (results.length === 0) {
-                  results[0] = { ...job, priority: 1 };
-                  oldResults[0] = job;
-                } else {
-                  results.unshift({ ...job, priority: 1 });
-                  oldResults.unshift(job);
-                }
-              } else {
-                const newP = results[oldResults.indexOf(job)].priority + 1;
-                results[oldResults.indexOf(job)] = {
-                  ...job,
-                  priority: newP,
-                };
-              }
-            }
-          }
-        } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
-          if (!isNaN(Date.parse(query))) {
-            // Dates
+      let oldInitialData: any;
+      this.jobService.getData().subscribe((res) => {
+        oldInitialData = res.jobs;
+        const queries = this.searchForm.value.search.split(',');
+        const oldResults = [];
+        const results = [];
+        for (let query of queries) {
+          query = query.toLowerCase().trim();
+          if (
+            !isNaN(query) &&
+            query !== '' &&
+            !query.match(/^\s+$/) &&
+            query !== null
+          ) {
+            // Numbers
             for (const job of oldInitialData) {
-              if (
-                job.createdAt.includes(query) ||
-                job.updatedAt.includes(query)
-              ) {
+              const dd = job._id + '';
+              if (dd.includes(query)) {
                 if (oldResults.indexOf(job) < 0) {
                   if (results.length === 0) {
                     results[0] = { ...job, priority: 1 };
@@ -925,37 +918,14 @@ export class SearchComponent implements OnInit, OnDestroy {
                 }
               }
             }
-          } else {
-            // String
-            // tslint:disable-next-line: max-line-length
-            for (const job of oldInitialData) {
-              if (
-                job.title.toLowerCase().includes(query) ||
-                job.team.toLowerCase().includes(query) ||
-                job.manager.toLowerCase().includes(query) ||
-                job.createdBy.toLowerCase().includes(query) ||
-                job.description.toLowerCase().includes(query) ||
-                job.status.toLowerCase().includes(query)
-              ) {
-                if (oldResults.indexOf(job) < 0) {
-                  if (results.length === 0) {
-                    results[0] = { ...job, priority: 1 };
-                    oldResults[0] = job;
-                  } else {
-                    results.unshift({ ...job, priority: 1 });
-                    oldResults.unshift(job);
-                  }
-                } else {
-                  const newP = results[oldResults.indexOf(job)].priority + 1;
-                  results[oldResults.indexOf(job)] = {
-                    ...job,
-                    priority: newP,
-                  };
-                }
-              }
-              for (let skill of job.skills) {
-                skill = skill.toLowerCase().trim();
-                if (skill.includes(query)) {
+          } else if (query !== '' && !query.match(/^\s+$/) && query !== null) {
+            if (!isNaN(Date.parse(query))) {
+              // Dates
+              for (const job of oldInitialData) {
+                if (
+                  job.createdAt.includes(query) ||
+                  job.updatedAt.includes(query)
+                ) {
                   if (oldResults.indexOf(job) < 0) {
                     if (results.length === 0) {
                       results[0] = { ...job, priority: 1 };
@@ -973,21 +943,78 @@ export class SearchComponent implements OnInit, OnDestroy {
                   }
                 }
               }
+            } else {
+              // String
+              // tslint:disable-next-line: max-line-length
+              for (const job of oldInitialData) {
+                if (
+                  job.title.toLowerCase().includes(query) ||
+                  job.team.toLowerCase().includes(query) ||
+                  job.manager.toLowerCase().includes(query) ||
+                  job.createdBy.toLowerCase().includes(query) ||
+                  job.description.toLowerCase().includes(query) ||
+                  job.status.toLowerCase().includes(query)
+                ) {
+                  if (oldResults.indexOf(job) < 0) {
+                    if (results.length === 0) {
+                      results[0] = { ...job, priority: 1 };
+                      oldResults[0] = job;
+                    } else {
+                      results.unshift({ ...job, priority: 1 });
+                      oldResults.unshift(job);
+                    }
+                  } else {
+                    const newP = results[oldResults.indexOf(job)].priority + 1;
+                    results[oldResults.indexOf(job)] = {
+                      ...job,
+                      priority: newP,
+                    };
+                  }
+                }
+                for (let skill of job.skills) {
+                  skill = skill.toLowerCase().trim();
+                  if (skill.includes(query)) {
+                    if (oldResults.indexOf(job) < 0) {
+                      if (results.length === 0) {
+                        results[0] = { ...job, priority: 1 };
+                        oldResults[0] = job;
+                      } else {
+                        results.unshift({ ...job, priority: 1 });
+                        oldResults.unshift(job);
+                      }
+                    } else {
+                      const newP = results[oldResults.indexOf(job)].priority + 1;
+                      results[oldResults.indexOf(job)] = {
+                        ...job,
+                        priority: newP,
+                      };
+                    }
+                  }
+                }
+              }
             }
           }
         }
-      }
-      if (results.length > 0) {
-        results.sort((a, b) => b.priority - a.priority);
-        this.rowData = results;
-        this.loadProducts();
-      } else {
-        this.rowData = [...this.dataService.getData()];
-        this.loadProducts();
-      }
+        if (results.length > 0) {
+          results.sort((a, b) => b.priority - a.priority);
+          this.rowData = results;
+          this.loadProducts();
+        } else {
+          this.jobService.getData().subscribe((res) => {
+            this.rowData = res.jobs;
+            if (this.isDark) {
+              this.loadProducts();
+            }
+          });
+        }
+      });
     } else {
-      this.rowData = [...this.dataService.getData()];
-      this.loadProducts();
+      this.jobService.getData().subscribe((res) => {
+        this.rowData = res.jobs;
+        if (this.isDark) {
+          this.loadProducts();
+        }
+      });
     }
   }
 
@@ -995,7 +1022,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.editJobMode = true;
     this.prev = job;
     this.newJobForm.patchValue({
-      id: job.id,
+      id: job._id,
       title: job.title,
       team: job.team,
       positions: job.position,
@@ -1009,54 +1036,33 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async deleteJob() {
-    if (!this.isKendo) {
+    if (!this.isDark) {
       const selectedNodes = this.agGrid.api.getSelectedNodes();
       if (selectedNodes.length >= 1) {
         this.alertify.confirm(
           'Are you sure you want to delete job(s)?',
           async () => {
-            this.docsService.getDocs().subscribe(async (res) => {
-              this.candidateData = res.docs;
-              const selectedData = selectedNodes.map((node) => node.data);
-              for (const candidate of this.candidateData) {
-                for (const job of selectedData) {
-                  for (let i = 0; i < candidate.jobs.length; i++) {
-                    if (job.id === candidate.jobs[i]) {
-                      candidate.jobs.splice(i, 1);
-                      break;
-                    }
+            const selectedData = selectedNodes.map((node) => node.data);
+            for (const job of selectedData) {
+              (await this.jobService.deleteData(job._id)).subscribe(() => {
+                this.jobService.getData().subscribe(res => {
+                  this.rowData = res.jobs;
+                  if (this.isDark) {
+                    this.loadProducts();
                   }
-                }
-                await this.docsService
-                  .updateDoc(
-                    candidate._id,
-                    candidate.fullName,
-                    candidate.email,
-                    candidate.phone,
-                    candidate.skills,
-                    candidate.jobs,
-                    candidate.url
-                  )
-                  .subscribe(() => {
-                    this.search();
-                  });
-              }
-              await this.dataService.deleteData(selectedNodes);
-              await this.dataService
-                .getDataChangedListener()
-                .subscribe((res) => {
-                  this.rowData = res;
                 });
-              this.rowCount = 0;
-              setTimeout(() => {
-                if (
-                  this.searchForm.valid &&
-                  !this.searchForm.value.search.match(/^\s+$/)
-                ) {
-                  this.search();
-                }
-              }, 500);
-            });
+              });
+            }
+            this.alertify.success('Job(s) has been deleted successfully');
+            this.rowCount = 0;
+            setTimeout(() => {
+             if (
+               this.searchForm.valid &&
+               !this.searchForm.value.search.match(/^\s+$/)
+             ) {
+               this.search();
+             }
+           }, 500);
           }
         );
       } else {
@@ -1067,47 +1073,26 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.alertify.confirm(
           'Are you sure you want to delete job(s)?',
           async () => {
-            this.docsService.getDocs().subscribe(async (res) => {
-              this.candidateData = res.docs;
-              for (const candidate of this.candidateData) {
-                for (const job of this.mySelection) {
-                  for (let i = 0; i < candidate.jobs.length; i++) {
-                    if (job === candidate.jobs[i]) {
-                      candidate.jobs.splice(i, 1);
-                      break;
-                    }
-                  }
+            for (const job of this.mySelection) {
+              (await this.jobService.deleteData(job)).subscribe(() => {
+              this.jobService.getData().subscribe(res => {
+                this.rowData = res.jobs;
+                if (this.isDark) {
+                  this.loadProducts();
                 }
-                await this.docsService
-                  .updateDoc(
-                    candidate._id,
-                    candidate.fullName,
-                    candidate.email,
-                    candidate.phone,
-                    candidate.skills,
-                    candidate.jobs,
-                    candidate.url
-                  )
-                  .subscribe(() => {
-                    this.search();
-                  });
-              }
-              await this.dataService.deleteforKendo(this.mySelection);
-              await this.dataService
-                .getDataChangedListener()
-                .subscribe((res) => {
-                  this.rowData = res;
-                });
-              this.rowCount = 0;
-              setTimeout(() => {
-                if (
-                  this.searchForm.valid &&
-                  !this.searchForm.value.search.match(/^\s+$/)
-                ) {
-                  this.search();
-                }
-              }, 500);
+              });
             });
+          }
+            this.alertify.success('Job(s) has been deleted successfully');
+            this.rowCount = 0;
+            setTimeout(() => {
+           if (
+             this.searchForm.valid &&
+             !this.searchForm.value.search.match(/^\s+$/)
+           ) {
+             this.search();
+           }
+         }, 500);
           }
         );
       } else {
@@ -1128,14 +1113,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   addSubmission() {
-    if (!this.isKendo) {
+    if (!this.isDark) {
       const selectedNodes = this.agGrid.api.getSelectedNodes();
       if (selectedNodes.length >= 1) {
         this.rowData4 = [];
         this.rowData5 = [];
-        const selectedData = selectedNodes.map((node) => node.data);
+        const selectedData = selectedNodes.map((node: { data: any; }) => node.data);
         this.selectedJobs = selectedData;
-        this.docsService.getDocs().subscribe((res) => {
+        this.candidatesService.getCandidates().subscribe((res: { docs: any; }) => {
           this.candidateData = res.docs;
         });
         this.agGrid3.api.setRowData(this.candidateData);
@@ -1153,16 +1138,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       if (this.mySelection.length >= 1) {
         this.rowData4 = [];
         this.rowData5 = [];
-        let selectedData = [];
+        const selectedData = [];
         for (const id of this.mySelection) {
           for (const job of this.rowData) {
-            if (id === job.id) {
+            if (id === job._id) {
               selectedData.push(job);
             }
           }
         }
         this.selectedJobs = selectedData;
-        this.docsService.getDocs().subscribe((res) => {
+        this.candidatesService.getCandidates().subscribe((res: { docs: any; }) => {
           this.candidateData = res.docs;
         });
         this.agGrid3.api.setRowData(this.candidateData);
@@ -1187,16 +1172,16 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       for (const candidate of this.rowData5) {
         for (const job of this.rowData4) {
-          if (candidate.jobs.indexOf(job.id) < 0) {
+          if (candidate.jobs.indexOf(job._id) < 0) {
             if (candidate.jobs.length === 0) {
-              candidate.jobs[0] = job.id;
+              candidate.jobs[0] = job._id;
             } else {
-              candidate.jobs.unshift(job.id);
+              candidate.jobs.unshift(job._id);
             }
           }
         }
-        await this.docsService
-          .updateDoc(
+        await this.candidatesService
+          .updateCandidate(
             candidate._id,
             candidate.fullName,
             candidate.email,
@@ -1207,40 +1192,40 @@ export class SearchComponent implements OnInit, OnDestroy {
           )
           .subscribe(() => {
             this.search();
-            this.dataService.getAllData();
+            // this.jobService.getAllData();
           });
       }
-      await this.dataService.addSubmissions();
-      this.rowData = [...this.dataService.getData()];
-      setTimeout(() => {
+      await this.jobService.addSubmissions();
+      this.jobService.getData().subscribe((res: { jobs: any; }) => {
+        this.rowData = res.jobs;
+        if (this.isDark) {
+          this.loadProducts();
+        }
         if (
           this.searchForm.valid &&
           !this.searchForm.value.search.match(/^\s+$/)
         ) {
-          this.rowData = [...this.dataService.getData()];
           this.search();
         }
-      }, 400);
-      this.rowCount = 0;
-      $('#viewSubs').modal('hide');
+        this.rowCount = 0;
+        $('#viewSubs').modal('hide');
+      });
     }
   }
 
   onNewJob() {
     if (!this.editJobMode) {
       this.newJobForm.value.skills += '';
-      let newSkills = this.newJobForm.value.skills.split(',');
+      const newSkills = this.newJobForm.value.skills.split(',');
       for (let newSkill of newSkills) {
         newSkill = newSkill.trim();
       }
-      const newd = new Date().toLocaleString();
+      const newd = new Date().toLocaleDateString('en-US').toString();
       // tslint:disable-next-line: max-line-length
       const newRow = {
-        id: +this.newJobForm.value.id,
         title: this.newJobForm.value.title,
         team: this.newJobForm.value.team,
-        position: this.newJobForm.value.positions,
-        submissions: 0,
+        position: +this.newJobForm.value.positions,
         status: this.newJobForm.value.status,
         updatedAt: newd,
         manager: this.newJobForm.value.manager,
@@ -1249,10 +1234,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         skills: newSkills,
         description: this.newJobForm.value.description,
       };
-      this.dataService.addData(newRow);
-      this.dataService.getDataChangedListener().subscribe((res) => {
-        this.rowData = res;
-      });
+      this.jobService.addData(newRow)
+      .subscribe((res: any) => {
+        this.alertify.success('Job has been added successfully');
+        this.jobService.getData().subscribe(res => {
+          this.rowData = res.jobs;
+        });
+        });
       if (
         this.searchForm.valid &&
         !this.searchForm.value.search.match(/^\s+$/)
@@ -1261,18 +1249,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     } else {
       this.newJobForm.value.skills += '';
-      let newSkills = this.newJobForm.value.skills.split(',');
+      const newSkills = this.newJobForm.value.skills.split(',');
       for (let newSkill of newSkills) {
         newSkill = newSkill.trim();
       }
-      const newd = new Date().toLocaleDateString('en-US');
+      const newd = new Date().toLocaleDateString('en-US').toString();
       // tslint:disable-next-line: max-line-length
       const newRow = {
-        id: +this.newJobForm.value.id,
         title: this.newJobForm.value.title,
         team: this.newJobForm.value.team,
         position: this.newJobForm.value.positions,
-        submissions: this.prev.submissions,
         status: this.newJobForm.value.status,
         updatedAt: newd,
         manager: this.newJobForm.value.manager,
@@ -1281,17 +1267,28 @@ export class SearchComponent implements OnInit, OnDestroy {
         skills: newSkills,
         description: this.newJobForm.value.description,
       };
-      this.dataService.updateData(this.prev.id, newRow);
-      this.rowData = this.dataService.getData();
-      this.dataService.getDataChangedListener().subscribe((res) => {
-        this.rowData = res;
-      });
-      if (
-        this.searchForm.valid &&
-        !this.searchForm.value.search.match(/^\s+$/)
-      ) {
-        this.search();
-      }
+      this.jobService.updateData(this.prev._id, newRow)
+      .subscribe(
+        () => {
+          this.alertify.success('Job has been updated successfully');
+          this.jobService.getData().subscribe((res: { jobs: any; }) => {
+            this.rowData = res.jobs;
+            if (this.isDark) {
+              this.loadProducts();
+            }
+          });
+          if (
+            this.searchForm.valid &&
+            !this.searchForm.value.search.match(/^\s+$/)
+          ) {
+            this.search();
+          }
+        },
+        (err) => {
+          this.alertify.error('Failed to update job!');
+          console.log(err);
+        }
+      );
     }
     this.newJobForm.reset();
     this.rowCount = 0;
@@ -1303,11 +1300,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   onSubClick(job: any) {
     this.prev = job;
     this.rowData3 = [];
-    this.docsService.getDocs().subscribe((res) => {
+    this.candidatesService.getCandidates().subscribe((res: { docs: any; }) => {
       this.candidateData = res.docs;
       for (const candidate of this.candidateData) {
         for (const candidateJob of candidate.jobs) {
-          if (candidateJob === job.id) {
+          if (candidateJob === job._id) {
             if (this.rowData3.indexOf(candidate) < 0) {
               this.rowData3.push(candidate);
             }
@@ -1324,7 +1321,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onViewDetails(job: any) {
-    this.toViewJob.id = job.id;
+    this.toViewJob._id = job._id;
     this.toViewJob.title = job.title;
     this.toViewJob.team = job.team;
     this.toViewJob.manager = job.manager;
@@ -1376,7 +1373,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(params): void {
-    if (!this.isKendo) {
+    if (!this.isDark) {
       this.gridApi = params.api;
       this.gridColumnApi = params.columnApi;
 
@@ -1397,12 +1394,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.agGrid.selectionChanged.subscribe(() => {
         this.rowCount = this.agGrid.api.getSelectedRows().length;
       });
-      this.agGrid.cellClicked.subscribe((res) => {
+      this.agGrid.cellClicked.subscribe((res: { colDef: { field: string; }; data: any; }) => {
         if (res.colDef.field === 'submission') {
           this.onSubClick(res.data);
         } else if (
           res.colDef.field === 'description' ||
-          res.colDef.field === 'id' ||
+          res.colDef.field === '_id' ||
           res.colDef.field === 'skills'
         ) {
           this.onViewDetails(res.data);
@@ -1439,7 +1436,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.agGrid3.selectionChanged.subscribe(() => {
       this.subCount = this.rowData5.length;
     });
-    this.agGrid3.cellClicked.subscribe((res) => {
+    this.agGrid3.cellClicked.subscribe((res: { colDef: { field: string; }; data: { _id: any; }; }) => {
       if (res.colDef.field === '_id') {
         this.rowData5.unshift(res.data);
         this.agGrid5.api.setRowData(this.rowData5);
@@ -1464,13 +1461,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.getTableHeight();
       });
     });
-    this.agGrid4.cellClicked.subscribe((res) => {
+    this.agGrid4.cellClicked.subscribe((res: { colDef: { field: string; }; data: { _id: any; }; }) => {
       if (res.colDef.field === 'delete') {
         this.alertify.confirm(
           'Are you sure you want to remove this job from submissions?',
           () => {
             for (let i = 0; i < this.rowData4.length; i++) {
-              if (this.rowData4[i].id === res.data.id) {
+              if (this.rowData4[i]._id === res.data._id) {
                 this.rowData4.splice(i, 1);
                 this.agGrid4.api.setRowData(this.rowData4);
                 this.gridApi4.sizeColumnsToFit();
@@ -1494,7 +1491,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.agGrid5.selectionChanged.subscribe(() => {
       this.subCount = this.rowData5.length;
     });
-    this.agGrid5.cellClicked.subscribe((res) => {
+    this.agGrid5.cellClicked.subscribe((res: { colDef: { field: string; }; data: { _id: any; }; }) => {
       if (res.colDef.field === 'delete') {
         this.candidateData.unshift(res.data);
         this.agGrid3.api.setRowData(this.candidateData);

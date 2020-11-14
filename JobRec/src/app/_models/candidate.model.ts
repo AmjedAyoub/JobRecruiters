@@ -1,4 +1,8 @@
 export interface Candidate {
   url: string;
-  userId: string;
+  fullName: string;
+  email: string;
+  phone: number;
+  skills: string[];
+  jobs: string[];
 }

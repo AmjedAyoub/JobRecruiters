@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const candidateRoutes = require("./routes/candidates");
-const docRoutes = require("./routes/docs");
 const jobRoutes = require("./routes/jobs");
 var cors = require('cors')
 
@@ -48,7 +47,6 @@ app.use("/", express.static(path.join(__dirname, "angular")));
 // });
 
 app.use("/api/candidates", candidateRoutes);
-app.use("/api/docs", docRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, "angular", "index.html"));

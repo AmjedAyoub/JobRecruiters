@@ -1,142 +1,117 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
 const Candidate = require("../models/candidate");
 
-exports.addNewCandidate = (req, res, next) => {
-  const url = req.protocol + "://" + req.get("host");
+exports.createCandidate = (req, res, next) => {
+  let docPath = req.body.doc;
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    docPath = url + "/Docs/" + req.file.filename;
+  }
   const candidate = new Candidate({
+    url: docPath,
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
-    jobs: [],
-    resume: req.file != null ? url + "/Docs/" + req.file.filename : null,
+    skills: req.body.skills,
+    jobs: req.body.jobs
   });
   candidate
     .save()
-    .then(result => {
+    .then(addedCandidate => {
       res.status(201).json({
-        message: "candidate created!",
-        result: result
-      });
-    })
-    .catch(err => {
-      res.status(500).json({
-        message: "Invalid authentication credentials!"
-      });
-    });
-}
-
-exports.getCandidates = (req, res, next) => {
-  Candidate.find()
-    .then(candidates => {
-      res.status(200).json({
-        message: "Candidates fetched successfully!",
-        candidates: candidates
+        message: "Candidate added successfully",
+        doc: {
+          ...addedCandidate,
+          id: addedCandidate._id,
+          url: addedCandidate.url,
+          fullName: addedCandidate.fullName,
+          email: addedCandidate.email,
+          phone: addedCandidate.phone,
+          skills: addedCandidate.skills,
+          jobs: addedCandidate.jobs
+        }
       });
     })
     .catch(error => {
       res.status(500).json({
-        message: "Fetching candidates failed!"
+        message: "Creating Candidate failed!"
+      });
+    });
+};
+
+exports.getCandidates = (req, res, next) => {
+  Candidate.find().sort({_id: -1})
+    .then(docs => {
+      res.status(200).json({
+        message: "Candidates fetched successfully!",
+        docs: docs
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching Candidates failed!"
       });
     });
 };
 
 exports.getCandidate = (req, res, next) => {
   Candidate.findById(req.params.id)
-    .then(candidate => {
-      if (candidate) {
-        res.status(200).json(candidate);
+    .then(doc => {
+      if (doc) {
+        res.status(200).json(doc);
       } else {
-        res.status(404).json({ message: "candidate not found!" });
+        res.status(404).json({ message: "Candidate not found!" });
       }
     })
     .catch(error => {
       res.status(500).json({
-        message: "Fetching candidate failed!"
+        message: "Fetching Candidate failed!"
       });
     });
 };
 
-exports.userLogin = (req, res, next) => {
-  let fetchedUser;
-  User.findOne({ email: req.body.email })
-    .then(user => {
-      if (!user) {
-        return res.status(401).json({
-          message: "User not found!"
-        });
-      }
-      fetchedUser = user;
-
-      return bcrypt.compare(req.body.password, user.password);
-    })
-    .then(result => {
-      if (!result) {
-        return res.status(401).json({
-          message: "Invalid password!"
-        });
-      }
-      const token = jwt.sign(
-        { email: fetchedUser.email, userId: fetchedUser._id },
-        "secret_this_should_be_longer",
-        { expiresIn: "6h" }
-      );
-      res.status(200).json({
-        token: token,
-        expiresIn: 21600,
-        userId: fetchedUser._id
-      });
-    })
-    .catch(err => {
-      return res.status(401).json({
-        message: "Invalid authentication credentials!"
-      });
-    });
-}
-
-exports.getUserName = (req, res, next) => {
-  User.findById(req.params.id)
-    .then(user => {
-      if (user) {
-        res.status(200).json(user.firstName + ' ' + user.lastName);
-      } else {
-        res.status(404).json({ message: "user not found!" });
-      }
-    })
-    .catch(error => {
-      res.status(500).json({
-        message: "Fetching user failed!"
-      });
-    });
-};
-
-exports.updateCandidate = (req, res, next) => {
-
-  let d = new Date();
-  let docPath = req.body.docPath;
-  if (req.file) {
-    const url = req.protocol + "://" + req.get("host");
-    docPath = url + "/Docs/" + req.file.filename;
-  }
-  const candidate = new Candidate({
-    fullName: req.body.fullName,
-    email: req.body.email,
-    phone: req.body.phone,
-    resume: docPath,
-    jobs: req.body.jobs
-  });
-  Candidate.updateOne({ _id: req.params.id }, candidate)
+exports.deleteCandidate = (req, res, next) => {
+  Candidate.deleteOne({ _id: req.params.id })
     .then(result => {
       if (result.n > 0) {
-        res.status(200).json({ message: "Update successful!" });
+        res.status(200).json({ message: "Deletion successful!" });
       } else {
         res.status(401).json({ message: "Not authorized!" });
       }
     })
     .catch(error => {
       res.status(500).json({
-        message: "Couldn't udpate candidate!"
+        message: "Deleting Candidate failed!"
       });
     });
 };
+
+exports.updateCandidate = (req, res, next) => {
+  let docPath = req.body.doc;
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    docPath = url + "/Docs/" + req.file.filename;
+  }
+  const candidate = new Candidate({
+    _id: req.body.id,
+    url: docPath,
+    fullName: req.body.fullName,
+    email: req.body.email,
+    phone: req.body.phone,
+    skills: req.body.skills.split(','),
+    jobs: req.body.jobs.split(',')
+  });
+  Candidate.updateOne({ _id: req.params.id }, candidate)
+    .then(result => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Update successful!", doc: candidate });
+      } else {
+        res.status(401).json({ message: "Not authorized!" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Couldn't udpate Candidate!"
+      });
+    });
+};
+

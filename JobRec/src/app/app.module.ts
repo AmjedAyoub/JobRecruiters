@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { LoginComponent } from './login/login.component';
 import { SearchComponent } from './search/search.component';
-import { DataService } from './_services/data.service';
+import { JobService } from './_services/job.service';
 import { CandidateComponent } from './candidate/candidate.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -45,7 +45,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SliderModule,
     BrowserAnimationsModule
   ],
-  providers: [AuthService, DataService],
+  providers: [AuthService, JobService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

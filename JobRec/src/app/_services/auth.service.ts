@@ -8,6 +8,8 @@ import { AlertifyService } from '../_services/alertify.service';
 export class AuthService {
   private isAuthenticated: any;
   private authStatusListener = new Subject<boolean>();
+  private isDark = 'false';
+  private isDarkListener = new Subject<boolean>();
 
   constructor(private router: Router, private alertifyService: AlertifyService) {}
 
@@ -16,6 +18,8 @@ export class AuthService {
       this.isAuthenticated = true;
       this.authStatusListener.next(true);
       localStorage.setItem('isAuth', 'true');
+      localStorage.setItem('isDark', 'false');
+      this.isDarkListener.next(false);
       this.router.navigate(['search']);
       this.alertifyService.success('Logged In successfully');
     }
@@ -40,5 +44,29 @@ export class AuthService {
 
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
+  }
+
+  getisDark(): boolean{
+    this.isDark = localStorage.getItem('isDark');
+    if (this.isDark === 'false'){
+      return false;
+    }
+    return true;
+  }
+
+  switchMode () {
+    if (this.isDark === 'false'){
+      this.isDark = 'true';
+      localStorage.setItem('isDark', 'true');
+      this.isDarkListener.next(true);
+    }else{
+      this.isDark = 'false';
+      localStorage.setItem('isDark', 'false');
+      this.isDarkListener.next(false);
+    }
+  }
+
+  getisDarkListener() {
+    return this.isDarkListener.asObservable();
   }
 }

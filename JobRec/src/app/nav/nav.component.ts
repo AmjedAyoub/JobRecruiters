@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav',
@@ -10,6 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class NavComponent implements OnInit {
   isAuth = false;
   isSearch = true;
+  faCog = faCog;
+  isDark = false;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
 
@@ -25,6 +28,10 @@ export class NavComponent implements OnInit {
       (res) => {
           this.isAuth = res;
       });
+    this.isDark = this.authService.getisDark();
+    this.authService.getisDarkListener().subscribe(res => {
+        this.isDark = res;
+      });
   }
 
   logout(){
@@ -39,5 +46,10 @@ export class NavComponent implements OnInit {
       this.isSearch = false;
       this.router.navigate(['candidates']);
     }
+  }
+
+  switchMode(){
+    this.authService.switchMode();
+    this.isDark = this.authService.getisDark();
   }
 }

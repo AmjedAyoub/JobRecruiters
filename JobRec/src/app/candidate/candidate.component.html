@@ -2,9 +2,6 @@
   <div class="row center">
     <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
-        <button type="button" class="btn btn-outline-secondary btn-sm mr-5 badge-pill" data-toggle="tooltip"
-        data-placement="auto" title="Switch to" style="float: left;" (click)="switchKendo()"> {{ isKendo ? 'AG-Grid' : 'Kendo-Grid' }}
-      </button>
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 90%;">
             <input type="text" class="form-control form-control-sm"
@@ -40,7 +37,7 @@
       <fa-icon [icon]="faUserPlus"></fa-icon>
     </button>
   </span>
-  <div class="row center" style="height: 100%; position: relative;" *ngIf="!isKendo">
+  <div *ngIf="!isDark" class="row center" style="height: 100%; position: relative;">
     <ag-grid-angular #agGrid style="width: 100%; margin: auto; position: absolute; font: small !important;"
       [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowData2" [columnDefs]="columnDefs3"
       rowSelection="multiple" (gridReady)="onGridReady($event)" [suppressHorizontalScroll]=false rowHeight='30'
@@ -58,7 +55,7 @@
     </div>
   </div>
 
-  <div class="row center" style="height: 100%; position: relative;" *ngIf="isKendo">
+  <div class="row center" style="height: 100%; position: relative;" *ngIf="isDark">
     <kendo-grid #kGrid id="kGrid" style="color: #656565 !important;" [data]="gridView"
     [ngStyle]="getTableHeight()" [navigable]="true" [reorderable]="true"
     [resizable]="true" [height]="480" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
@@ -98,13 +95,13 @@
     </kendo-grid-column>
     <kendo-grid-column field="jobs" title="Jobs">
       <ng-template kendoGridCellTemplate let-dataItem>
-      <button (click)="onJobsClick(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">{{ dataItem.jobs.length - 1 }}</button>
+      <button (click)="onJobsClick(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">{{ dataItem.jobs?.length || 0 }}</button>
     </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="url" title="Resume">
       <ng-template kendoGridCellTemplate let-dataItem>
         <a *ngIf="dataItem.url !== 'null'" href= {{dataItem.url}} target="_blank" class="btn btn-info" style="font: small;  height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a>
-        <div *ngIf="dataItem.url === 'null'" class="disabledResume"><a class="btn btn-info disabledResume" style="font: small; font-size: 12px; height: 29px; color: darkgrey; margin: auto; text-align: center opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>
+        <div *ngIf="dataItem.url === 'null'" class="disabledResume"><a class="btn btn-info disabledResume" style="font: small; font-size: 12px; height: 29px; color: darkgrey; margin: auto; text-align: center; opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>
       </ng-template>
     </kendo-grid-column>
     <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './_services/data.service';
+import { AuthService } from './_services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +8,10 @@ import { DataService } from './_services/data.service';
 })
 export class AppComponent implements OnInit {
   title = 'JobRec';
-  constructor(private dataService: DataService){}
+  constructor(private authService: AuthService){}
 
   ngOnInit() {
-    this.dataService.getData();
-    this.dataService.getAllData();
+    this.authService.getIsAuth();
+    this.authService.getisDark();
   }
 }

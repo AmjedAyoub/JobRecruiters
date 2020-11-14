@@ -2,9 +2,6 @@
   <div class="row center">
     <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
-        <button type="button" class="btn btn-outline-secondary btn-sm mr-5 badge-pill" data-toggle="tooltip"
-        data-placement="auto" title="Switch to" style="float: left;" (click)="isKendo = !isKendo"> {{ isKendo ? 'AG-Grid' : 'Kendo-Grid' }}
-      </button>
         <div class="form-group has-success  has-danger" style="display: flex;">
           <div style="margin: auto; width: 90%;">
             <input type="text" class="form-control form-control-sm"
@@ -41,7 +38,7 @@
       <fa-icon [icon]="faUserPlus"></fa-icon>
     </button>
   </span>
-  <div class="row center" style="height: 100%; position: relative;" *ngIf="!isKendo">
+  <div class="row center" style="height: 100%; position: relative;" *ngIf="!isDark">
     <ag-grid-angular #agGrid style="width: 100%; margin: auto; position: absolute; font: small !important;"
       [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs"
       rowSelection="multiple" (gridReady)="onGridReady($event)" [suppressHorizontalScroll]=false rowHeight='30'
@@ -59,7 +56,7 @@
     </div>
   </div>
 
-  <div class="row center" style="height: 100%; position: relative;" *ngIf="isKendo">
+  <div class="row center" style="height: 100%; position: relative;" *ngIf="isDark">
     <kendo-grid #kGrid id="kGrid" style="color: #656565 !important;" [data]="gridView"
     [ngStyle]="getTableHeight()" [navigable]="true" [reorderable]="true"
     [resizable]="true" [height]="480" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
@@ -72,7 +69,7 @@
       info: true,
       previousNext: true
   }" (pageChange)="onPageChange($event)"
-  kendoGridSelectBy="id"
+  kendoGridSelectBy="_id"
   [selectedKeys]="mySelection">
     <kendo-grid-checkbox-column width="50">
       <ng-template kendoGridCellTemplate let-idx="rowIndex">
@@ -84,9 +81,9 @@
         <button (click)="editJob(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="Edit Job">Edit</button>
       </ng-template>
     </kendo-grid-command-column>
-    <kendo-grid-column field="id" title="#">
+    <kendo-grid-column field="_id" title="#">
       <ng-template kendoGridCellTemplate let-dataItem>
-        <button (click)="onViewDetails(dataItem)" class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; border-color: lime; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job">{{ dataItem.id }}</button>
+        <button (click)="onViewDetails(dataItem)" class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; border-color: lime; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Job">View</button>
       </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="title" title="Job Title">
@@ -95,9 +92,9 @@
     </kendo-grid-column>
     <kendo-grid-column field="position" title="#Pos.">
     </kendo-grid-column>
-    <kendo-grid-column field="submission" title="#Subs.">
+    <kendo-grid-column field="candidates" title="#Subs.">
       <ng-template kendoGridCellTemplate let-dataItem>
-      <button (click)="onSubClick(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">{{ dataItem.submission }}</button>
+      <button (click)="onSubClick(dataItem)" class="btn btn-outline-warning" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black" data-toggle="tooltip" data-placement="auto" title="View Candidates">{{ dataItem.candidates?.length || 0 }}</button>
     </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="status" title="Status">
@@ -154,16 +151,10 @@
           style="margin: auto; width: 100%; padding: 20px;">
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group has-success has-danger mt-5" style="white-space:nowrap; display: flex;">
+              <div class="form-group has-success has-danger mt-5" style="white-space:nowrap; display: flex;"  *ngIf="editJobMode">
                 <label for="id" style="color: aliceblue; width: 100px;">ID: </label>
-                <input type="number" class="form-control ml-2" placeholder="Job ID" formControlName="id" [ngClass]="
-                (newJobForm.get('id').errors &&
-                newJobForm.get('id').touched) ||
-                (newJobForm.get('id').touched &&
-                newJobForm.hasError('exists')) ?
-                'is-invalid' : newJobForm.get('id').valid && !newJobForm.hasError('exists') ? 'is-valid' : ''
-              ">
-                <!-- <div class="invalid-feedback">ID is required!</div> -->
+                <input  type="text" class="form-control" disabled placeholder="Job ID" formControlName="id" [ngClass]="
+                !editJobMode ? 'hideId' : ''">
               </div>
 
               <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
@@ -386,7 +377,7 @@
         </div>
         <form class="center mt-4" style="margin: auto; width: 95%; padding: 2px;">
           <div class="card border-warning mb-3" style="width: 100%;">
-            <div class="card-header"><strong># {{ toViewJob.id }} </strong> | <strong> Status:
+            <div class="card-header"><strong># {{ toViewJob._id }} </strong> | <strong> Status:
                 {{ toViewJob.status }}</strong></div>
             <div class="card-body">
               <h4 class="card-title">{{ toViewJob.title }}</h4>

@@ -1,19 +1,18 @@
 const Job = require("../models/job");
 
 exports.addNewJob = (req, res, next) => {
-  const url = req.protocol + "://" + req.get("host");
-
-  let d = new Date();
   const job = new Job({
     title: req.body.title,
     position: req.body.position,
     status: req.body.status,
-    dateUpdated: d,
+    skills: req.body.skills,
+    updatedAt: req.body.updatedAt,
     manager: req.body.manager,
+    description: req.body.description,
     team: req.body.team,
     createdBy: req.body.createdBy,
-    createdAt: d,
-    candidates: []
+    createdAt: req.body.createdAt,
+    candidates: req.body.candidates,
   });
   job
     .save()
@@ -34,23 +33,25 @@ exports.addNewJob = (req, res, next) => {
 };
 
 exports.updateJob = (req, res, next) => {
-
-  let d = new Date();
+  let d = new Date().toLocaleDateString('en-US').toString();
   const job = new Job({
+    _id: req.params.id,
     title: req.body.title,
     position: req.body.position,
     status: req.body.status,
-    dateUpdated: d,
+    updatedAt: d,
     manager: req.body.manager,
     team: req.body.team,
+    skills: req.body.skills,
+    candidates: req.body.candidates,
     createdBy: req.body.createdBy,
     createdAt: req.body.createdAt,
-    candidates: req.body.candidates
+    description: req.body.description
   });
   Job.updateOne({ _id: req.params.id }, job)
     .then(result => {
       if (result.n > 0) {
-        res.status(200).json({ message: "Update successful!" });
+        res.status(200).json({ message: "Update successful!", job: job });
       } else {
         res.status(401).json({ message: "Not authorized!" });
       }
