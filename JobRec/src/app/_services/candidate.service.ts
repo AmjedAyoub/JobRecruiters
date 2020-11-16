@@ -91,6 +91,14 @@ export class CandidatesService implements OnInit, OnDestroy {
     return this.http.put<{ message: string; doc: any }>(BACKEND_URL + id, postData);
   }
 
+  addSubmissions(id: any, Data: any) {
+    return this.http.put<{ message: string; doc: any }>(BACKEND_URL + 'subs/' + id, Data);
+  }
+
+  deleteSubmissions(id: any, Data: any) {
+    return this.http.put<{ message: string; doc: any }>(BACKEND_URL + 'delete/' + id, Data);
+  }
+
   getCandidatesUpdateListener() {
     return this.candidatesChangedListener.asObservable();
   }

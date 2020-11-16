@@ -11,6 +11,10 @@ router.post("", JobController.addNewJob);
 
 router.put("/:id", JobController.updateJob);
 
+router.put("/subs/:id", JobController.updateSubsJob);
+
+router.put("/delete/:id", JobController.deleteSubs);
+
 router.get("", JobController.getJobs);
 
 router.get("/:id", JobController.getJob);

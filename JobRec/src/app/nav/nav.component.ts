@@ -48,8 +48,20 @@ export class NavComponent implements OnInit {
     }
   }
 
+  getStyle(){
+    if (this.isDark){
+      return {
+        'background-color': '#060606 !important',
+      };
+    }
+    return {
+      'background-color': '#a2a2a2 !important',
+    };
+  }
+
   switchMode(){
     this.authService.switchMode();
     this.isDark = this.authService.getisDark();
+    this.getStyle();
   }
 }

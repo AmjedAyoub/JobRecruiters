@@ -17,4 +17,8 @@ router.delete("/:id", CandidateController.deleteCandidate);
 
 router.put("/:id", extractFile, CandidateController.updateCandidate);
 
+router.put("/subs/:id", CandidateController.updateSubsCandidates);
+
+router.put("/delete/:id", CandidateController.deleteSubs);
+
 module.exports = router;

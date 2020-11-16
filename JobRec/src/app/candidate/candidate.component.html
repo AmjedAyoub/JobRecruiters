@@ -1,4 +1,5 @@
 <div class="container-fluid center">
+
   <div class="row center">
     <div class="col-md-12" style="display: flex;">
       <form [formGroup]="searchForm" (submit)="search()" class="center mt-2" style="margin: auto; width: 800px;">
@@ -19,6 +20,7 @@
       </form>
     </div>
   </div>
+
   <span class="badge">
     <button type="button" class="btn btn-outline-info btn-sm" (click)="newCandidate()" data-toggle="tooltip"
       data-placement="auto" title="Add New Candidate">
@@ -37,6 +39,7 @@
       <fa-icon [icon]="faUserPlus"></fa-icon>
     </button>
   </span>
+
   <div *ngIf="!isDark" class="row center" style="height: 100%; position: relative;">
     <ag-grid-angular #agGrid style="width: 100%; margin: auto; position: absolute; font: small !important;"
       [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowData2" [columnDefs]="columnDefs3"

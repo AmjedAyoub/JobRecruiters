@@ -89,8 +89,12 @@ export class JobService implements OnInit, OnDestroy {
     return this.http.put<{ message: string; doc: any }>(BACKEND_URL + id, Data);
   }
 
-  addSubmissions() {
-    this.alertify.success('Submission(s) added successfully');
+  addSubmissions(id: any, Data: any) {
+    return this.http.put<{ message: string; doc: any }>(BACKEND_URL + 'subs/' + id, Data);
+  }
+
+  deleteSubmissions(id: any, Data: any) {
+    return this.http.put<{ message: string; doc: any }>(BACKEND_URL + 'delete/' + id, Data);
   }
 
   ngOnDestroy() {

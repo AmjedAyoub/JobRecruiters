@@ -1,6 +1,14 @@
 
-.modal-content {
+/* .modal-content {
+  background-color: transparent !important;
+} */
+
+#modalDark {
   background-color: #4e3c55 !important;
+}
+
+#modalLight {
+  background-color: #ededed !important;
 }
 
 .form-control{

@@ -734,7 +734,7 @@ export class CandidateComponent implements OnInit, OnDestroy {
             this.search();
           });
       }
-      this.jobService.addSubmissions();
+      // this.jobService.addSubmissions();
       await this.jobService.getjobChangedListener().subscribe((res) => {
         this.rowData = res;
       });

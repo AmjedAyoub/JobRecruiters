@@ -1,3 +1,5 @@
+var mongojs = require("mongojs");
+const Candidate = require("../models/candidate");
 const Job = require("../models/job");
 
 exports.addNewJob = (req, res, next) => {
@@ -63,8 +65,34 @@ exports.updateJob = (req, res, next) => {
     });
 };
 
+exports.updateSubsJob = (req, res, next) => {
+  const candidate = new Candidate({
+    _id: req.body._id,
+    url: req.body.resume,
+    fullName: req.body.fullName,
+    email: req.body.email,
+    phone: req.body.phone,
+    skills: req.body.skills,
+    jobs: req.body.jobs
+  });
+  Job.updateOne({ _id: req.params.id }, {$push: { candidates: candidate }}, { new: true, useFindAndModify: false })
+    .then(result => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Updated submissions successfully!", job: candidate });
+      } else {
+        res.status(401).json({ message: "Not authorized!" });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        message: "Couldn't udpate submissions!"
+      });
+    });
+};
+
 exports.getJobs = (req, res, next) => {
-  Job.find().sort({createdAt: -1})
+  Job.find().populate("candidates").sort({createdAt: -1})
     .then(jobs => {
       res.status(200).json({
         message: "jobs fetched successfully!",
@@ -79,7 +107,7 @@ exports.getJobs = (req, res, next) => {
 };
 
 exports.getJob = (req, res, next) => {
-  Job.findById(req.params.id)
+  Job.findById(req.params.id).populate("candidates")
     .then(job => {
       if (job) {
         res.status(200).json(job);
@@ -95,7 +123,23 @@ exports.getJob = (req, res, next) => {
 };
 
 exports.deleteJob = (req, res, next) => {
-  Job.deleteOne({ _id: req.params.id })
+  Job.remove({ _id: mongojs.ObjectID(req.params.id) })
+    .then(result => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Deletion successful!" });
+      } else {
+        res.status(401).json({ message: "Not authorized!" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Deleting jobs failed!"
+      });
+    });
+};
+
+exports.deleteSubs = (req, res, next) => {
+  Job.updateMany({}, { $pull: { candidates: req.params.id} } )
     .then(result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });

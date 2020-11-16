@@ -1,14 +1,16 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="height: 45px;">
-  <a class="navbar-brand">JobRec</a>
+<nav class="navbar navbar-expand-sm" style="height: 45px;" [ngClass]="{'navbar-dark bg-dark': isDark, 'navbar-light bg-light': !isDark}">
+  <img src="../../assets/RJ.png" style="height: inherit; width: inherit;" *ngIf="isDark">
+  <img src="../../assets/RJLight.png" style="height: inherit; width: inherit;" *ngIf="!isDark">
+  <p style="color: goldenrod; font-size: 11pt; left: 0px; bottom: 0px; margin-bottom: 0px;">JobRec</p>
 
   <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse left" id="navbarColor02" style="background-color: black; z-index: 1000;">
+  <div class="collapse navbar-collapse left" id="navbarColor02" style="z-index: 1000;" [ngStyle]="{'background-color': isDark ? 'black' : '#ededed'}">
     <ul class="navbar-nav mr-auto" *ngIf="isAuth" style="margin: auto; height: 35px;">
       <li class="nav-item" style="margin: auto; width: 300px; height: 100%;">
-        <div class="my-nav-link center">{{ isSearch ? 'Jobs Search Page' : 'Candidates Search Page' }}</div>
+        <div class="my-nav-link center" [ngStyle]="{color: isSearch ? '#28a745' : '#ffc107', 'background-color': isDark ? '#202020' : '#e8e5e5'}">{{ isSearch ? 'Jobs Search' : 'Candidates Search' }}</div>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0 mr-3" *ngIf="isAuth">
@@ -21,7 +23,7 @@
           <!-- <button type="button" class="btn btn-outline-danger"></button> -->
           <div class="btn-group" role="group">
             <button id="btnGroupDrop4" type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fa-icon [icon]="faCog"></fa-icon></button>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop4" style="position: absolute; left: -105px; background-color: black;">
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop4" style="position: absolute; left: -105px;" [ngStyle]="{'background-color': isDark ? 'black' : '#ededed'}">
               <a class="dropdown-item" (click)="switchMode()" style="color: #dc3545 !important;"> {{ isDark ? 'Light Mode' : 'Dark mode' }}</a>
               <a class="dropdown-item" (click)="logout()" style="color: #dc3545 !important;">Logout</a>
             </div>

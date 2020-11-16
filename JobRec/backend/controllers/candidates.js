@@ -1,4 +1,6 @@
+var mongojs = require("mongojs");
 const Candidate = require("../models/candidate");
+const Job = require("../models/job");
 
 exports.createCandidate = (req, res, next) => {
   let docPath = req.body.doc;
@@ -39,7 +41,7 @@ exports.createCandidate = (req, res, next) => {
 };
 
 exports.getCandidates = (req, res, next) => {
-  Candidate.find().sort({_id: -1})
+  Candidate.find().populate("jobs").sort({_id: -1})
     .then(docs => {
       res.status(200).json({
         message: "Candidates fetched successfully!",
@@ -54,7 +56,7 @@ exports.getCandidates = (req, res, next) => {
 };
 
 exports.getCandidate = (req, res, next) => {
-  Candidate.findById(req.params.id)
+  Candidate.findById(req.params.id).populate("jobs")
     .then(doc => {
       if (doc) {
         res.status(200).json(doc);
@@ -70,7 +72,7 @@ exports.getCandidate = (req, res, next) => {
 };
 
 exports.deleteCandidate = (req, res, next) => {
-  Candidate.deleteOne({ _id: req.params.id })
+  Candidate.remove({ _id: mongojs.ObjectID(req.params.id) })
     .then(result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });
@@ -111,6 +113,53 @@ exports.updateCandidate = (req, res, next) => {
     .catch(error => {
       res.status(500).json({
         message: "Couldn't udpate Candidate!"
+      });
+    });
+};
+
+exports.updateSubsCandidates = (req, res, next) => {
+  const job = new Job({
+    _id: req.body._id,
+    title: req.body.title,
+    position: req.body.position,
+    status: req.body.status,
+    skills: req.body.skills,
+    updatedAt: req.body.updatedAt,
+    manager: req.body.manager,
+    description: req.body.description,
+    team: req.body.team,
+    createdBy: req.body.createdBy,
+    createdAt: req.body.createdAt,
+    candidates: req.body.candidates,
+  });
+  Candidate.updateOne({ _id: req.params.id }, {$push: { jobs: job }}, { new: true, useFindAndModify: false })
+    .then(result => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Updated submissions successfully!", doc: job });
+      } else {
+        res.status(401).json({ message: "Not authorized!" });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        message: "Couldn't udpate submissions!"
+      });
+    });
+  };
+
+exports.deleteSubs = (req, res, next) => {
+  Candidate.updateMany({}, { $pull: { jobs: req.params.id} } )
+    .then(result => {
+      if (result.n > 0) {
+        res.status(200).json({ message: "Deletion successful!" });
+      } else {
+        res.status(401).json({ message: "Not authorized!" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Deleting jobs failed!"
       });
     });
 };
