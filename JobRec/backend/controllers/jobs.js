@@ -66,29 +66,31 @@ exports.updateJob = (req, res, next) => {
 };
 
 exports.updateSubsJob = (req, res, next) => {
-  const candidate = new Candidate({
-    _id: req.body._id,
-    url: req.body.resume,
-    fullName: req.body.fullName,
-    email: req.body.email,
-    phone: req.body.phone,
-    skills: req.body.skills,
-    jobs: req.body.jobs
-  });
-  Job.updateOne({ _id: req.params.id }, {$push: { candidates: candidate }}, { new: true, useFindAndModify: false })
-    .then(result => {
-      if (result.n > 0) {
-        res.status(200).json({ message: "Updated submissions successfully!", job: candidate });
-      } else {
-        res.status(401).json({ message: "Not authorized!" });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({
-        message: "Couldn't udpate submissions!"
-      });
+  for(const reqCan of req.body){
+    const candidate = new Candidate({
+      _id: reqCan._id,
+      url: reqCan.resume,
+      fullName: reqCan.fullName,
+      email: reqCan.email,
+      phone: reqCan.phone,
+      skills: reqCan.skills,
+      jobs: reqCan.jobs
     });
+    Job.updateOne({ _id: req.params.id }, {$addToSet: { candidates: candidate }})
+      .then(result => {
+        if (result.n > 0) {
+          // res.status(200).json({ message: "Updated submissions successfully!", job: candidate });
+        } else {
+          res.status(401).json({ message: "Not authorized!" });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).json({
+          message: "Couldn't udpate submissions!"
+        });
+      });
+  }
 };
 
 exports.getJobs = (req, res, next) => {
@@ -123,7 +125,7 @@ exports.getJob = (req, res, next) => {
 };
 
 exports.deleteJob = (req, res, next) => {
-  Job.remove({ _id: mongojs.ObjectID(req.params.id) })
+  Job.deleteOne({ _id: mongojs.ObjectID(req.params.id) })
     .then(result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });

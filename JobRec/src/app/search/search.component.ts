@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormBuilder
 } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   faPlus,
@@ -30,6 +31,22 @@ declare var $: any;
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit {
+  private jobChangedListener = new Subject<
+    {
+      _id: string;
+      title: string;
+      team: string;
+      position: number;
+      createdAt: string;
+      updatedAt: string;
+      createdBy: string;
+      manager: string;
+      status: string;
+      skills: string[];
+      candidates: string[];
+      description: string;
+    }[]
+  >();
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
   @ViewChild('agGrid3') agGrid3: AgGridAngular;
@@ -568,7 +585,7 @@ export class SearchComponent implements OnInit {
       }
     });
     this.jobService.getjobChangedListener().subscribe((res) => {
-      this.rowJobsData = res;
+      this.jobChangedListener.next([...this.rowJobsData]);
       if (!this.isDark) {
         this.loadJobsData();
       }else{
@@ -1085,7 +1102,7 @@ export class SearchComponent implements OnInit {
           async () => {
             const selectedData = selectedNodes.map((node) => node.data);
             for (const job of selectedData) {
-              let deletedJob = job;
+              const deletedJob = job;
               (await this.jobService.deleteData(job._id)).subscribe(() => {
                 this.jobService.getData().subscribe(res => {
                   this.rowJobsData = res.jobs;
@@ -1117,7 +1134,7 @@ export class SearchComponent implements OnInit {
           'Are you sure you want to delete job(s)?',
           async () => {
             for (const job of this.mySelection) {
-              let deletedJob = job;
+              const deletedJob = job;
               (await this.jobService.deleteData(job)).subscribe(() => {
               this.jobService.getData().subscribe(res => {
                 this.rowJobsData = res.jobs;
@@ -1205,19 +1222,11 @@ export class SearchComponent implements OnInit {
     } else if (this.rowSelectedJobsData.length <= 0) {
       this.alertify.error('Please add jobs!');
     } else {
+      for (const job of this.rowSelectedJobsData) {
+        await this.jobService.addSubmissions(job._id, this.rowSelectedCandidatesData).subscribe(rs => {});
+      }
       for (const candidate of this.rowSelectedCandidatesData) {
-        for (const job of this.rowSelectedJobsData) {
-          let exist = false;
-          for (const candidateJob of candidate.jobs){
-            if (candidateJob._id === job._id) {
-              exist = true;
-            }
-          }
-          if (!exist) {
-            this.jobService.addSubmissions(job._id, candidate).subscribe(rs => {});
-            this.candidatesService.addSubmissions(candidate._id, job).subscribe(rs => {});
-          }
-        }
+        await this.candidatesService.addSubmissions(candidate._id, this.rowSelectedJobsData).subscribe(rs => {});
       }
       this.jobService.getData().subscribe((res: { jobs: any; }) => {
         this.rowJobsData = res.jobs;

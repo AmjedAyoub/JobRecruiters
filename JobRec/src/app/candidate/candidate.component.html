@@ -1,4 +1,4 @@
-<div class="container-fluid center">
+<div class="container-fluid center" [ngStyle]="{'background-color': isDark ? '#202020' : 'rgb(224 226 229)', height: '-webkit-fill-available'}">
 
   <div class="row center">
     <div class="col-md-12" style="display: flex;">
@@ -40,11 +40,11 @@
     </button>
   </span>
 
-  <div *ngIf="!isDark" class="row center" style="height: 100%; position: relative;">
+  <div *ngIf="isDark" class="row center" style="height: 100%; position: relative;">
     <ag-grid-angular #agGrid style="width: 100%; margin: auto; position: absolute; font: small !important;"
-      [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowData2" [columnDefs]="columnDefs3"
+      [ngStyle]="getTableHeight()" class="ag-theme-alpine" [rowData]="rowCandidatesData" [columnDefs]="columnDefs3"
       rowSelection="multiple" (gridReady)="onGridReady($event)" [suppressHorizontalScroll]=false rowHeight='30'
-      cellHeight='29' [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25"
+      cellHeight='29' sortable=true [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25"
       (onGridSizeChanged)="sizeGrid($event)" [statusBar]="true" [pivotPanelShow]="true" [groupIncludeFooter]="true"
       [domLayout]="domLayout" [groupIncludeTotalFooter]="true">
     </ag-grid-angular>
@@ -58,14 +58,14 @@
     </div>
   </div>
 
-  <div class="row center" style="height: 100%; position: relative;" *ngIf="isDark">
-    <kendo-grid #kGrid id="kGrid" style="color: #656565 !important;" [data]="gridView"
+  <div class="row center" style="height: 100%; position: relative;" *ngIf="!isDark">
+    <kendo-grid #kGrid id="kGrid" style="color: #656565 !important;" [data]="candidatesData"
     [ngStyle]="getTableHeight()" [navigable]="true" [reorderable]="true"
     [resizable]="true" [height]="480" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
     [resizable]="true" [sortable]="{
               allowUnsort: true,
               mode: 'single'
-              }" [sort]="sort" (sortChange)="sortChange($event)" [kendoGridBinding]="rowData" [pageSize]="pageSize"
+              }" [sort]="sort" (sortChange)="sortChange($event)" [kendoGridBinding]="rowCandidatesData" [pageSize]="pageSize"
     [skip]="skip" [pageable]="{
       buttonCount: 4,
       info: true,
@@ -130,9 +130,9 @@
   <div class="modal fade bd-example-modal-lg mt-5 mb-5 text-center" id="newCandidate" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
+      <div class="modal-content" [id]="isDark ? 'modalDark' : 'modalLight'">
         <div class="modal-header text-center">
-          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">{{!editJobMode? 'New Candidate' : 'Edit Candidate'}}</h3>
+          <h3 class="modal-title text-center" style="flex: auto;" [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">{{!editJobMode? 'New Candidate' : 'Edit Candidate'}}</h3>
           <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -142,13 +142,13 @@
             <form [formGroup]="newCandidateForm" (submit)="onNewCandidate()" class="center"
             style="margin: auto; width: 80%; padding: 20px;">
               <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;"  *ngIf="editJobMode">
-                <label for="createdBy" style="color: aliceblue; width: 100px;">ID: </label>
+                <label for="createdBy" style="width: 100px;" [ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">ID: </label>
                 <input  type="text" class="form-control" disabled placeholder="Candidate ID" formControlName="_id" [ngClass]="
                 !editJobMode ? 'hideId' : ''">
               </div>
 
               <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
-                <label for="createdBy" style="color: aliceblue; width: 100px;">Full-Name: </label>
+                <label for="createdBy" style="width: 100px;"[ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">Full-Name: </label>
                 <input type="text" class="form-control" placeholder="Full Name"
                   formControlName="fullName" [ngClass]="
                 newCandidateForm.get('fullName').errors &&
@@ -159,7 +159,7 @@
               </div>
 
               <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
-                <label for="email" style="color: aliceblue; width: 100px;">Email: </label>
+                <label for="email" style="width: 100px;" [ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">Email: </label>
                 <input type="text" class="form-control" placeholder="Email"
                   formControlName="email" [ngClass]="
                 newCandidateForm.get('email').errors &&
@@ -170,7 +170,7 @@
               </div>
 
               <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
-                <label for="phone" style="color: aliceblue; width: 100px;">Phone: </label>
+                <label for="phone" style="width: 100px;" [ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">Phone: </label>
                 <input type="text" class="form-control" placeholder="Phone"
                   formControlName="phone" [ngClass]="
                 newCandidateForm.get('phone').errors &&
@@ -181,7 +181,7 @@
               </div>
 
               <div class="form-group has-success has-danger mt-1" style="white-space:nowrap; display: flex;">
-                <label for="skills" style="color: aliceblue; width: 100px;">Skills: </label>
+                <label for="skills" style="width: 100px;" [ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">Skills: </label>
                 <textarea rows="3" class="form-control ml-2"
                   placeholder="Skills seperated by comma, skill #1, skill #2,..." formControlName="skills" [ngClass]="
                   newCandidateForm.get('skills').errors &&
@@ -213,10 +213,10 @@
   <div class="modal fade bd-example-modal-xl mt-5 mb-5 text-center" id="viewJobs" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-      <div class="modal-content">
+      <div class="modal-content" [id]="isDark ? 'modalDark' : 'modalLight'">
         <div class="modal-header text-center">
-          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Submissions Details</h3>
-          <h4 class="modal-title text-center" style="color: thistle; flex: auto;">For Candidate: {{ prev?.fullName || '' }} </h4>
+          <h3 class="modal-title text-center" style="flex: auto;" [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">Submissions Details</h3>
+          <h4 class="modal-title text-center" style="flex: auto;" [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">For Candidate: {{ prev?.fullName || '' }} </h4>
           <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -224,15 +224,62 @@
         <form class="center mt-4"
           style="margin: auto; width: 95%; padding: 2px;">
           <div class="form-group">
-            <ag-grid-angular #agGrid2 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
-              [rowData]="rowData3" [columnDefs]="columnDefs" rowSelection="multiple"
+            <ag-grid-angular *ngIf="isDark" #agGrid2 style="width: 99%; height: 400px; margin: auto;" class="ag-theme-alpine"
+              [rowData]="rowJobsCandidatesData" [columnDefs]="columnDefs" rowSelection="multiple"
               (gridReady)="onGridReady2($event)"
               [suppressHorizontalScroll]=false
-              [enableSorting]="true"
+              sortable=true
               [enableRangeSelection]="true"
               [pagination]="true"
               [paginationPageSize]="25">
             </ag-grid-angular>
+            <kendo-grid *ngIf="!isDark" #kGrid2 id="kGrid2" style="color: #656565 !important;" [data]="jobsCandidatesData"
+    [ngStyle]="{width: '99%', height: '400px', margin: 'auto'}" [navigable]="true" [reorderable]="true"
+    [resizable]="true" [height]="400" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
+    [resizable]="true" [sortable]="{
+              allowUnsort: true,
+              mode: 'single'
+              }" [kendoGridBinding]="rowJobsCandidatesData" [pageSize]="pageSize"
+    [skip]="skip" [pageable]="{
+      buttonCount: 4,
+      info: true,
+      previousNext: true
+  }" (pageChange)="onPageChange($event)"
+  kendoGridSelectBy="_id"
+  [selectedKeys]="mySelection">
+    <kendo-grid-column field="_id" title="#">
+    </kendo-grid-column>
+    <kendo-grid-column field="title" title="Job Title">
+    </kendo-grid-column>
+    <kendo-grid-column field="team" title="Team">
+    </kendo-grid-column>
+    <kendo-grid-column field="position" title="#Pos.">
+    </kendo-grid-column>
+    <kendo-grid-column field="candidates" title="#Subs.">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black">{{dataItem.candidates?.length || 0}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="status" title="Status">
+    </kendo-grid-column>
+    <kendo-grid-column field="updatedAt" title="Updated At">
+    </kendo-grid-column>
+    <kendo-grid-column field="manager" title="Manager">
+    </kendo-grid-column>
+    <kendo-grid-column field="createdBy" title="Created By">
+    </kendo-grid-column>
+    <kendo-grid-column field="createdAt" title="Created At">
+    </kendo-grid-column>
+    <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+      <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+      <!-- <kendo-slider [showButtons]="false" tickPlacement="none" [max]="totalPages" [min]="1"
+        (valueChange)="sliderChange($event)" [value]="currentPage">
+      </kendo-slider> -->
+      <kendo-pager-info></kendo-pager-info>
+      <kendo-pager-next-buttons></kendo-pager-next-buttons>
+      <kendo-pager-page-sizes [pageSizes]="pageSizes"></kendo-pager-page-sizes>
+    </ng-template>
+            </kendo-grid>
           </div>
           <br>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
@@ -244,9 +291,9 @@
   <div class="modal fade bd-example-modal-xl mt-5 mb-5" id="viewCandidateDetails" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-      <div class="modal-content">
+      <div class="modal-content" [id]="isDark ? 'modalDark' : 'modalLight'">
         <div class="modal-header text-center">
-          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Candidate Details</h3>
+          <h3 class="modal-title text-center" style="flex: auto;" [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">Candidate Details</h3>
           <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -262,13 +309,13 @@
                 <div class="col-md-8">
                   <h6>Phone: {{ toViewCandidate.phone }}</h6>
                   <h6>Skills: {{ toViewCandidate.skills }} </h6><br>
-                  <h6>Submissions: {{ toViewCandiateJobs.length }}</h6>
+                  <h6>Submissions: {{ toViewCandidate.jobs?.length || 0}}</h6>
                 </div>
                 <div class="col-md-2 center">
                   <div class="center"><a href="{{ toViewCandidate.url }}" target="_blank" class="btn btn-info" style="margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume" [ngClass]="toViewCandidate.url==='null'? 'disabledResume' : ''">Resume</a></div>
                 </div>
               </div>
-              <div class="row" *ngIf="toViewCandiateJobs.length > 0">
+              <div class="row" *ngIf="toViewCandidate.jobs.length > 0">
                 <div class="col-md-12">
                   <table class="table table-hover">
                     <thead>
@@ -283,8 +330,8 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="table-active" *ngFor="let job of toViewCandiateJobs">
-                        <td>{{ job.id }}</td>
+                      <tr class="table-active" *ngFor="let job of toViewCandidate.jobs">
+                        <td>{{ job._id }}</td>
                         <td>{{ job.title }}</td>
                         <td>{{ job.status }}</td>
                         <td>{{ job.updatedAt }}</td>
@@ -310,9 +357,9 @@
   <div class="modal fade bd-example-modal-xl mt-5 mb-5 text-center" id="viewSubs" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl candidateView">
-      <div class="modal-content">
+      <div class="modal-content" [id]="isDark ? 'modalDark' : 'modalLight'">
         <div class="modal-header text-center">
-          <h3 class="modal-title text-center" style="color: thistle; flex: auto;">Add Submissions</h3>
+          <h3 class="modal-title text-center" style="flex: auto;" [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">Add Submissions</h3>
           <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -333,7 +380,7 @@
                 <div style="white-space:nowrap; display: flex;">
                   <button type="submit" class="btn btn-outline-primary btn-sm ml-2"
                     style="max-height: 40px;">Search</button>
-                    <h6 class="ml-2 mr-2" style="color: thistle; padding-top: 5px;">OR TRY</h6>
+                    <h6 class="ml-2 mr-2" style="padding-top: 5px;" [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">OR TRY</h6>
                     <button type="button" class="btn btn-outline-warning" (click)="autoMatch()" data-toggle="tooltip"
                     data-placement="auto" title="Auto match jobs based on selected candidates skills">
                     <fa-icon [icon]="faUserCog"></fa-icon>
@@ -342,44 +389,184 @@
               </div>
               <div class="form-group">
                 <div style="display: flex;">
-                  <h6 class="mt-2" style="color: white; text-align: start;">Please select Jobs:</h6>
+                  <h6 class="mt-2" style="text-align: start;" [ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">Please select Jobs:</h6>
                   <div class="alert alert-danger mt-2" style="width:fit-content; height:fit-content; margin: auto; padding: auto !important; font-size: 12px;" *ngIf="noMatch">
                     It looks like the job(s) you are searching for is/are already selected!.
                   </div>
                 </div>
-                <ag-grid-angular #agGrid3 style="width: 99%; height: 350px; margin: auto; margin-top: 10px;"
-                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData" [columnDefs]="columnDefs2"
+                <ag-grid-angular *ngIf="isDark" #agGrid3 style="width: 99%; height: 350px; margin: auto; margin-top: 10px;"
+                  class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowSubCandidatesData" [columnDefs]="columnDefs2"
                   rowSelection="multiple" (gridReady)="onGridReady3($event)" [suppressHorizontalScroll]=false
-                  [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+                  sortable=true [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
                 </ag-grid-angular>
+                <kendo-grid *ngIf="!isDark" #kGrid3 id="kGrid3" style="color: #656565 !important;" [data]="subjobsData"
+        [ngStyle]="{width: '99%', height: '350px', margin: 'auto'}" [navigable]="true" [reorderable]="true"
+        [resizable]="true" [height]="350" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
+        [resizable]="true" [sortable]="{
+                  allowUnsort: true,
+                  mode: 'single'
+                  }" [kendoGridBinding]="rowSubCandidatesData" [pageSize]="pageSize"
+        [skip]="skip" [pageable]="{
+          buttonCount: 4,
+          info: true,
+          previousNext: true
+      }" (pageChange)="onPageChange($event)"
+      kendoGridSelectBy="_id"
+      [selectedKeys]="mySelection">
+        <kendo-grid-column field="_id" title="#">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="onJobSelect(dataItem)" class="btn btn-outline-success" style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto;" data-toggle="tooltip" data-placement="auto" title="Add for submissions">Select</button>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="title" title="Job Title">
+        </kendo-grid-column>
+        <kendo-grid-column field="team" title="Team">
+        </kendo-grid-column>
+        <kendo-grid-column field="position" title="#Pos.">
+        </kendo-grid-column>
+        <kendo-grid-column field="candidates" title="#Subs.">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div style="font: small; height: 29px; font-size: 12px; width: 100%; margin: auto; color: black">{{ dataItem.candidates?.length || 0 }}</div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="status" title="Status">
+        </kendo-grid-column>
+        <kendo-grid-column field="updatedAt" title="Updated At">
+        </kendo-grid-column>
+        <kendo-grid-column field="skills" title="Skills">
+        </kendo-grid-column>
+        <kendo-grid-column field="manager" title="Manager">
+        </kendo-grid-column>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+          <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+          <!-- <kendo-slider [showButtons]="false" tickPlacement="none" [max]="totalPages" [min]="1"
+            (valueChange)="sliderChange($event)" [value]="currentPage">
+          </kendo-slider> -->
+          <kendo-pager-info></kendo-pager-info>
+          <kendo-pager-next-buttons></kendo-pager-next-buttons>
+          <kendo-pager-page-sizes [pageSizes]="pageSizes"></kendo-pager-page-sizes>
+        </ng-template>
+                </kendo-grid>
               </div>
             </form>
           </div>
         </div>
         <div class="row">
           <div class="col-md-2" style="align-self: center;">
-            <h4 style="color: thistle;">Selected Jobs:</h4>
+            <h4 [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">Selected Jobs:</h4>
           </div>
           <div class="col-md-10">
-            <ag-grid-angular #agGrid4 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
-              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData4" [columnDefs]="columnDefs4"
+            <ag-grid-angular *ngIf="isDark" #agGrid4 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
+              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowSelectedJobsData" [columnDefs]="columnDefs4"
               rowSelection="multiple" (gridReady)="onGridReady4($event)" [suppressHorizontalScroll]=false
-              [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+              sortable=true [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
             </ag-grid-angular>
-            <div style="color: #ffff; z-index: 100; font-size: small;">Jobs selected({{ candidateCount }})</div>
+            <kendo-grid *ngIf="!isDark" #kGrid4 id="kGrid4" style="color: #656565 !important;" [data]=" subSelectedJobsData" [ngStyle]="{width: '99%', height: '250px', margin: 'auto'}" [navigable]="true" [reorderable]="true"
+            [resizable]="true" [height]="250" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
+            [resizable]="true" [sortable]="{
+                      allowUnsort: true,
+                      mode: 'single'
+                      }" [kendoGridBinding]="rowSelectedJobsData" [pageSize]="pageSize"
+            [skip]="skip" [pageable]="{
+              buttonCount: 4,
+              info: true,
+              previousNext: true
+          }" (pageChange)="onPageChange($event)"
+          kendoGridSelectBy="delete"
+          [selectedKeys]="mySelection">
+            <kendo-grid-command-column field="_id">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="onUnselectJobs(dataItem)" class="btn btn-outline-danger" style="font: small; height: 29px; font-size: 14px; width: 100%; margin: auto;" data-toggle="tooltip" data-placement="auto" title="Remove"><strong>X</strong></button>
+              </ng-template>
+            </kendo-grid-command-column>
+            <kendo-grid-column field="title" title="Job Title">
+            </kendo-grid-column>
+            <kendo-grid-column field="team" title="Team">
+            </kendo-grid-column>
+            <kendo-grid-column field="position" title="#Pos.">
+            </kendo-grid-column>
+            <kendo-grid-column field="candidates" title="#Subs.">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black">{{ dataItem.candidates?.length || 0 }}</div>
+            </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="status" title="Status">
+            </kendo-grid-column>
+            <kendo-grid-column field="skills" title="Skills">  <ng-template kendoGridCellTemplate let-dataItem>
+              <div style="font: small; font-size: 12px; height: 29px; width: 100%; margin: auto; color: black">{{ dataItem.skills }}</div>
+            </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="updatedAt" title="Updated At">
+            </kendo-grid-column>
+            <kendo-grid-column field="manager" title="Manager">
+            </kendo-grid-column>
+            <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <!-- <kendo-slider [showButtons]="false" tickPlacement="none" [max]="totalPages" [min]="1"
+                (valueChange)="sliderChange($event)" [value]="currentPage">
+              </kendo-slider> -->
+              <kendo-pager-info></kendo-pager-info>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+              <kendo-pager-page-sizes [pageSizes]="pageSizes"></kendo-pager-page-sizes>
+            </ng-template>
+          </kendo-grid>
+            <div style="z-index: 100; font-size: small;" [ngStyle]="{'color': isDark ? 'aliceblue' : 'mediumslateblue'}">Jobs selected({{ candidateCount }})</div>
           </div>
         </div>
         <hr>
         <div class="row">
           <div class="col-md-2" style="align-self: center;">
-            <h4 style="color: thistle;">Selected Candidates:</h4>
+            <h4 [ngStyle]="{'color': isDark ? 'thistle' : 'cornflowerblue'}">Selected Candidates:</h4>
           </div>
           <div class="col-md-10">
-            <ag-grid-angular #agGrid5 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
-              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowData5" [columnDefs]="columnDefs5"
+            <ag-grid-angular *ngIf="isDark" #agGrid5 style="width: 99%; height: 250px; margin: auto; margin-top: 10px;"
+              class="ag-theme-alpine" rowHeight='30' cellHeight='29' [rowData]="rowSelectedCandidatesData" [columnDefs]="columnDefs5"
               rowSelection="multiple" (gridReady)="onGridReady5($event)" [suppressHorizontalScroll]=false
-              [enableSorting]="true" [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
+              sortable=true [enableRangeSelection]="true" [pagination]="true" [paginationPageSize]="25">
             </ag-grid-angular>
+            <kendo-grid *ngIf="!isDark" #kGrid5 id="kGrid5" style="color: #656565 !important;" [data]="subSelectedCandidatesData"
+    [ngStyle]="{width: '99%', height: '250px', margin: 'auto'}" [navigable]="true" [reorderable]="true"
+    [resizable]="true" [height]="250" [selectable]="{enabled: true, checkboxOnly: true}" [columnMenu]="{ filter: true }"
+    [resizable]="true" [sortable]="{
+              allowUnsort: true,
+              mode: 'single'
+              }" [kendoGridBinding]="rowSelectedCandidatesData" [pageSize]="pageSize"
+    [skip]="skip" [pageable]="{
+      buttonCount: 4,
+      info: true,
+      previousNext: true
+  }" (pageChange)="onPageChange($event)"
+  kendoGridSelectBy="_id"
+  [selectedKeys]="mySelection">
+    <kendo-grid-column field="_id" title="">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button (click)="onUnselectCandidates(dataItem)" class="btn btn-outline-danger" style="font: small; height: 29px; font-size: 14px; width: 100%; margin: auto;" data-toggle="tooltip" data-placement="auto" title="Remove"><strong>X</strong></button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="fullName" title="Name">
+    </kendo-grid-column>
+    <kendo-grid-column field="phone" title="Phone">
+    </kendo-grid-column>
+    <kendo-grid-column field="email" title="Email">
+    </kendo-grid-column>
+    <kendo-grid-column field="skills" title="Skills">
+    </kendo-grid-column>
+    <kendo-grid-column field="url" title="Resume">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <a *ngIf="dataItem.url !== 'null'" href= {{dataItem.url}} target="_blank" class="btn btn-info" style="font: small;  height: 29px; font-size: 12px; margin: auto; text-align: center" data-toggle="tooltip" data-placement="auto" title="View Resume">Resume</a>
+        <div *ngIf="dataItem.url === 'null'" class="disabledResume"><a class="btn btn-info disabledResume" style="font: small; font-size: 12px; height: 29px; color: darkgrey; margin: auto; text-align: center; opacity: 0.4 !important; cursor: default !important; pointer-events: none !important;">Resume</a></div>
+      </ng-template>
+    </kendo-grid-column>
+    <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+      <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+      <!-- <kendo-slider [showButtons]="false" tickPlacement="none" [max]="totalPages" [min]="1"
+        (valueChange)="sliderChange($event)" [value]="currentPage">
+      </kendo-slider> -->
+      <kendo-pager-info></kendo-pager-info>
+      <kendo-pager-next-buttons></kendo-pager-next-buttons>
+      <kendo-pager-page-sizes [pageSizes]="pageSizes"></kendo-pager-page-sizes>
+    </ng-template>
+            </kendo-grid>
           </div>
         </div>
         <hr>

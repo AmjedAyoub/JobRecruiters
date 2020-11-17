@@ -72,7 +72,7 @@ exports.getCandidate = (req, res, next) => {
 };
 
 exports.deleteCandidate = (req, res, next) => {
-  Candidate.remove({ _id: mongojs.ObjectID(req.params.id) })
+  Candidate.deleteOne({ _id: mongojs.ObjectID(req.params.id) })
     .then(result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });
@@ -118,34 +118,36 @@ exports.updateCandidate = (req, res, next) => {
 };
 
 exports.updateSubsCandidates = (req, res, next) => {
-  const job = new Job({
-    _id: req.body._id,
-    title: req.body.title,
-    position: req.body.position,
-    status: req.body.status,
-    skills: req.body.skills,
-    updatedAt: req.body.updatedAt,
-    manager: req.body.manager,
-    description: req.body.description,
-    team: req.body.team,
-    createdBy: req.body.createdBy,
-    createdAt: req.body.createdAt,
-    candidates: req.body.candidates,
-  });
-  Candidate.updateOne({ _id: req.params.id }, {$push: { jobs: job }}, { new: true, useFindAndModify: false })
-    .then(result => {
-      if (result.n > 0) {
-        res.status(200).json({ message: "Updated submissions successfully!", doc: job });
-      } else {
-        res.status(401).json({ message: "Not authorized!" });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({
-        message: "Couldn't udpate submissions!"
-      });
+  for(const reqJob of req.body){
+    const job = new Job({
+      _id: reqJob._id,
+      title: reqJob.title,
+      position: reqJob.position,
+      status: reqJob.status,
+      skills: reqJob.skills,
+      updatedAt: reqJob.updatedAt,
+      manager: reqJob.manager,
+      description: reqJob.description,
+      team: reqJob.team,
+      createdBy: reqJob.createdBy,
+      createdAt: reqJob.createdAt,
+      candidates: reqJob.candidates,
     });
+    Candidate.updateOne({ _id: req.params.id }, {$addToSet: { jobs: job }})
+      .then(result => {
+        if (result.n > 0) {
+          // res.status(200).json({ message: "Updated submissions successfully!", doc: job });
+        } else {
+          res.status(401).json({ message: "Not authorized!" });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).json({
+          message: "Couldn't udpate submissions!"
+        });
+      });
+    }
   };
 
 exports.deleteSubs = (req, res, next) => {

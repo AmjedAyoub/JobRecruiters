@@ -25,7 +25,6 @@ export class JobService implements OnInit, OnDestroy {
       manager: string;
       status: string;
       skills: string[];
-      submission: number;
       candidates: string[];
       description: string;
     }[]
